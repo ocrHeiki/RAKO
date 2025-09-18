@@ -1,7 +1,7 @@
 import random
 
 
-names = ['Mari', 'Jüri', 'Kati', 'Juhan']
+names = ['Mari', 'Anna', 'Villem', 'Jüri']
 
 # Väljasta listis olevad nimed nime kaupa eraldi real.
 for name in names:
@@ -21,3 +21,22 @@ for x in range(0, 10, 2): # Paarisarvud 0..8
     print(x, end=' | ')
 
 print('\n')    
+
+x = 0
+while x < len(names):
+    print(names[x])
+    x += 1 # x = x + 1
+print()    
+
+"""
+Väljasta listi nimed konsooli iga nimi eraldi real, kuid iga nime ees on järjekorranumber. Järjekorranumber algab 1-st. Korrektne rida on järgmine
+1. Mari
+2. Anna
+3. Villem
+4. Jüri
+"""
+for i in range(len(names)):
+    print(f'{i+1}. {names[i]}') # i = 0..3 
+print()
+
+  ###
