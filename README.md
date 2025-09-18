@@ -59,9 +59,7 @@ Uus ühendasutus kannabki nüüd nime **Raplamaa Rakenduslik Kolledž (RAKO)**.
 - Minu poolt selgeks õpitud tarkvara **manuaalid**  
 - Praktilised **playbookid** (intsidentide käsitlemiseks)  
 - **Raamistikud ja standardid**:  
-  - NIST CSF  
   - MITRE ATT&CK  
-  - CIS Controls  
   - Eesti infoturbestandard (E-ITS)  
   - OWASP Top 10 ja turvalise arenduse põhimõtted  
 - **Mallid** (intsidendi raport, runbook)  
