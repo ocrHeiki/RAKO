@@ -60,3 +60,9 @@ print(places)
 # Väljasta listi places viimane element ilma [-1] kasutamata
 print(places[len(places)-1])
 print(places)
+
+# Väljasta konsooli elemendi Pärnu keskmine täht trükitähena
+print(places[2][2].upper())
+city = places[2] #Element Pärnu
+char = city[2] # Täht
+print(char.upper())
