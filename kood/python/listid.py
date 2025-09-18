@@ -49,3 +49,14 @@ print(new_sorted_list)
 
 # Tühjenda listi sisu
 new_sorted_list.clear()
+list_copy.clear()
+list_list.clear()
+
+print(new_sorted_list)
+print(list_copy)
+print(list_list)
+print(places)
+
+# Väljasta listi places viimane element ilma [-1] kasutamata
+print(places[len(places)-1])
+print(places)
