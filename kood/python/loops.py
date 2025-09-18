@@ -47,4 +47,3 @@ ages = []
 for i in range(len(names)):
     ages.append(random.randint(1, 100))
     print(f'{i+1}. {names[i]} - {ages[i]} aastat vana.')    
-  ###
