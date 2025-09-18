@@ -4,11 +4,13 @@ See on minu RAKO kooliprojekti jaoks loodud GitHubi repositoorium.
 Siin hoian ja arendan oma õppematerjale, manuaale, koodijuppe ja tehtud töid.  
 Eesmärk on luua Wiki-laadne keskkond, kus kõik õpitu on ühes kohas koos.
 
-📌 **Märkus:** Selle GitHubi konto lõin juba oma eelmise kooli ajal **Haapsalu Kutsehariduskeskuses**,  
-kus õppisin erialal **IT-süsteemide nooremspetsialist (tase 4)**.  
-Keskkonna kasutuselevõttu ja arendamist soovitasid mitmed õpetajad,  
-et ka eksamifailid ja õppematerjalid saaks ühte kohta koondada.  
-Nüüd jätkan sama konto ja keskkonna kasutamist ning täiendan seda oma uue õppe jooksul RAKO-s (tase 5).
+📌 **Märkus:** Lõin selle GitHubi konto algselt oma eelmise kooli ajal  
+**Haapsalu Kutsehariduskeskuses**, kus õppisin erialal  
+**IT-süsteemide nooremspetsialist (tase 4)**.  
+
+GitHubi kasutamist soovitasid mitmed õpetajad, sh programmeerimise õpetaja  
+**Mario Metshein**, et ka eksamifailid ja õppematerjalid saaks hiljem ühte kohta koondada.  
+Nüüd jätkan selle keskkonna arendamist ja täiendamist oma uues õppes RAKO-s (tase 5).
 
 ---
 
@@ -46,6 +48,26 @@ Uus ühendasutus kannabki nüüd nime **Raplamaa Rakenduslik Kolledž (RAKO)**.
 - `kood/` – koodijupid ja skriptid (Python, Bash, PowerShell)
 - `projektid/` – tehtud iseseisvad projektid ja koolitööd
 - `pildid/` – visuaalid, skeemid ja muud pildifailid
+- `tooriistakohver/` – sõnavara, manuaalid, playbookid, raamistikud ja mallid
+
+---
+
+## 🧰 Tööriistakohver
+
+**Tööriistakohver** on eraldi ala, kuhu kogun:  
+- Enamlevinud **sõnavara** (terminibaas)  
+- Minu poolt selgeks õpitud tarkvara **manuaalid**  
+- Praktilised **playbookid** (intsidentide käsitlemiseks)  
+- **Raamistikud ja standardid**:  
+  - NIST CSF  
+  - MITRE ATT&CK  
+  - CIS Controls  
+  - Eesti infoturbestandard (E-ITS)  
+  - OWASP Top 10 ja turvalise arenduse põhimõtted  
+- **Mallid** (intsidendi raport, runbook)  
+- **Viited** ja kasulikud ressursid  
+
+See on minu isiklik töövahendite ja teadmiste kogu, mida saan õppimise käigus pidevalt täiendada.
 
 ---
 
