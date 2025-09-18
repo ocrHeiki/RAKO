@@ -34,9 +34,17 @@ Väljasta listi nimed konsooli iga nimi eraldi real, kuid iga nime ees on järje
 2. Anna
 3. Villem
 4. Jüri
+
+TÄIENDUS: Tee igale nimele juhuslik vanus, kuid kirjuta see vanus listi nimega ages.
+Näita tulemust samas for või while loopis. Peale kordust näita nii names, kui ages listi sisu lihtsalt nagu listid.py failis näitasime.
+
 """
 for i in range(len(names)):
     print(f'{i+1}. {names[i]}') # i = 0..3 
 print()
 
+ages = []
+for i in range(len(names)):
+    ages.append(random.randint(1, 100))
+    print(f'{i+1}. {names[i]} - {ages[i]} aastat vana.')    
   ###
