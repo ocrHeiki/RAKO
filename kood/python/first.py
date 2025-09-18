@@ -43,3 +43,10 @@ elif len(place) > 7:
     print(f'Pika nimega koht {place.title()}')
 else:
     print('Nimi liiga lühike.')       
+
+# Väljasta muutujate andmetüübid
+print(type(name))
+print(type(age))
+print(type(height))
+print(type(place))
+
