@@ -41,12 +41,23 @@ Näita tulemust samas for või while loopis. Peale kordust näita nii names, kui
 """
 ages = [] # Tühi list vanustele
 for i in range(len(names)):
+<<<<<<< HEAD
     age = random.randint(1, 122) #Juhuslik vanus
     ages.append(age)
 print(f'{x+1}. {names[]} - {age[x]} aastat vana.')
+=======
+    age = random.randint(1, 100) #Juhuslik vanus
+    ages.append(age)
+print(f'{i+1}. {names[i]} - {age} aastat vana.')
+>>>>>>> 21cb65c9f07ad82e2c155bfbe3b501c6d5ce211f
 
 print()
 
 #Kuvame mõlemad listid nagu listid.py näites
 print('Names list:', names)
+<<<<<<< HEAD
 print('Ages list:', age)
+=======
+print('Ages list:', ages)
+
+>>>>>>> 21cb65c9f07ad82e2c155bfbe3b501c6d5ce211f
