@@ -17,4 +17,3 @@ Summa: 1054
 Keskmine: 52.70
 Suurim arv: 97
 """
-import random

@@ -52,10 +52,10 @@ print(division(b, 0))
 print()
 print(introduction('Heiki'))
 print(introduction('KukiMuki', 30))
+print()
 
 """ÜLESANNE: Loo list viie nimega. Väljasta viie nime tervitus."""
 
 names = ['Heiki', 'KukiMuki', 'Juku', 'Mari', 'Peeter'] 
 for name in names:
     print(welcome_name(name))
-    
