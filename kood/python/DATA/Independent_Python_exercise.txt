@@ -24,4 +24,4 @@ https://peps.python.org/pep-0257/
 https://developer.lsst.io/v/DM-7919/docs/py_docs.html
 https://realpython.com/documenting-python-code/
 https://stackoverflow.com/questions/3898572/
-https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-normalize-in-a-python-unicode-string #440
+https://stackoverflow.com/questions/517923/ #440
