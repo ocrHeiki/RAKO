@@ -7,3 +7,4 @@ Jagasin laiali:
 kodusedHARJUTUSED
 kooliHARJUTUSED
 DATA ehk ÜLESANNETE kaust.
+---
