@@ -1,3 +1,5 @@
+"""
+TÄIENDUS: Näita mitu nime leiti. Leiti xx nime."""
 import csv 
 
 filename = 'DATA/Persons.csv'
@@ -13,6 +15,8 @@ if len(phrase) > 1:
             last = row[1].lower() # Tee väiketähtedeks perekonnanimi
             if phrase in first or phrase in last:
                 print(';'.join(row)) # Tee list stringiks
-              
+                total += 1
+    print(f'Leiti {total} nime.')
+    
 else:
     print('Otsitav fraas on liiga lühike!')
