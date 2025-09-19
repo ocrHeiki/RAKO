@@ -39,13 +39,14 @@ TÄIENDUS: Tee igale nimele juhuslik vanus, kuid kirjuta see vanus listi nimega 
 Näita tulemust samas for või while loopis. Peale kordust näita nii names, kui ages listi sisu lihtsalt nagu listid.py failis näitasime.
 
 """
+ages = [] # Tühi list vanustele
 for i in range(len(names)):
-    print(f'{i+1}. {names[i]}') # i = 0..3 
+    age = random.randint(1, 122) #Juhuslik vanus
+    ages.append(age)
+print(f'{x+1}. {names[]} - {age[x]} aastat vana.')
+
 print()
 
-ages = []
-for i in range(len(names)):
-    ages.append(random.randint(1, 100))
-    print(f'{i+1}. {names[i]} - {ages[i]} aastat vana.')    
-print(names)
-print(ages)
+#Kuvame mõlemad listid nagu listid.py näites
+print('Names list:', names)
+print('Ages list:', age)

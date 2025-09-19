@@ -1,0 +1,19 @@
+"""Loo programm, mis:
+
+1. Genereerib 20 juhuslikku täisarvu vahemikus 1–100.
+2. Salvestab need koos tänase kuupäevaga faili andmed.txt.
+3. Loeb failist need arvud uuesti sisse.
+4. Kasutab funktsiooni (enda loodud funktsioon), mis arvutab: summa, keskmise ja suurima arvu.
+5. Kuvab tulemused ekraanile (funktsiooni tulemused + failist loetud arvud).
+6. Kirjuta funktsioonile dokumentatsioon (vaata vajadusel linke lõpust)
+
+Näidis: failisisu on järgnev:
+Kuupäev: 18.09.2025 22:07:10
+Arvud: 53 40 54 25 96 78 45 30 12 63 9 90 97 97 71 3 59 53 15 64
+
+Näidis tulemus ekraanile:
+Failist loetud arvud: [53, 40, 54, 25, 96, 78, 45, 30, 12, 63, 9, 90, 97, 97, 71, 3, 59, 53, 15, 64]
+Summa: 1054
+Keskmine: 52.70
+Suurim arv: 97
+"""
