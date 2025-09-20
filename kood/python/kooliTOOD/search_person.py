@@ -2,7 +2,7 @@
 TÄIENDUS: Näita mitu nime leiti. Leiti xx nime."""
 import csv 
 
-filename = 'DATA/Persons.csv'
+filename = 'andmeFAILID/Persons.csv'
 
 phrase = input('Sisesta otsitav fraas (min. 2 märki): ')
 

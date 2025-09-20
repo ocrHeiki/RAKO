@@ -1,4 +1,4 @@
-filename = 'DATA/Create-MyCSV-v.csv'
+filename = 'andmeFAILID/Create-MyCSV-v.csv'
 column = 2 # Veerg mida kokku liita
 total = 0 # Veeru summa
 

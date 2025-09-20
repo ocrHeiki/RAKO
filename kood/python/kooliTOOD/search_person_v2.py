@@ -1,4 +1,4 @@
-filename = 'DATA/Persons.csv'
+filename = 'andmeFAILID/Persons.csv'
 total = 0 
 
 phrase = input('Sisesta otsitav fraas (min. 2 märki): ')

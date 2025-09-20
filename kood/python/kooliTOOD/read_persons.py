@@ -16,8 +16,8 @@ Eesnimi;Perenimi;Sünniaeg;Sugu;Isikukood <-- ORIGINAAL
 import csv
 import unicodedata
 
-src = 'DATA/Persons.csv' # Algandmed
-dst = 'DATA/Persons_accounts.csv' # Uus fail
+src = 'andmeFAILID/Persons.csv' # Algandmed
+dst = 'andmeFAILID/Persons_accounts.csv' # Uus fail
 header = 'Eesnimi;Perenimi;Isikukood;Kasutajanimi;Epost' # Uue faili päis
 domain = '@asutus.com' # Eposti domeen
 
