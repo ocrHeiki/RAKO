@@ -1,4 +1,4 @@
-![skriptimise kaanepilt](kood.png)
+![skriptimise kaanepilt](kood.PNG)
 
 # kood
 
