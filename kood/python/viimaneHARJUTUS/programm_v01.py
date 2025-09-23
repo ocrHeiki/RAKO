@@ -1,7 +1,11 @@
-# Ülesanne:
-# Programm, mis genereerib 20 juhuslikku täisarvu (1–100), salvestab need koos kuupäevaga faili, adndmed.txt
-# Loeb need uuesti failist tagasi, arvutab summa, keskmise ja suurima arvu ning kuvab tulemused.
-# Kirjutan funktsioonile dokumentatsiooni
+# ÜLESANNE:
+# Programm, mis genereerib 20 juhuslikku täisarvu (1–100),
+# salvestab need koos kuupäevaga faili andmed.txt,
+# loeb need uuesti failist tagasi, arvutab summa, keskmise ja suurima arvu ning kuvab tulemused.
+# Kirjutan funktsioonile dokumentatsiooni.
+#
+# Autor: Heiki Rebane - ITSK25
+# Kuupäev: 23.09.2025
 
 import random                       # Toob sisse mooduli juhuslike arvude genereerimiseks
 from datetime import datetime       # Toob sisse kuupäeva ja kellaaja funktsioonid
