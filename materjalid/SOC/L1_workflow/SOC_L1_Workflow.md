@@ -89,6 +89,14 @@
 | **Medium**   | Kollane (Yellow)        | `#FFD700` | (255, 215, 0) |
 | **Low**      | Roheline (Green)        | `#32CD32` | (50, 205, 50) |
 
+### GitHub Markdownis (reaalne värvikuva)
+
+- <span style="color:#FF0000; font-weight:bold">Critical</span>  
+- <span style="color:#FFA500; font-weight:bold">High</span>  
+- <span style="color:#FFD700; font-weight:bold">Medium</span>  
+- <span style="color:#32CD32; font-weight:bold">Low</span>  
+
+
 ### Excelis
 - Conditional Formatting → vali **More Colors → Custom → Hex/RGB**.  
 - Loo 4 eraldi reeglit.  
@@ -98,9 +106,3 @@
 - Pivot Chart → **Format Data Series → Fill → Solid Fill → Custom color (Hex)**.  
 - Salvesta graafikust mall (**Save as Template**).  
 
-### GitHub Markdownis
-```markdown
-- <span style="color:#FF0000; font-weight:bold">Critical</span>
-- <span style="color:#FFA500; font-weight:bold">High</span>
-- <span style="color:#FFD700; font-weight:bold">Medium</span>
-- <span style="color:#32CD32; font-weight:bold">Low</span>
