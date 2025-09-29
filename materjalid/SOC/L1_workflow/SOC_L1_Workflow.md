@@ -1,103 +1,97 @@
-# 📑 SOC L1 Workflow — Samm-sammuline juhend (täpse menüüdega)
-
-## 1. CSV import Excelisse
-1. Ava Excel.  
-2. **Data → Get Data → From File → From Text/CSV** (Excel 365-s sama).  
-3. Vali logifail (nt `paloalto-threat-2025-09-26.csv`).  
-4. Import-aknas:
-   - **File Origin** = UTF-8
-   - **Delimiter** = Comma (,)
-   - Vaata eelvaadet – veerud peavad jagunema õigesti (nt `SourceIP`, `DestinationIP`, `ThreatName`).  
-5. Vajuta **Load**.
+# SOC Analyst L1 Workflow (Palo Alto Threat Log)
 
 ---
 
-## 2. Vormindus (andmete ettevalmistamine)
-- **Home → Editing → Sort & Filter → Filter** – lisa filtrid igale veerule.  
-- **View → Freeze Panes → Freeze Top Row** – päis jääb nähtavaks.  
-- (Soovi korral) **Ctrl + T** – tee andmed Excel Table-iks (lihtsam filtreerida ja viidata).  
-- **File → Save As → Excel Workbook (.xlsx)** – salvesta tööfail.
+## 1. Ava CSV Excelis
+- File → Open → vali CSV
+- Eraldajaks koma `,`
+- Näed päises valitud välju
 
 ---
 
-## 3. Tingimuslik vormindamine (Severity värvid)
-1. Vali veerg **Severity**.  
-2. **Home → Styles → Conditional Formatting → Highlight Cell Rules → Text that Contains…**  
-   loo neli reeglit:
-   - Critical → **More Colors → Custom → Hex `#FF0000`** (punane)
-   - High → **Hex `#FFA500`** (oranž)
-   - Medium → **Hex `#FFD700`** (kollane)
-   - Low → **Hex `#32CD32`** (roheline)
-3. (Valikuline) **Action** veerule: Allowed = roheline, Block = hall/punane.
+## 2. Kasuta ainult olulisi veerge
+✅ Hoia alles:
+- Generate Time
+- Type
+- Threat ID/Name
+- From Zone / To Zone
+- Source Address
+- Source User (kui täidetud)
+- Severity
+- Destination Address
+- To Port
+- Application
+- Action
+- File Name / URL
+- Device Name / Device SN
+- Rule
+
+❌ Ära kasuta: kõik, mis on CSV-s alati tühjad või nullidega
 
 ---
 
-## 4. Kiirfiltreerimine
-- Filtreeri esmalt **Severity = Critical OR High**.  
-- **SourceIP** pealt: **Sort Z→A** või kasuta Pivotit, et näha kordusi.  
-- **Text Filters → Contains / Does Not Contain** – false positive mustrite eemaldamiseks.  
+## 3. Tee püsiv Template vorming
+1. Ava CSV → vali kõik veerud  
+2. Mine **Insert → Table** → märgi „My table has headers“  
+3. Lisa **Data → Filter** → saad igale veerule rippmenüü  
+4. Lisa **Conditional Formatting** Severity värvidega:  
+   - Critical = punane (#FF0000)  
+   - High = oranž (#FF6600)  
+   - Medium = kollane (#FFCC00)  
+   - Low = sinine (#3399FF)  
+5. Salvesta see töövihik nimega **ThreatLog_Template.xlsx**  
+6. Edaspidi: ava uus CSV → kopeeri andmed → kleebi **ThreatLog_Template.xlsx** sisse → kõik filtrid ja värvid jäävad püsima  
 
 ---
 
-## 5. Pivot Table raport
-1. Märgi kogu tabel (**Ctrl + A**).  
-2. **Insert → PivotTable**.  
-3. Valikud:
-   - **Rows** → *Threat Category* (või *MITRE_Tactic*)
-   - **Columns** → *Severity*
-   - **Values** → *Count of Alert_ID* (või *Count of Events*)  
-4. Nüüd on sul koondvaade ohtudest kategooriate ja tasemete kaupa.
+## 4. Filtreeri enne graafikuid
+1. **Severity** – alusta Critical ja High  
+2. **Action** – kõigepealt Allowed, seejärel Blocked  
+3. **Threat Name** – vaata korduvusi  
+4. **Source / Destination** – IP või riikide järgi  
+5. **Application / Port** – millist teenust rünnati  
 
 ---
 
-## 6. Graafikud
-- Kliki Pivotisse → **Insert → Charts → Column (Clustered Column)** või **Pie (2‑D Pie)**.  
-- **Chart Design → Add Chart Element → Data Labels** – lisa väärtused.  
-- Määra seeriatele samad värvid, mis all olevas tabelis (vaata *Severity värvikoodid*).  
-- **Save as Template** – et kasutada sama paletti ka edaspidi.
+## 5. Koosta graafikud
+- **Severity jaotus** → Pie Chart (kui palju Critical/High/Medium/Low)  
+- **Top Threat Name** → Column Chart (Top 5 ohtu)  
+- **Source Address korduvused** → Bar Chart (Top allikad)  
+- **Destination Address korduvused** → Bar Chart (Top sihtmärgid)  
+- **Aja trend** (Generate Time) → Line Chart (sündmuste arv ajas)
+
+👉 Kuna töötad **ThreatLog_Template.xlsx** failis, rakenduvad filtrid ja värvid automaatselt graafikutele iga kord, kui andmed uuesti sisse kleebid.
 
 ---
 
-## 7. Analüüsi kokkuvõte
-- Ava `analüüs/SOC_LogiFaili_Analüüsi_Template.md`.  
-- Täida sektsioonid: üldarv, jaotus, kategooriad, kordused, allikad/sihtmärgid, MITRE, riskid, tegevused.  
-- **NB!** Päeviku reaalandmeid **ära** pane avalikku GitHubi – see läheb ainult praktikakohale.
+## 6. Tee esmane analüüs
+- Critical + Allowed → **kohene eskaleerimine**  
+- High + Blocked → dokumenteeri ja jälgi korduvust  
+- Medium/Low → kas korduv muster või üksik intsident  
+- Kontrolli **Rule** → kas reegel käitus ootuspäraselt  
 
 ---
 
-## ⚡ Kiirklahvid SOC Exceli töövoos
-- **Ctrl + A** → vali kogu tabel  
-- **Ctrl + T** → teisenda tabeliks (Excel Table)  
-- **Alt + N, V** → lisa Pivot Table  
-- **Alt + N, C** → lisa Column Chart  
-- **Alt + N, Q** → lisa Pie Chart  
-- **Ctrl + ↑ / ↓** → hüppa tabeli algusesse/lõppu  
-- **Ctrl + Shift + L** → lülita filtrid sisse/välja  
-- **Alt + H, L** → Conditional Formatting menüü  
-- **Ctrl + S** → salvesta  
-- **Ctrl + F / Ctrl + H** → otsi / asenda
+## 7. Tee kokkuvõte
+1. Mitu sündmust kokku?  
+2. Severity jaotus (Critical/High/Medium/Low)  
+3. Top Threat Names  
+4. Top Source Address  
+5. Top Destination Address  
+6. Kas oli Allowed + High/Critical?  
+7. Kas reeglid toimisid?  
 
 ---
 
-## 🎨 Severity värvikoodid
+## 🎨 Severity värvi legend
+| Severity  | Näidisvärv |
+|-----------|------------|
+| <span style="color:#ff0000">Critical</span> | Punane (#FF0000) |
+| <span style="color:#ff6600">High</span> | Oranž (#FF6600) |
+| <span style="color:#ffcc00">Medium</span> | Kollane (#FFCC00) |
+| <span style="color:#3399ff">Low</span> | Sinine (#3399FF) |
 
-| Severity  | Excel värv (Fill Color) | Hex kood | RGB |
-|-----------|-------------------------|----------|-----------|
-| **Critical** | Punane (Red)            | `#FF0000` | (255, 0, 0) |
-| **High**     | Oranž (Orange)          | `#FFA500` | (255, 165, 0) |
-| **Medium**   | Kollane (Yellow)        | `#FFD700` | (255, 215, 0) |
-| **Low**      | Roheline (Green)        | `#32CD32` | (50, 205, 50) |
+---
 
-### Excelis
-- Conditional Formatting reeglites → **More Colors → Custom → Hex/RGB**.  
-- Soovi korral salvesta värvid **Custom Theme Colors** alla.
-
-### Graafikutes
-- Pivot Chart → **Format Data Series → Fill → Solid Fill → Custom color (Hex)**.  
-- Salvesta graafikust mall (**Save as Template**).
-
-### GitHub Markdownis (reaalne värvikuva)
-- <span style="color:#FF0000; font-weight:bold">Critical</span>  
-- <span style="color:#FFA500; font-weight:bold">High</span>  
-- <span style="color:#FFD700; font-weight:bold">Medium</span>  
-- <span style="color:#32CD32; font-weight:bold">Low</span>
+📌 **Oluline nipp**:  
+Kui teed uue päeva analüüsi, **ära ava CSV otse graafikuks**, vaid kopeeri andmed oma **ThreatLog_Template.xlsx** sisse → see säästab aega, sest filtrid, värvid ja graafikute paigutus on alati valmis.
