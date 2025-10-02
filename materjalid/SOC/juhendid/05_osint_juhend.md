@@ -1,4 +1,4 @@
-# Etapp 4 — OSINT (võrguliikluse ja IP-de kontroll)
+# Etapp 5 — OSINT (võrguliikluse ja IP-de kontroll)
 
 See etapp kirjeldab, kuidas käsitsi kontrollida kahtlasi IP-aadresse, domeene ja URL-e veebipõhiste OSINT tööriistade abil. Eesmärk on kinnitada või välistada pahatahtlikkus.
 
