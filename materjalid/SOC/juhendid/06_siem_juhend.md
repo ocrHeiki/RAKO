@@ -1,4 +1,4 @@
-# Etapp 5 — SIEM (alertid ja päringud)
+# Etapp 6 — SIEM (alertid ja päringud)
 
 See juhend annab praktilised päringu- ja alerti-näited Splunkile ja Elastic/Kibana'le, et saaksid L1→L3 tasemel triage ja eskalatsiooni teha.
 
