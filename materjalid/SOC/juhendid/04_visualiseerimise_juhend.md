@@ -1,4 +1,4 @@
-# Etapp 3 — Visualiseerimine (graafikud ja trendid)
+# Etapp 4 — Visualiseerimine (graafikud ja trendid)
 
 Selles etapis õpid looma graafikuid, et näidata Palo Alto logide analüüsi tulemusi.  
 Graafikuid saab teha **Excelis** või **Google Sheetsis**, hiljem kopeerida need Wordi raportisse või salvestada piltidena Markdowni jaoks.
