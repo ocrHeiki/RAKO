@@ -43,3 +43,4 @@ print("Failist loetud arvud:", arvud_failist)                       # Kuvame ekr
 print(f"Summa: {summa}")                                            # Kuvame summa
 print(f"Keskmine: {keskmine:.2f}")                                  # Kuvame keskmise (2 komakohaga)
 print(f"Suurim arv: {suurim}")                                      # Kuvame suurima arvu
+
