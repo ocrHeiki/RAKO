@@ -1,4 +1,0 @@
-pandas
-matplotlib
-openpyxl
-python-docx
