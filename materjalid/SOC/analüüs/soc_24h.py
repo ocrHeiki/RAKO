@@ -1,4 +1,4 @@
-# soc_24h.py — 24h SOC analüüs (TXT, CSV, XLSX, DOCX + graafikud)
+# soc_24h.py — 24h SOC analüüs (TXT, CSV, XLSX, DOCX + graafikud; võtab automaatselt uusima CSV)
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
@@ -11,12 +11,12 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 # --- Kaustad ---
 BASE = Path.home() / "Documents" / "SOC"
 RAW = BASE / "raw"
-OUT = BASE / "tulemused"   # <— tulemused/
+OUT = BASE / "tulemused"
 REP = BASE / "reports"
 for d in (RAW, OUT, REP):
     d.mkdir(parents=True, exist_ok=True)
 
-# --- Värvikaardid ---
+# --- Värvikaardid (HEX) ---
 COLORS_SEV = {"low":"#0000FF","medium":"#FFFF00","high":"#FFA500","critical":"#FF0000"}
 COLORS_ACTION = {"allow":"#33CC33","deny":"#CC3333","drop":"#3366CC","alert":"#FFCC00","reset-both":"#9933CC","reset-server":"#800080"}
 COLORS_TYPE = {"malware":"#CC0033","vulnerability":"#FF3333","spyware":"#3399FF","suspicious":"#FFCC66","benign":"#66CC66"}
@@ -85,13 +85,13 @@ def write_docx_report(title: str, txt_path: Path, images: list[tuple[Path, str]]
     doc.save(str(out_docx))
 
 def main():
-    # Võta kõige värskem CSV
-    csv_files = sorted(RAW.glob("ThreatLog_*.csv"), reverse=True)
+    # Leia uusim CSV fail kaustast raw/
+    csv_files = sorted(RAW.glob("*.csv"), key=lambda p: p.stat().st_mtime, reverse=True)
     if not csv_files:
         print("[!] Ei leitud CSV-faile kaustas 'raw/'."); return
     path = csv_files[0]
     date_iso = iso_from_filename(path.name)
-    print(f"[i] Analüüsitakse: {path.name} ({date_iso})")
+    print(f"[i] Analüüsitakse (uusim): {path.name} ({date_iso})")
 
     df = pd.read_csv(path, encoding="utf-8", low_memory=False)
 
@@ -194,14 +194,6 @@ def main():
         else:
             f.write("    – (puuduvad)\n")
         f.write("\nGraafikud salvestatud kausta: reports/\n")
-        f.write(f"  - paev_severity_bar_{date_iso}.png – Severity jaotus (tulbad)\n")
-        f.write(f"  - paev_severity_pie_{date_iso}.png – Severity osakaal (pirukas)\n")
-        f.write(f"  - paev_action_bar_{date_iso}.png – Action jaotus (tulbad)\n")
-        f.write(f"  - paev_action_pie_{date_iso}.png – Action osakaal (pirukas)\n")
-        f.write(f"  - paev_threat_type_pie_{date_iso}.png – Threat/Content Type pirukas\n")
-        f.write(f"  - paev_top_kategooriad_{date_iso}.png – TOP kategooriad (tulbad)\n")
-        f.write(f"  - paev_top_src_{date_iso}.png – TOP 10 allika IP (tulbad)\n")
-        f.write(f"  - paev_top_dst_{date_iso}.png – TOP 10 sihtmärgi IP (tulbad)\n")
 
     # CSV kokkuvõte
     out_csv = OUT / f"24h_summary_{date_iso}.csv"
@@ -228,7 +220,6 @@ def main():
         if not top_name.empty:    top_name.rename_axis("ThreatName").reset_index(name="Count").to_excel(xw, sheet_name="TopThreatNames", index=False)
         if not top_src.empty:     top_src.rename_axis("SrcIP").reset_index(name="Count").to_excel(xw, sheet_name="TopSrc", index=False)
         if not top_dst.empty:     top_dst.rename_axis("DstIP").reset_index(name="Count").to_excel(xw, sheet_name="TopDst", index=False)
-        # Top 5 per severity / risk
         for sev, dft in top5_by_sev.items():
             if dft is not None and len(dft)>0: dft.to_excel(xw, sheet_name=f"Top5_{sev.title()}", index=False)
         for risk, dft in top5_by_risk.items():
@@ -256,7 +247,20 @@ def main():
         (REP / f"paev_top_src_{date_iso}.png",       "TOP 10 allika IP"),
         (REP / f"paev_top_dst_{date_iso}.png",       "TOP 10 sihtmärgi IP"),
     ]
-    write_docx_report(f"SOC 24h aruanne — {date_iso}", out_txt, images_24h, docx_path)
+    doc = Document()
+    doc.add_heading(f"SOC 24h aruanne — {date_iso}", level=1)
+    doc.add_heading("Tekstiline kokkuvõte", level=2)
+    with open(out_txt, "r", encoding="utf-8") as fh:
+        for line in fh:
+            doc.add_paragraph(line.rstrip("\n"))
+    if images_24h:
+        doc.add_heading("Graafikud ja visuaalid", level=2)
+        for img, cap in images_24h:
+            if img.exists():
+                p = doc.add_paragraph(); run = p.add_run(); run.add_picture(str(img), width=Inches(6.0))
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                cap_p = doc.add_paragraph(cap); cap_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    doc.save(str(docx_path))
 
     print("[OK] 24h analüüs valmis.")
     print(f" - TXT : {out_txt}")

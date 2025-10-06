@@ -1,4 +1,4 @@
-# soc_week.py — Nädala SOC analüüs (TXT, CSV, XLSX, DOCX + graafikud)
+# soc_week.py — Nädala SOC analüüs (TXT, CSV, XLSX, DOCX + graafikud + valepositiivid; võtab automaatselt uusimad CSV-d)
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
@@ -11,7 +11,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 # --- Kaustad ---
 BASE = Path.home() / "Documents" / "SOC"
 RAW = BASE / "raw"
-OUT = BASE / "tulemused"   # <— tulemused/
+OUT = BASE / "tulemused"
 REP = BASE / "reports"
 for d in (RAW, OUT, REP):
     d.mkdir(parents=True, exist_ok=True)
@@ -71,32 +71,6 @@ def stacked_severity(df_day_sev, outpath):
     plt.title("Severity jaotus päevade lõikes (stacked)")
     plt.xticks(rotation=45, ha="right"); plt.legend(); plt.tight_layout(); plt.savefig(outpath); plt.close()
 
-# --- DOCX abi ---
-def add_image(doc: Document, img_path: Path, caption: str, width_in=6.0):
-    if img_path.exists():
-        p = doc.add_paragraph()
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(width_in))
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        if caption:
-            cap = doc.add_paragraph(caption)
-            cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
-def write_docx_report(title: str, txt_path: Path, images: list[tuple[Path, str]], out_docx: Path):
-    doc = Document()
-    doc.add_heading(title, level=1)
-    if txt_path.exists():
-        doc.add_heading("Tekstiline kokkuvõte", level=2)
-        with open(txt_path, "r", encoding="utf-8") as fh:
-            for line in fh:
-                doc.add_paragraph(line.rstrip("\n"))
-    if images:
-        doc.add_heading("Graafikud ja visuaalid", level=2)
-        for img, cap in images:
-            add_image(doc, img, cap)
-    out_docx.parent.mkdir(parents=True, exist_ok=True)
-    doc.save(str(out_docx))
-
 def load_day(path: Path):
     df = pd.read_csv(path, encoding="utf-8", low_memory=False)
     sev_col  = first_existing(df, ["Severity","severity"])
@@ -118,11 +92,13 @@ def load_day(path: Path):
     return df
 
 def main():
-    csv_files = sorted(RAW.glob("ThreatLog_*.csv"), key=lambda p: iso_from_filename(p.name))
+    # Leia CSV-d ja vajadusel võta ainult viimased N (nt 7)
+    csv_files = sorted(RAW.glob("*.csv"), key=lambda p: p.stat().st_mtime, reverse=True)
     if not csv_files:
         print("[!] Ei leitud CSV-faile kaustas 'raw/'."); return
     if LIMIT_LAST_N:
-        csv_files = csv_files[-LIMIT_LAST_N:]
+        csv_files = csv_files[:LIMIT_LAST_N]  # viimased N kõige uuemat
+    csv_files = list(reversed(csv_files))     # et ajajoon oleks vanim → uusim
 
     print(f"[i] Leiti {len(csv_files)} faili analüüsiks.")
     days = []
@@ -143,6 +119,16 @@ def main():
         week[f"{col}_delta"] = week[col].diff().fillna(0).round(2)
 
     all_df = pd.concat([d for _,d,_ in days], ignore_index=True)
+
+    # --- Valepositiivid (nädala koond) ---
+    fp_cat = pd.Series(dtype=int)
+    if "cat_norm" in all_df.columns:
+        fp_cat = all_df[all_df["cat_norm"].isin(FALSE_POSITIVE_CATEGORIES)]["cat_norm"].value_counts()
+
+    fp_names = pd.Series(dtype=int)
+    if "tname_norm" in all_df.columns:
+        fp_names = all_df[all_df["tname_norm"].str.lower().isin(FALSE_POSITIVE_NAMES)]["tname_norm"].str.lower().value_counts()
+
     sev_stack = week.set_index("date")[["low","medium","high","critical"]].fillna(0).astype(int)
     risk_hist = all_df["risk_norm"].astype(int).value_counts().sort_index() if "risk_norm" in all_df.columns else pd.Series(dtype=int)
     cat_counts = all_df["cat_norm"].value_counts() if "cat_norm" in all_df.columns else pd.Series(dtype=int)
@@ -186,6 +172,11 @@ def main():
             if df_top is not None and len(df_top)>0: df_top.to_excel(xw, sheet_name=f"Top5_{sev.title()}", index=False)
         for risk, df_top in top5_by_risk.items():
             if df_top is not None and len(df_top)>0: df_top.to_excel(xw, sheet_name=f"Top5_Risk{risk}", index=False)
+        # Valepositiivid (nädal)
+        if not fp_cat.empty:
+            fp_cat.rename_axis("category").reset_index(name="count").to_excel(xw, sheet_name="FalsePos_Categories", index=False)
+        if not fp_names.empty:
+            fp_names.rename_axis("threat_name").reset_index(name="count").to_excel(xw, sheet_name="FalsePos_Names", index=False)
 
     # TXT
     out_txt = OUT / f"week_summary_{today}.txt"
@@ -221,6 +212,19 @@ def main():
                 df_top = top5_by_risk[risk]
                 for _, row in df_top.iterrows():
                     f.write(f"    - {row['tname_norm']} – {str(row['cat_norm'])} – {int(row['count'])}\n")
+        f.write("\nSAGEDASED VALEPOSITIIVID (nädal):\n")
+        f.write("  Kategooriad:\n")
+        if not fp_cat.empty:
+            for i, (k, v) in enumerate(fp_cat.items(), 1):
+                f.write(f"    {i}. {k} – {int(v)}\n")
+        else:
+            f.write("    – (puuduvad)\n")
+        f.write("  Threat/Content Name:\n")
+        if not fp_names.empty:
+            for i, (k, v) in enumerate(fp_names.items(), 1):
+                f.write(f"    {i}. {k} – {int(v)}\n")
+        else:
+            f.write("    – (puuduvad)\n")
 
     # Graafikud
     plt.figure(figsize=(11,6))
@@ -252,7 +256,6 @@ def main():
         (REP / f"week_top_src_{today}.png", "TOP 10 allika IP"),
         (REP / f"week_top_dst_{today}.png", "TOP 10 sihtmärgi IP"),
     ]
-    # Filtreeri pildid, mis reaalselt olemas
     images_week = [(p, c) for p, c in images_week if p.exists()]
     doc = Document()
     doc.add_heading(f"SOC nädala koondaruanne — {week['date'].iloc[0]} … {week['date'].iloc[-1]}", level=1)
@@ -266,6 +269,22 @@ def main():
             p = doc.add_paragraph(); run = p.add_run(); run.add_picture(str(img), width=Inches(6.0))
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             cap_p = doc.add_paragraph(cap); cap_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    # --- DOCX: Valepositiivid (nädal) ---
+    doc.add_heading("Valepositiivid (nädal)", level=2)
+    if fp_cat is not None and not fp_cat.empty:
+        doc.add_paragraph("Kategooriad:")
+        for i, (k, v) in enumerate(fp_cat.items(), 1):
+            doc.add_paragraph(f"{i}. {k} – {int(v)}")
+    else:
+        doc.add_paragraph("Kategooriad: – (puuduvad)")
+    if fp_names is not None and not fp_names.empty:
+        doc.add_paragraph("Threat/Content Name:")
+        for i, (k, v) in enumerate(fp_names.items(), 1):
+            doc.add_paragraph(f"{i}. {k} – {int(v)}")
+    else:
+        doc.add_paragraph("Threat/Content Name: – (puuduvad)")
+
     doc.save(str(docx_path))
 
     print("[OK] Nädala analüüs valmis.")

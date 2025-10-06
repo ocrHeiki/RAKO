@@ -1,35 +1,28 @@
-# SOC logianalüüsi skriptid — v2.3 (tulemused/)
-**Versioon:** v2.3 (06.10.2025)
+# SOC logianalüüsi skriptid — v2.3.4 (tulemused/)
+**Versioon:** v2.3.4 (06.10.2025)
 
-Selles versioonis:
-- Väljundkaust on **`tulemused/`** (varasema `processed/` asemel)
-- Loob automaatselt **TXT, CSV, XLSX ja DOCX** (Word) raportid
-- Graafikud salvestuvad kausta **`reports/`**
-- Sobib **Windows/macOS** keskkondadele
+- Automaatselt valitakse kaustast `raw/` **kõige uuem CSV** logifail.
+- 24h ja nädala skriptid loovad **TXT, CSV, XLSX ja DOCX** raportid.
+- DOCX sisaldab **TXT sisu + graafikud** (tabeleid ei lisata).
+- Väljundkaust: **`tulemused/`**, graafikud: **`reports/`**.
 
-## Kaustastruktuur
+## 📁 Kaustastruktuur ja tööjaama nõue
+
+Kõik järgnevad kataloogid **peavad asuma tööjaamas**, kus analüüsi teostatakse:
+
 ```
-SOC/
- ├─ raw/           ← sisendlogid (CSV, nt ThreatLog_2025-10-06.csv)
- ├─ tulemused/     ← TXT, DOCX, XLSX raportid
- ├─ reports/       ← graafikute pildid (.png)
- ├─ soc_24h.py
- ├─ soc_week.py
- ├─ requirements.txt
- └─ README.md
+raw/          → Sisendlogid (nt ThreatLog_06.10.2025.csv)
+tulemused/    → Analüüside väljundid (TXT, CSV, XLSX, DOCX)
+reports/      → Graafikute pildifailid (PNG)
 ```
 
-## Logifailide salvestamine
-- **24h analüüs:** `raw/ThreatLog_YYYY-MM-DD.csv` (nt `ThreatLog_2025-10-06.csv`)
-- **Nädala analüüs:** 7 järjestikust faili samas formaadis
+> ⚠️ **NB!** Need kaustad peavad olema loodud enne skriptide käivitamist, kuna `soc_24h.py` ja `soc_week.py`
+> salvestavad oma tulemused otse nendesse. Kui katalooge pole olemas, võib analüüs katkeda või väljundfaile ei teki.
 
-> ⚠️ Failinimi peab sisaldama kuupäeva kujul `YYYY-MM-DD` (või `DD.MM.YYYY`).
-
-## Paigaldus
+## Install
 ```
 pip install -r requirements.txt
 ```
-(`requirements.txt`: pandas, matplotlib, openpyxl, python-docx)
 
 ## Käivitus
 **Windows (PowerShell):**
@@ -43,9 +36,7 @@ python3 soc_24h.py
 python3 soc_week.py
 ```
 
-## Väljund
-- `tulemused/24h_summary_YYYY-MM-DD.txt|csv|xlsx|docx`
-- `tulemused/week_summary_YYYY-MM-DD.txt|csv|xlsx|docx`
-- Graafikud kaustas `reports/`
-
-**Märkus:** DOCX raport sisaldab TXT-sisu ning lisab kõik graafikud dokumenti pealkirjade alla.
+## Väljundid
+- `tulemused/24h_summary_YYYY-MM-DD.(txt|csv|xlsx|docx)`
+- `tulemused/week_summary_YYYY-MM-DD.(txt|csv|xlsx|docx)`
+- `reports/` kaustas graafikud (PNG)
