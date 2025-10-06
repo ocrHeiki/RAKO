@@ -21,7 +21,7 @@ reports/      → Graafikute pildifailid (PNG)
 
 ## Install
 ```
-pip install -r requirements.txt
+pip install pandas matplotib openpyxl python-docx
 ```
 
 ## Käivitus
