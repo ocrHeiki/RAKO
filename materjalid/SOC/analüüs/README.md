@@ -1,42 +1,39 @@
-# SOC logianalüüsi skriptid — v2.3.4 (tulemused/)
-**Versioon:** v2.3.4 (06.10.2025)
+# SOC Analüüsi tööriistad v2.4
 
-- Automaatselt valitakse kaustast `raw/` **kõige uuem CSV** logifail.
-- 24h ja nädala skriptid loovad **TXT, CSV, XLSX ja DOCX** raportid.
-- DOCX sisaldab **TXT sisu + graafikud** (tabeleid ei lisata).
-- Väljundkaust: **`tulemused/`**, graafikud: **`reports/`**.
+See versioon sisaldab kahte automaatset analüüsi skripti:  
+`24h` ja `nädalane` logide töötlemine (CSV → TXT, DOCX, graafikud).
 
-## 📁 Kaustastruktuur ja tööjaama nõue
+## 📁 Kaustastruktuur
+| Kaust | Kirjeldus |
+|-------|-----------|
+| `raw/` | Toorandmed (CSV logifailid, nt ThreatLog_06.10.2025.csv) |
+| `tulemused/` | Lõplikud aruanded (TXT, XLSX, DOCX) |
+| `reports/` | Kõik graafikud (PNG formaadis) |
 
-Kõik järgnevad kataloogid **peavad asuma tööjaamas**, kus analüüsi teostatakse:
+Kõik need kaustad peavad asuma **tööjaamas, kus analüüs tehakse**.
 
+## ⚙️ Paigaldus
+**Windows:**
 ```
-raw/          → Sisendlogid (nt ThreatLog_06.10.2025.csv)
-tulemused/    → Analüüside väljundid (TXT, CSV, XLSX, DOCX)
-reports/      → Graafikute pildifailid (PNG)
-```
-
-> ⚠️ **NB!** Need kaustad peavad olema loodud enne skriptide käivitamist, kuna `soc_24h.py` ja `soc_week.py`
-> salvestavad oma tulemused otse nendesse. Kui katalooge pole olemas, võib analüüs katkeda või väljundfaile ei teki.
-
-## Install
-```
-pip install pandas matplotib openpyxl python-docx
-```
-
-## Käivitus
-**Windows (PowerShell):**
-```
-py soc_24h.py
-py soc_week.py
+py -m pip install pandas matplotlib openpyxl python-docx
 ```
 **macOS / Linux:**
 ```
-python3 soc_24h.py
-python3 soc_week.py
+python3 -m pip install pandas matplotlib openpyxl python-docx
 ```
 
-## Väljundid
-- `tulemused/24h_summary_YYYY-MM-DD.(txt|csv|xlsx|docx)`
-- `tulemused/week_summary_YYYY-MM-DD.(txt|csv|xlsx|docx)`
-- `reports/` kaustas graafikud (PNG)
+## 🚀 Kasutamine
+**24h analüüs**
+```
+py soc_24h.py
+```
+**Nädala analüüs**
+```
+py soc_week.py
+```
+
+Skriptid otsivad automaatselt uusimad `.csv` failid kaustast `raw/` ja loovad tulemused:
+- TXT (tulemus kokkuvõte)
+- DOCX (Wordi raport koos graafikutega)
+- XLSX (Exceli koond)
+- PNG (graafikud kaustas `reports/`)
