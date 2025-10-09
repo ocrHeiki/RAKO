@@ -1,0 +1,8 @@
+txt 
+doc 
+docx 
+xls 
+xlsx
+pdf 
+png 
+mp3
