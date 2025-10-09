@@ -14,3 +14,4 @@ Get-Date -Format "yyyy-MM-dd HH:mm:ss" | Out-File ".\Desktop\log.txt" -Append
 
  1..10 | ForEach-Object { $i=$_; $t=Get-Date; Write-Host "$i - $($t.ToString('yyyy-MM-dd HH:mm:ss'))"; $t.ToString("yyyy-MM-dd HH:mm:ss") | Out-File ".\Desktop\log.txt" -Append; Start-Sleep -Seconds (Get-Random -Minimum 1 -Maximum 5)}
 
+Powershell faili laiendid on kõik .ps1
