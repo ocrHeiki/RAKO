@@ -43,11 +43,10 @@ function LetsPlay {
 }
 while($game_over -eq $false) {
     $game_over =  LetsPlay
-    if($game_over)
+    if($game_over){
         writeToFile
         Show-Scoreboard
 }
+}
 
-
-#Show-Scoreboard
-#writeToFile
+Write-Host "Mäng läbi"
