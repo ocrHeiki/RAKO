@@ -11,3 +11,10 @@ Clear-Host
 Write-Host $pc_nr $filename #Kontrolliks
 Clear-Host
 
+
+function writeToFile {
+    $name = Read-Host "Mängija nimi"
+    ($name, $Global:steps -join ",") | Out-File -FilePath $filename -Append #Append lisab failinime alati juurde
+    
+}
+writeToFile
