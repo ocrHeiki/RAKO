@@ -1,0 +1,8 @@
+Esimesed PowerShell käsud, mida terminalis proovisime
+
+Get-Date
+Get-Date | Get-Member
+(Get-Date).Year
+Get-Date | ForEach-Object { $_.Year}
+Get-Date | Select-Object -Property Date, DayOfWeek
+Get-Date -Format "yyyy-MM-dd HH:mm:ss"
