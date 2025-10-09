@@ -61,10 +61,19 @@ Import-Csv $src -Delimiter ";" | ForEach-Object {
             #Loome kasutajanime
             $username = Remove-Diacritics($first_name, $last_name -join ".").ToLower()
 
-            Write-Host $username
+            #Loome eposti
+            $email = $username + $domain
+
+            #Teeme massiiivi veergudest
+            $array = $_.Eesnimi, $_.Perenimi, $_.Sünniaeg, $username, $email
+
+            #Teeme uue rea faili
+            $new_line = $array -join ";"
+
+            #Write-Host $new_line
+            Out-File $dst -Append -InputObject $new_line
         }
    }
    
-   #Write-Host $_
 }
-
+Write-Host "Valmis, $counter tk."
