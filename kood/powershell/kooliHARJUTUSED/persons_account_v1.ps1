@@ -35,4 +35,21 @@ param ([String]$src = [String]::Empty)
   }
   $sb.ToString()
 }
+# Kas uus fail on olemas
+if(Test-Path $dst) {
+    Remove-Item $dst
+}
+# Kirjutame uude faili päise
+Out-File -FilePath $dst -Append -InputObject $header
+
+# Loeme originaalfaili ja töötleme ridasid
+Import-Csv $src -Delimiter ";" | ForEach-Object {
+   $date_str = $_.Sünniaeg
+   $isValid = [DateTime]::ParseExact($date_str, $pattern, $null)
+   if($isValid){
+        $date = [DateTime]::ParseExact($date_str, $pattern, $null)
+   }
+   
+   Write-Host $_
+}
 
