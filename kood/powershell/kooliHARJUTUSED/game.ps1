@@ -15,6 +15,13 @@ Clear-Host
 function writeToFile {
     $name = Read-Host "Mängija nimi"
     ($name, $Global:steps -join ",") | Out-File -FilePath $filename -Append #Append lisab failinime alati juurde
-    
 }
+
+function Show-Scoreboard {
+    $content = Get-Content -Path $filename
+    foreach ($line in $content) {
+        Write-Host $line.split(";")
+    }
+}
+Show-Scoreboard
 #writeToFile
