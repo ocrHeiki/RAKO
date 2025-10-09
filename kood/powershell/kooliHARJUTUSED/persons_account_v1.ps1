@@ -48,8 +48,23 @@ Import-Csv $src -Delimiter ";" | ForEach-Object {
    $isValid = [DateTime]::ParseExact($date_str, $pattern, $null)
    if($isValid){
         $date = [DateTime]::ParseExact($date_str, $pattern, $null)
+        if($date.Year -ge 1990 -and $date.Year -le 1999) {
+            $counter++
+            
+            $first_name = $_.Eesnimi
+            $last_name = $_.Perenimi
+
+            #Eemaldame tühiku ja sidekriipsu eesnimest
+            $first_name = $first_name -replace " ", ""
+            $first_name = $first_name -replace "-", ""
+
+            #Loome kasutajanime
+            $username = Remove-Diacritics($first_name, $last_name -join ".").ToLower()
+
+            Write-Host $username
+        }
    }
    
-   Write-Host $_
+   #Write-Host $_
 }
 
