@@ -36,5 +36,3 @@ param ([String]$src = [String]::Empty)
   $sb.ToString()
 }
 
-# Test data
-@("Rhône", "Basíl", "Åbo", "", "Gräsäntörmä") | % { Remove-Diacritics $_ }
