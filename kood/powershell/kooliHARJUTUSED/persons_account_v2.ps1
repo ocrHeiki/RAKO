@@ -18,7 +18,7 @@ https://stackoverflow.com/questions/7836670
 
 
 $src = Join-Path -Path $PSScriptRoot -ChildPath ".\Persons.csv"
-$dst = Join-Path -Path $PSScriptRoot -ChildPath ".\Persons_account_v1.csv"
+$dst = Join-Path -Path $PSScriptRoot -ChildPath ".\Persons_account_v2.csv"
 $domain = "@asutus.com"
 $header = "Eesnimi;Perenimi;Sünniaeg;Sugu;Isikukood;Kasutajanimi;Epost"
 $pattern = "dd.MM.yyyy" #kuupäeva formaat failis
@@ -42,36 +42,40 @@ if(Test-Path $dst) {
 # Kirjutame uude faili päise
 Out-File -FilePath $dst -Append -InputObject $header
 
+$content = [System.IO.File]::ReadAllLines($src, [System.Text.Encoding]::UTF8)
+
+
 # Loeme originaalfaili ja töötleme ridasid
-Import-Csv $src -Delimiter ";" | ForEach-Object {
-   $date_str = $_.Sünniaeg
-   $isValid = [DateTime]::ParseExact($date_str, $pattern, $null)
-   if($isValid){
-        $date = [DateTime]::ParseExact($date_str, $pattern, $null)
-        if($date.Year -ge 1990 -and $date.Year -le 1999) {
-            $counter++
+$content | Select-Object -Skip 1 | ForEach-Object {
+  $parts = $_.Split(";") # Tükeldame rea semikoolonist
+  $date_str = $parts[2] # Kolmas element on sünniaeg
+  $isValid = [DateTime]::ParseExact($date_str, $pattern, $null)
+  if($isValid){
+      $date = [DateTime]::ParseExact($date_str, $pattern, $null)
+      if($date.Year -ge 1990 -and $date.Year -le 1999) {
+          $counter++
             
-            $first_name = $_.Eesnimi
-            $last_name = $_.Perenimi
+          $first_name = $parts[0] #Eesnimi
+          $last_name = $parts[1]  #Perenimi
 
             #Eemaldame tühiku ja sidekriipsu eesnimest
-            $first_name = $first_name -replace " ", ""
-            $first_name = $first_name -replace "-", ""
+          $first_name = $first_name -replace " ", ""
+          $first_name = $first_name -replace "-", ""
 
             #Loome kasutajanime
-            $username = Remove-Diacritics($first_name, $last_name -join ".").ToLower()
+          $username = Remove-Diacritics($first_name, $last_name -join ".").ToLower()
 
             #Loome eposti
-            $email = $username + $domain
+          $email = $username + $domain
 
             #Teeme massiiivi veergudest
-            $array = $_.Eesnimi, $_.Perenimi, $_.Sünniaeg, $username, $email
+          $array = $parts[0], $parts[1], $parts[2], $username, $email
 
             #Teeme uue rea faili
-            $new_line = $array -join ";"
+          $new_line = $array -join ";"
 
             #Write-Host $new_line
-            Out-File $dst -Append -InputObject $new_line
+          Out-File $dst -Append -InputObject $new_line
         }
    }
    
