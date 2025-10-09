@@ -46,7 +46,13 @@ while($game_over -eq $false) {
     if($game_over){
         writeToFile
         Show-Scoreboard
+        $answer = Read-Host "Kas mängime veel? (J/E)"
+        if($answer -eq "J") {
+            $pc_nr = Get-Random -Minimum 1 -Maximum 100
+            [System.Boolean]$game_over = $false
+            $Global:steps = 0
+           
 }
 }
-
+}
 Write-Host "Mäng läbi"
