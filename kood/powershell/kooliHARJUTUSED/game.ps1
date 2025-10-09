@@ -17,4 +17,4 @@ function writeToFile {
     ($name, $Global:steps -join ",") | Out-File -FilePath $filename -Append #Append lisab failinime alati juurde
     
 }
-writeToFile
+#writeToFile
