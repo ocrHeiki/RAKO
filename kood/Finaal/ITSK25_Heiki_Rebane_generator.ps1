@@ -1,6 +1,6 @@
-# ITSK25_Heiki_generator.ps1
+# ITSK25_Heiki_Rebane_generator.ps1
 # Loob juhuslike numbritega maatriksi ja salvestab faili 'output.txt'
-# Autor: ocrHeiki
+# Autor: ocrHeiki/Heiki Rebane
 
 do {
     $suurus = Read-Host "Sisesta maatriksi suurus (3–10)"
