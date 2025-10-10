@@ -18,12 +18,12 @@ Eesmärk: õppida kasutama **kahte erinevat skriptimiskeelt (PowerShell ja Pytho
 
 ## ⚙️ 1. PowerShell skript – *andmete generaator*
 
-**Failinimi:** `ITSK25_Heiki_generator.ps1`
+**Failinimi:** `ITSK25_Heiki_Rebane_generator.ps1`
 
 ```powershell
-# ITSK25_Heiki_generator.ps1
+# ITSK25_Heiki_Rebane_generator.ps1
 # Loob juhuslike numbritega maatriksi ja salvestab faili 'output.txt'
-# Autor: ocrHeiki
+# Autor: ocrHeiki/Heiki Rebane
 
 do {
     $suurus = Read-Host "Sisesta maatriksi suurus (3–10)"
@@ -82,12 +82,12 @@ Fail `output.txt`:
 
 ## 🐍 2. Python skript – *andmete analüsaator*
 
-**Failinimi:** `ITSK25_Heiki_analyys.py`
+**Failinimi:** `ITSK25_Heiki_Rebane_analyys.py`
 
 ```python
-# ITSK25_Heiki_analyys.py
+# ITSK25_Heiki_Rebane_analyys.py
 # Loeb faili 'output.txt' ja arvutab ridade ja veergude summad
-# Autor: ocrHeiki
+# Autor: ocrHeiki/Heiki Rebane
 
 import os
 
@@ -178,12 +178,12 @@ Väikseim number: 01
 ## 📁 Projekti struktuur
 
 ```
-ITSK25_Skriptimine/
+finaalSKRIPTiD/
 │
-├── ITSK25_Heiki_generator.ps1    # PowerShelli skript (andmete generaator)
-├── ITSK25_Heiki_analyys.py       # Pythoni skript (andmete analüsaator)
-├── output.txt                    # Tekstifail, kuhu PowerShell salvestab maatriksi
-└── README.md                     # Käesolev juhend koos seletustega
+├── ITSK25_Heiki_Rebane_generator.ps1    # PowerShelli skript (andmete generaator)
+├── ITSK25_Heiki_Rebane_analyys.py       # Pythoni skript (andmete analüsaator)
+├── output.txt                           # Tekstifail, kuhu PowerShell salvestab maatriksi
+└── README.md                            # Käesolev juhend koos seletustega
 ```
 
 ---
@@ -192,14 +192,14 @@ ITSK25_Skriptimine/
 
 1. Ava PowerShell ja käivita:
    ```powershell
-   .\ITSK25_Heiki_generator.ps1
+   .\ITSK25_Heiki_Rebane_generator.ps1
    ```
    → vali maatriksi suurus (nt 5)  
    → fail `output.txt` tekib kausta  
 
 2. Seejärel ava Python ja käivita:
    ```bash
-   python ITSK25_Heiki_analyys.py
+   python ITSK25_Heiki_Rebane_analyys.py
    ```
 
 ---
@@ -216,7 +216,7 @@ ITSK25_Skriptimine/
 
 ## ✍️ Autor
 
-**Nimi:** ocrHeiki  
+**Nimi:** ocrHeiki/ Heiki Rebane  
 **Õpperühm:** ITSK25  
 **Kool:** Raplamaa Rakenduslik Kolledž  
 **Kontakt:** [ocrHeiki @ GitHub](https://github.com/ocrHeiki)
