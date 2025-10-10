@@ -1,6 +1,6 @@
-# ITSK25_Heiki_analyys.py
+# ITSK25_Heiki_Rebane_analyys.py
 # Loeb faili 'output.txt' ja arvutab ridade ja veergude summad
-# Autor: ocrHeiki
+# Autor: ocrHeiki/Heiki Rebane
 
 import os
 
