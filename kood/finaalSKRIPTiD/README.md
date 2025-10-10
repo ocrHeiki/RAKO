@@ -182,7 +182,7 @@ finaalSKRIPTiD/
 │
 ├── ITSK25_Heiki_Rebane_generator.ps1    # PowerShelli skript (andmete generaator)
 ├── ITSK25_Heiki_Rebane_analyys.py       # Pythoni skript (andmete analüsaator)
-├── output.txt                           # Tekstifail, kuhu PowerShell salvestab maatriksi
+├── output.txt                           # Tekstifail, kuhu PowerShell salvestab maatriksi, lisan hiljem
 └── README.md                            # Käesolev juhend koos seletustega
 ```
 
