@@ -110,7 +110,7 @@ type $env:USERPROFILE\.ssh\id_ed25519.pub
 - [Pythoni õpik (progeopik.cs.ut.ee)](https://progeopik.cs.ut.ee/) – tasuta eestikeelne õppematerjal, mis sobib hästi programmeerimise algajatele.
 
 ### E-õppe kursused (metshein.com)
-Portaal [metshein.com](https://metshein.com/) sisaldab tasuta eestikeelseid kursuseid. Õppejõud **Mario Metshein** oli minu varasem õpetaja eelmisest koolist.  
+- [metshein.com](https://metshein.com/) sisaldab tasuta eestikeelseid kursuseid. Õppejõud **Mario Metshein** oli minu varasem õpetaja eelmisest koolist.  
 
 ---
 
