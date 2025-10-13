@@ -7,6 +7,7 @@ Siin on meie Skriptimise tunni teemad
 
 ## 📁 Struktuur
 
+- `finaalSKRIPTiD/` -
 - `powershell/` - 
 - `python/` -
 
