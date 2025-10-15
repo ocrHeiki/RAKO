@@ -18,20 +18,25 @@ See projekt sisaldab kahte täiustatud Python-skripti SOC (Security Operations C
 
 ## 📁 Kaustastruktuur
 
-Skriptid loovad automaatselt järgmised kaustad:
+Kõik SOC tööfailid paiknevad kasutaja **Documents/SOC** kataloogis.  
+Skriptid asuvad alamkaustas `scripts/`.
+
 ```
 C:\Users\<kasutaja>\Documents\SOC\
 │
 ├── raw\              # sisendfailid (.csv)
 ├── reports\          # graafikute väljundid (.png)
-└── tulemused\        # aruanded (TXT, DOCX, XLSX)
+├── tulemused\        # aruanded (TXT, DOCX, XLSX)
+└── scripts\          # Python-skriptid (soc_24h.py, soc_week.py)
 ```
+
+> ⚠️ **NB!** Need kaustad luuakse automaatselt, kui neid pole olemas.
 
 ---
 
 ## ⚙️ Paigaldamine
 
-Paigalda vajalikud teegid:
+Paigalda vajalikud teegid käsuga:
 
 ```bash
 pip install pandas matplotlib python-docx openpyxl
@@ -46,9 +51,14 @@ C:\Users\<kasutaja>\Documents\SOC\raw\
 
 ## ▶️ Käivitamine
 
-### Päevane analüüs (v2.9)
+Ava terminal (CMD või PowerShell) ja liigu skriptide kausta:
+
 ```bash
 cd C:\Users\<kasutaja>\Documents\SOC\scripts
+```
+
+### Päevane analüüs (v2.9)
+```bash
 py soc_24h.py
 ```
 
@@ -59,7 +69,6 @@ Tulemus:
 
 ### Nädalane analüüs (v2.8)
 ```bash
-cd C:\Users\<kasutaja>\Documents\SOC\scripts
 py soc_week.py
 ```
 
