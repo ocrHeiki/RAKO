@@ -1,139 +1,127 @@
-# 🧠 SOC logianalüüsi skriptid — v2.8
+# 🧠 SOC Analüüsi tööriistad — v2.8 / v2.9
 
-**Versioon:** v2.8 (15.10.2025)  
-**Autor:** Heiki Rebane (õpiprojekt)
+**Autor:** Heiki Rebane (õpiprojekt)  
+**Kuupäev:** 15. oktoober 2025  
 
-## 📌 Ülevaade
+---
 
-Kaks Python-skripti — **`soc_24h.py`** ja **`soc_week.py`** — koostavad automaatsed logianalüüsi raportid:
+## 📘 Ülevaade
 
-- otsivad kaustast `raw/` **kõige uuema CSV** logifaili,  
-- koostavad **TXT, CSV, XLSX ja DOCX** aruanded,  
-- genereerivad **visuaalsed graafikud (PNG)** kausta `reports/`.  
+See projekt sisaldab kahte täiustatud Python-skripti SOC (Security Operations Center) analüüside automatiseerimiseks.
 
-Raportid sobivad igapäevaseks ja iganädalaseks SOC monitooringuks.
+| Skript | Versioon | Eesmärk |
+|---------|-----------|----------|
+| 🗓️ `soc_week.py` | **v2.8** | Nädalane koondanalüüs (trendide ja riskitasemete jälgimine) |
+| ⏱️ `soc_24h.py` | **v2.9** | Päevane analüüs (24h sündmuste põhjal, tekst + graafikud) |
 
 ---
 
 ## 📁 Kaustastruktuur
 
-Kõik järgnevad kataloogid asuvad SOC töökaustas. *Skriptid* on eraldi **`scripts/`** kaustas.
-
+Skriptid loovad automaatselt järgmised kaustad:
 ```
-SOC/
-├── scripts/      → Python skriptid (soc_24h.py, soc_week.py)
-├── raw/          → Sisendlogid (nt ThreatLog_2025-10-15.csv)
-├── tulemused/    → Analüüside väljundid (TXT, CSV, XLSX, DOCX)
-└── reports/      → Graafikute pildifailid (PNG)
+C:\Users\<kasutaja>\Documents\SOC\
+│
+├── raw\              # sisendfailid (.csv)
+├── reports\          # graafikute väljundid (.png)
+└── tulemused\        # aruanded (TXT, DOCX, XLSX)
 ```
-
-> ℹ️ Kui kaustasid pole, skriptid loovad **raw/**, **tulemused/** ja **reports/** ise.
 
 ---
 
-## ⚙️ Paigaldus
+## ⚙️ Paigaldamine
+
+Paigalda vajalikud teegid:
 
 ```bash
-pip install pandas matplotlib openpyxl python-docx
+pip install pandas matplotlib python-docx openpyxl
 ```
 
-> Linuxis võib vaja minna Tk backendit (mõnel platvormil):  
-> `sudo apt install python3-tk`
+Aseta oma logifail(id) kausta:
+```
+C:\Users\<kasutaja>\Documents\SOC\raw\
+```
 
 ---
 
-## 🖥️ Käivitus ITO terminalis
+## ▶️ Käivitamine
 
-> **Oluline:** ava ITO terminal ja **liigu kõigepealt skriptide kausta**.
-
-### Windows (ITO PowerShell)
-
-```powershell
-cd "$env:USERPROFILE\Documents\SOC\scripts"
+### Päevane analüüs (v2.9)
+```bash
+cd C:\Users\<kasutaja>\Documents\SOC\scripts
 py soc_24h.py
+```
+
+Tulemus:
+- 📄 `24h_summary_YYYY-MM-DD.txt`
+- 📘 `24h_summary_YYYY-MM-DD.docx`
+- 📊 Graafikud kaustas `reports/`
+
+### Nädalane analüüs (v2.8)
+```bash
+cd C:\Users\<kasutaja>\Documents\SOC\scripts
 py soc_week.py
 ```
 
-### macOS / Linux (ITO terminal)
+Tulemus:
+- 📈 `week_summary_YYYY-WW.xlsx`
+- 📘 `week_summary_YYYY-WW.docx`
+- Koondatud 7 päeva trendid ja riskitasemed
 
-```bash
-cd ~/Documents/SOC/scripts
-python3 soc_24h.py
-python3 soc_week.py
+---
+
+## 🧩 Peamised funktsioonid
+
+| Omadus | v2.8 (Week) | v2.9 (24h) |
+|---------|--------------|-------------|
+| Tekstiline kokkuvõte | ✅ | ✅ |
+| DOCX aruanne koos graafikutega | ✅ | ✅ |
+| Graafikute automaatne värvivahemik | 🟡 (fikseeritud) | 🟢 (dünaamiline `tab10`) |
+| Nutikas pirukas (donut või tulp) | ❌ | ✅ |
+| Automaatne valepositiivide eraldamine | ✅ | ✅ |
+| CSV / XLSX eksport | ✅ | 🔜 (tulekul v3.0) |
+| Headless töö (serveris) | ✅ | ✅ |
+
+---
+
+## 📊 Näide 24h aruandest (v2.9)
+
+**Tekstifail:**
+```
+SOC 24h ANALÜÜS — log (2).csv
+--------------------------------------------------
+Kuupäev: 2025-10-15
+Kokku logikirjeid: 12534
+
+■ Severity jaotus:
+  - critical: 83
+  - high: 430
+  - medium: 5000
+  - low: 7021
+
+■ TOP 10 ohud:
+  - Trojan.Win32.Agent: 120
+  - SQL.Injection.Attempt: 95
+  - Suspicious.PDF.File: 74
+  - Phishing.Link.Detected: 66
+  - Malicious.EXE.Payload: 52
+  - ...
 ```
 
-> Kui kaust ei leidu, loo see ja/või kontrolli õigusi:  
-> `mkdir -p ~/Documents/SOC/{scripts,raw,tulemused,reports}`
+---
+
+## ⚡ Versioonide kokkuvõte
+
+| Skript | Versioon | Uuendused |
+|--------|-----------|------------|
+| `soc_week.py` | **2.8** | Lisatud failiperioodi tuvastus ja allikafailide kronoloogiline järjestus. Parandatud graafikute loetavus. |
+| `soc_24h.py` | **2.9** | Taastatud täistekstiline raport. Lisatud nutikas pirukas/tulpdiagramm. Lahendatud `Invalid color None` viga. |
 
 ---
 
-## 🧩 Skriptide tööpõhimõte
+## 👨‍💻 Autor ja eesmärk
 
-### 🕐 `soc_24h.py` – 24h analüüs
-- **Faili valik:** võtab `raw/`-st kõige uuema CSV.  
-- **Periood:** tuvastab **andmete** algus- ja lõppkuupäeva CSV sisust (ajatempliveerud nagu `timestamp`, `time`, `Datetime`, …).  
-- **Normaliseerimine:** ühtlustab veerud (`Severity`, `Action`, `Threat/Content Type`, `Source/Destination` jpm).  
-- **Koond:** koguarv, keskmine risk, High+Critical %, jaotused + TOP-id.  
-- **Valepositiivid:** filtreerib etteantud kategooriad/nimed.  
-- **Väljundid:** TXT, CSV (metric/label/count), XLSX (mitu lehte), DOCX (TXT + graafikud).  
-- **Graafikud:** tulpdiagrammid ja **nutikas pirukas** (kui üks kategooria >92% → automaatselt tulp; DOCX pealkiri muutub vastavalt).
+See projekt on osa **SOC spetsialisti õppekavast**, mille eesmärk on automatiseerida logianalüüsi igapäevatööks.  
+Kõik materjalid ja skriptid on loodud õppimise eesmärgil.
 
-### 📅 `soc_week.py` – nädala analüüs
-- **Failid:** kasutab kuni **7 kõige uuemat** CSV-d (kronoloogiliselt vanem→uuem).  
-- **Periood:** leitakse koonddataseti varaseim ja hiliseim aeg (CSV sisust).  
-- **Koondtabelid:** päevade lõikes kokku/hi+crit/%/delta; TOP-id (kategooriad, allika/sihtmärgi IP).  
-- **LOW-fookus:** eraldi kokkuvõte “low” severity kihist + potentsiaalsed FP-allikad.  
-- **Võrdlus:** esimene pool vs teine pool (tõusud/langused).  
-- **Väljundid:** TXT, XLSX, DOCX (TXT + graafikud).  
-- **Graafikud:** trend, stacked severity, nutikas pirukas/tulp, TOP-tulbad.
-
----
-
-## 📊 Peamised graafikud
-
-- **Severity jaotus** (tulbad + pirukas/sõõrik)  
-- **Action osakaal** (nutikas pirukas → vajadusel tulp)  
-- **Threat/Content Type** (nutikas pirukas → vajadusel tulp)  
-- **TOP kategooriad / TOP allika IP / TOP sihtmärgi IP** (tulbad)  
-- **Nädala trend** (kokku vs High+Critical), **stacked severity** (päevade lõikes)
-
----
-
-## 🧾 Väljundfailid
-
-| Failitüüp | Asukoht | Kirjeldus |
-|---|---|---|
-| **TXT** | `tulemused/24h_summary_YYYY-MM-DD.txt`, `tulemused/week_summary_YYYY-MM-DD.txt` | Tekstipõhine ülevaade |
-| **CSV** | `tulemused/24h_summary_YYYY-MM-DD.csv` | Lühikoond automatiseerimiseks |
-| **XLSX** | `tulemused/24h_threats_YYYY-MM-DD.xlsx`, `tulemused/week_summary_YYYY-MM-DD.xlsx` | Täpsemad tabelid |
-| **DOCX** | `tulemused/24h_summary_YYYY-MM-DD.docx`, `tulemused/week_summary_YYYY-MM-DD.docx` | TXT sisu + graafikud |
-| **PNG** | `reports/` | Graafikute failid DOCX-iks |
-
----
-
-## 🧠 Mis on “nutikas pirukas”?
-
-- Kui üks kategooria moodustab üle **92%** või kategooriaid on liiga palju, on pirukas **raskesti loetav**.  
-- Skript joonistab sel juhul **horisontaalse tulpdiagrammi** ja märgib selle **captionis** (“tulp”).  
-- Muidu kuvatakse **pirukas/sõõrik**, kus pisikesed kategooriad liidetakse **„muu“** alla.
-
----
-
-## 🔁 Lühike töövoog
-
-1. **Pane CSV-d** kausta `raw/`.  
-2. Ava **ITO terminal** ja **mine kausta `scripts/`**.  
-3. Käivita `soc_24h.py` või `soc_week.py`.  
-4. Vaata tulemusi kaustas `tulemused/` (DOCX, XLSX, TXT, CSV) ja graafikuid kaustas `reports/`.
-
----
-
-## 🗒️ Versioonilogi (v2.3.4 → v2.8)
-
-- ✅ Lisatud **`scripts/`** kaust ja ITO terminali juhised (`cd` otse skriptide kausta).  
-- ✅ Periood võetakse **CSV sisesest ajatemplist** (mitte failinimest/alla laadimise ajast).  
-- ✅ DOCX pealkirjad ühtlustatud (`■ TITLE`) ja lisatud **Allikafailid** plokk.  
-- ✅ “Nutikas pirukas”: automaatne tulpdiagramm (caption muutub).  
-- ✅ Värvikaartide **None**-väärtuste kaitse (ei viska Pandase “Invalid color None”).  
-- ✅ Headless renderdus (`matplotlib.use("Agg")`).  
-- ✅ TXT/DOCX struktuur selgemaks ja ühtlaseks.
+**Materjalid koostatud ja jagatud GitHubi kasutaja [ocrHeiki](https://github.com/ocrHeiki) õpiprojekti tarbeks.**
