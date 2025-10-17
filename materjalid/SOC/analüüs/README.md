@@ -1,145 +1,198 @@
-# 🧠 SOC Analüüsi tööriistad — v2.8 / v2.9
+# 🧠 SOC Analüüsi tööriistad — v3.0.1
 
 **Autor:** Heiki Rebane (õpiprojekt)  
-**Kuupäev:** 15. oktoober 2025  
+**Kuupäev:** 18. oktoober 2025  
 
 ---
 
 ## 📘 Ülevaade
 
-See projekt sisaldab kahte täiustatud Python-skripti SOC (Security Operations Center) logianalüüside automatiseerimiseks ja raportite loomiseks.
+See repo sisaldab kahte Python-skripti, mis automatiseerivad SOC (Security Operations Center) logide igapäevase ja iganädalase analüüsi.
 
 | Skript | Versioon | Eesmärk |
 |---------|-----------|----------|
-| 🗓️ `soc_week.py` | **v2.8** | Nädalane koondanalüüs (trendide ja riskitasemete jälgimine) |
-| ⏱️ `soc_24h.py` | **v2.9** | Päevane analüüs (24h sündmuste põhjal, tekst + graafikud) |
+| `soc_24h.py`  | **v3.0.1** | Viimase 24h logi detailne analüüs (TXT, XLSX, DOCX, PNG + `24h_ip.txt`) |
+| `soc_week.py` | **v3.0** | Nädalane koond (trend, võrdlus, TOP-id + `week_ip.txt`) |
+
+---
+
+## 🆕 Uuendused v3.0.1
+
+- Uus **Severity sõõriku-graafik (donut)** legendiga paremal – vältab siltide kuhjumise pirukal.  
+- Legend kuvab: *nimi — arv (osakaal%)*  
+- DOCX-i lisatakse sõõriku pilt, varasem pirukas asendatud uuega.  
+- Ühtlustatud `soc_24h.py` DOCX ja XLSX väljundid.  
+- Täiendatud README juhend ITO terminali käsureaga.
 
 ---
 
 ## 📁 Kaustastruktuur
 
-Kõik failid ja kaustad luuakse automaatselt tööjaama kausta `Documents\SOC\` alla.
-
 ```
 C:\Users\<kasutaja>\Documents\SOC\
 │
-├── raw\              # Sisendlogid (.csv failid)
-├── reports\          # Graafikute väljundid (.png)
-├── tulemused\        # Aruanded (TXT, DOCX, XLSX)
-└── scripts\          # Python-skriptid (soc_24h.py, soc_week.py)
+├── raw\          # Sisendfailid (.csv)
+├── reports\      # Graafikute väljundid (.png)
+├── tulemused\    # Aruanded (TXT, CSV, XLSX, DOCX, IP-listid)
+└── scripts\      # Python-skriptid (soc_24h.py, soc_week.py)
 ```
-
-> ⚠️ **NB!** Kõik kaustad peavad eksisteerima enne skripti käivitamist!  
-> Kui neid pole, loob skript need automaatselt.
 
 ---
 
 ## ⚙️ Paigaldamine
 
-Python 3 peab olema eelnevalt paigaldatud. Seejärel lisa vajalikud teegid:
+**Eeldused:** Python 3.9 või uuem, pip olemas.
 
 ```bash
 pip install pandas matplotlib python-docx openpyxl
 ```
 
-Aseta oma logifail(id) kausta:
+Paiguta logifailid kausta:
 ```
 C:\Users\<kasutaja>\Documents\SOC\raw\
 ```
 
 ---
 
-## 🖥️ Käivitamine ITO terminalis (või PowerShellis)
+## ▶️ Käivitamine (ITO terminal / PowerShell)
 
-Kõigepealt ava ITO terminal (või PowerShell) ja **mine skriptide kausta**:
+### ⏱️ 24h analüüs (v3.0.1)
+```powershell
+🖥️ PS C:\Users\<kasutaja>\Documents\SOC\scripts> py .\soc_24h.py
+```
 
-```bash
-cd C:\Users\<kasutaja>\Documents\SOC\scripts
+**Väljundid:**
+- `tulemused\24h_summary_YYYY-MM-DD.txt`
+- `tulemused\24h_summary_YYYY-MM-DD.xlsx`
+- `tulemused\24h_summary_YYYY-MM-DD.docx`
+- `tulemused\24h_ip_YYYY-MM-DD.txt`  ← **TOP 10 lähte-IP nimekiri**
+- `reports\paev_*_YYYY-MM-DD.png` (tulpdiagrammid + sõõrik)
+
+---
+
+### 🗓️ Nädala analüüs (v3.0)
+```powershell
+🖥️ PS C:\Users\<kasutaja>\Documents\SOC\scripts> py .\soc_week.py
+```
+
+**Väljundid:**
+- `tulemused\week_summary_YYYY-MM-DD.txt`
+- `tulemused\week_summary_YYYY-MM-DD.xlsx`
+- `tulemused\week_summary_YYYY-MM-DD.docx`
+- `tulemused\week_ip_YYYY-MM-DD.txt`
+- `reports\week_*.png` (trend, severity stack, top_cat, top_src, top_dst)
+
+---
+
+## 🧩 Mis toimub skriptide sees
+
+### `soc_24h.py` (v3.0.1)
+- Valib **uusima** CSV-faili kaustast `raw/`.
+- Normaliseerib veerud: Severity, Action, Threat Name, Source/Destination IP.
+- Arvutab:
+  - **Severity jaotus** – esitatakse sõõrikuna legendiga.
+  - **Action jaotus** (tulp + pirukas).
+  - **TOP kategooriad** (tulpdiagramm).
+  - **TOP 10 Threat / Content Name** (tulpdiagramm).
+  - **TOP 10 allika ja sihtmärgi IP** (tulpdiagramm).
+- Salvestab:
+  - TXT raporti (kokkuvõte).
+  - XLSX (mitmeleheline analüüs).
+  - DOCX (TXT + pildid).
+  - PNG graafikud.
+  - `24h_ip.txt` nimekirja edasiseks OSINT- või võrgupäringuks.
+
+### `soc_week.py` (v3.0)
+- Võtab kuni 7 viimast CSV-faili (5–7 päeva katvus).
+- Välistab 24h logifailid, kui need sisaldavad vaid ühte päeva.
+- Koostab nädalase trendi ja võrdluse:
+  - Alerts kokku, High+Critical %, TOP kategooriad ja IP-d.
+- Salvestab TXT, XLSX, DOCX ja `week_ip.txt`.
+
+---
+
+## 📊 Graafikud
+
+| Tüüp | Skript | Kirjeldus |
+|------|---------|------------|
+| **Sõõrik (donut)** | 24h | Severity jaotus – legend paremal, näitab arv + % |
+| **Pirukas (pie)** | 24h, Week | Action jaotus – protsentides |
+| **Tulp (bar)** | Mõlemad | TOP kategooriad, TOP Threats, TOP IP-d |
+| **Virntulp (stacked)** | Week | Päevade lõikes low/medium/high/critical |
+| **Trend (line)** | Week | Alerts kokku + % High+Critical |
+
+**Näide sõõrikust (Severity):**
+
+```
+● Severity osakaal (24h) – 2025-10-18
+-------------------------------------
+Low — 450 (54.0%)
+Medium — 290 (34.8%)
+High — 80 (9.6%)
+Critical — 12 (1.4%)
 ```
 
 ---
 
-### 💾 Päevane analüüs — `soc_24h.py` (v2.9)
+## 🧾 XLSX väljund
 
-Käivita 24h analüüs (valib automaatselt uusima CSV-faili):
-
-```bash
-py soc_24h.py
-```
-
-**Tulemus:**
-- 📄 `tulemused/24h_summary_YYYY-MM-DD.txt`
-- 📘 `tulemused/24h_summary_YYYY-MM-DD.docx`
-- 📊 Graafikud: `reports/` kaustas
-
-**Funktsioonid:**
-- Leiab `raw/` kaustast uusima CSV-faili  
-- Loob TXT + DOCX kokkuvõtte koos graafikutega  
-- Kuvab `Severity`, `Action`, `Category`, `Threat Type`, `Top IP` analüüsi  
-- Lisab IP-aadressid ka teksti kujul Wordi-aruandesse  
-- Kasutab dünaamilist värvigammat ja parandatud pirukagraafikuid  
+- **Info** – failinimi, kuupäev, ridade arv, analüüsi aeg  
+- **Severity** – Low, Medium, High, Critical  
+- **Action** – Allow, Deny, Drop, Alert  
+- **ThreatType** – sisu või pahavara tüübid  
+- **TopCategories** – peamised kategooriad  
+- **TopThreats** – Threat/Content Name TOP 10  
+- **TopSrc** – lähte-IP TOP 10  
+- **TopDst** – sihtmärgi-IP TOP 10  
 
 ---
 
-### 💾 Nädalane analüüs — `soc_week.py` (v2.8)
+## 🧪 IP nimekirjad
 
-Käivita 7 päeva logifaile hõlmav koondanalüüs (välistab automaatselt 24h failid):
+**24h:** `tulemused\24h_ip_YYYY-MM-DD.txt`  
+**Week:** `tulemused\week_ip_YYYY-MM-DD.txt`
 
-```bash
-py soc_week.py
+Kasutatakse:
+- OSINT-i päringuteks,
+- lubatud või keelatud IP-de tuvastuseks,
+- riskivõrgu järeltöötluses.
+
+**Näide:**
 ```
-
-**Tulemus:**
-- 📄 `tulemused/week_summary_YYYY-MM-DD.txt`
-- 📘 `tulemused/week_summary_YYYY-MM-DD.docx`
-- 📈 `tulemused/week_summary_YYYY-MM-DD.xlsx`
-- 📊 Graafikud: `reports/` kaustas
-
-**Funktsioonid:**
-- Leiab ja kasutab ainult neid CSV-faile, mille sisu katab 5–7 päeva  
-- Välistab automaatselt 24h analüüsifailid  
-- Võrdleb mitut nädalafaili (kui neid on vähemalt 2) ja toob välja tõusud/langused  
-- Loob DOCX-aruande koos tekstilise kokkuvõtte ja graafikutega  
-- Lisab võrreldavad kategooriad, allika ja sihtmärgi IP muutused  
-
----
-
-## 📊 Näide 24h aruandest (v2.9)
-
-```
-SOC 24h ANALÜÜS — log (2).csv
---------------------------------------------------
-Kuupäev: 2025-10-15
-Kokku logikirjeid: 12534
-
-■ Severity jaotus:
-  - critical: 83
-  - high: 430
-  - medium: 5000
-  - low: 7021
-
-■ TOP 10 ohud:
-  - Trojan.Win32.Agent: 120
-  - SQL.Injection.Attempt: 95
-  - Suspicious.PDF.File: 74
-  - Phishing.Link.Detected: 66
-  - Malicious.EXE.Payload: 52
+TOP 10 Allika IP (24h)
+======================
+192.168.1.45 (38 korda)
+10.10.10.12 (25 korda)
+...
 ```
 
 ---
 
-## ⚡ Versioonide kokkuvõte
+## 🛠️ Levinud vead ja lahendused
 
-| Skript | Versioon | Peamised uuendused |
-|--------|-----------|--------------------|
-| **`soc_week.py`** | **v2.8** | Lisatud failiperioodi automaattuvastus (5–7 päeva). Kaasab ainult nädalafaile, loob võrdlusanalüüsi mitme faili vahel, täiustatud graafikute märgendid. |
-| **`soc_24h.py`** | **v2.9** | Täistekstiline raport + Wordi graafikud ja IP-aadresside nimekiri. Lisatud parandused pirukagraafikule ja värviloogikale. Lahendatud `Invalid color None` viga. |
+| Viga | Põhjus / Lahendus |
+|------|--------------------|
+| CSV ei leidu | Lisa vähemalt üks `.csv` fail `raw/` kausta |
+| DOCX-is pildid puuduvad | Kontrolli `reports/` kausta |
+| Invalid color None | Värvikaart puudulik → lisa `#888888` vaikevärv |
+| Aja veerg puudub (nädal) | Võrdlus töötab osaliselt, kuid andmed jäävad alles |
 
 ---
 
-## 👨‍💻 Autor ja eesmärk
+## 🧾 Versioonide logi
 
-Projekt on osa **SOC spetsialisti õppekavast**, mille eesmärk on õpetada logianalüüsi automatiseerimist reaalses töövoos.  
-Kõik skriptid ja materjalid on loodud õppimise ning testimise eesmärgil.
+| Versioon | Muudatused |
+|-----------|------------|
+| **v3.0.1** | Lisatud sõõrik Severity jaoks (donut + legend paremal), parandatud DOCX. |
+| **v3.0** | Lisatud `24h_ip.txt` ja `week_ip.txt` nimekirjad, taastatud TOP Threat graafik. |
+| **v2.9** | Värvide ja legendide korrastamine, DOCX parandus. |
+| **v2.8** | Esimene täisversioon nädalase võrdluse ja LOW-fookusega. |
+
+---
+
+## 👨‍💻 Märkused
+
+See projekt on osa SOC spetsialisti õppekavast.  
+Skriptid on mõeldud õppimiseks ja SOC-töövoogude automatiseerimise katsetamiseks.
 
 **Materjalid koostatud ja jagatud GitHubi kasutaja [ocrHeiki](https://github.com/ocrHeiki) õpiprojekti tarbeks.**
