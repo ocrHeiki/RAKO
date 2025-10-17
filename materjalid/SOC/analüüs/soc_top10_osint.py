@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-SOC L1 – Palo Alto RAW → TOP10 → Internal/OSINT Enrichment → Report (CSV + Markdown)
+SOC L1 – Palo Alto RAW → TOP10 → Internal/OSINT → CSV + Word (DOCX/RTF)
 
-- Ilma väliste teekideta: kasutab ainult Python standardteeki (urllib, csv, json, socket, ipaddress, re, argparse).
-- OSINT: AbuseIPDB, VirusTotal, OTX, ipinfo – HTTP päringud urllib'iga (keskkonnamuutujate alusel).
-- WHOIS: port 43 (best-effort). Kui võrgu poliitika keelab, jäetakse vahele.
-- Raport: Markdown (.md), mitte DOCX (vältimaks sõltuvusi).
-
-Kasutus:
-  python3 soc_top10_osint.py --raw-dir RAW --outdir results --md-report
+- Väljundkaust: ~/Documents/SOC/tulemused
+- Failinimed: top10_osint_YYYY-MM-DD_summary.csv / _enrich.csv / _internal.csv / .docx(.rtf)
+- DOCX luuakse, kui python-docx on saadaval; vastasel juhul RTF (Word loeb).
+- OSINT HTTP päringud urllib'iga (standardteek). WHOIS best-effort (port 43).
 """
 import os, sys, csv, json, re, argparse, socket, time, ipaddress
 from collections import Counter, defaultdict
@@ -18,6 +15,14 @@ from typing import Dict, Any, Iterable, List, Tuple
 from urllib.request import Request, urlopen
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
+
+# ---- DOCX tugi (kui saadaval) ----
+try:
+    from docx import Document
+    from docx.shared import Pt
+    DOCX_OK = True
+except Exception:
+    DOCX_OK = False
 
 # ---- ENV KEYS (kui on) ----
 ABUSEIPDB_KEY = os.getenv("ABUSEIPDB_KEY", "")
@@ -46,7 +51,7 @@ RANGE_RE = re.compile(r'^\s*(\d{1,3}(?:\.\d{1,3}){3})\s*-\s*(\d{1,3}(?:\.\d{1,3}
 # ---- Heuristikad ----
 LOW_FP_MIN_EVENTS = 50
 LOW_FP_LOW_RATIO  = 0.8
-WELL_KNOWN_UPDATE_PORTS = {80, 443, 8530, 52311}
+WELL_KNNOWN_UPDATE_PORTS = {80, 443, 8530, 52311}
 COMMON_SERVICE_PORTS = {53, 80, 443, 22, 21, 123, 445, 3389}
 
 def normkey(k: str) -> str:
@@ -305,7 +310,7 @@ def internal_context_analysis(src_entity: str, rows_for_ip: List[Tuple[str,Dict[
         if cnt >= total*0.6:
             fp_score += 10; reasons.append(f"Sündmused koonduvad kella {h} kanti (ajastatud töö)")
     for p,_ in stats["ports"].most_common(3):
-        if p in WELL_KNOWN_UPDATE_PORTS: fp_score += 10
+        if p in WELL_KNNOWN_UPDATE_PORTS: fp_score += 10
         if p in COMMON_SERVICE_PORTS: fp_score += 5
 
     decision = "needs_review"
@@ -438,11 +443,14 @@ def do_osint_for_ip(ip: str) -> Dict[str,Any]:
 
     return {"ip": ip, "osint": osint, "verdict": {"decision":decision, "score":score, "flags":flags}}
 
-# ---------- I/O ----------
+# ---------- CSV/JSON + kuupäevased failinimed ----------
 def write_top_summary(outdir: str, analysis: Dict[str,Any]):
     os.makedirs(outdir, exist_ok=True)
-    path = os.path.join(outdir, "top10_summary.csv")
-    with open(path, "w", newline="", encoding="utf-8") as f:
+    date_str = (analysis["latest_ts"].strftime("%Y-%m-%d")
+                if analysis["latest_ts"] else datetime.utcnow().strftime("%Y-%m-%d"))
+
+    top_path = os.path.join(outdir, f"top10_osint_{date_str}_summary.csv")
+    with open(top_path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["section","rank","value","count"])
         for i,(ip,c) in enumerate(analysis["top_src"],1):
@@ -451,18 +459,19 @@ def write_top_summary(outdir: str, analysis: Dict[str,Any]):
             w.writerow(["top_threat", i, thr, c])
         for i,(thr,c) in enumerate(analysis["top_low_threat"],1):
             w.writerow(["top_low_lowFreq", i, thr, c])
-    with open(os.path.join(outdir, "ips_for_enrichment.txt"), "w", encoding="utf-8") as f:
+
+    with open(os.path.join(outdir, f"top10_osint_{date_str}_ips.txt"), "w", encoding="utf-8") as f:
         for ip in analysis["ips_for_enrichment"]:
             f.write(ip+"\n")
-    return path
+    return top_path, date_str
 
-def write_enrich_json_csv(outdir: str, enrich_results: List[Dict[str,Any]]):
+def write_enrich_json_csv(outdir: str, enrich_results: List[Dict[str,Any]], date_str: str):
     e_dir = os.path.join(outdir, "enrich")
     os.makedirs(e_dir, exist_ok=True)
     for r in enrich_results:
         with open(os.path.join(e_dir, f"{r['ip']}.json"), "w", encoding="utf-8") as f:
             json.dump(r, f, indent=2, ensure_ascii=False)
-    path = os.path.join(outdir, "enrich_summary.csv")
+    path = os.path.join(outdir, f"top10_osint_{date_str}_enrich.csv")
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["ip","decision","score","flags","abuse_conf","vt_malicious","rdns","country","isp"])
@@ -483,8 +492,8 @@ def write_enrich_json_csv(outdir: str, enrich_results: List[Dict[str,Any]]):
             w.writerow([r["ip"], dec, score, flags, abuse, vt_mal, rdns, country, isp])
     return path
 
-def write_internal_csv(outdir: str, internal_results: List[Dict[str,Any]]):
-    path = os.path.join(outdir, "internal_analysis.csv")
+def write_internal_csv(outdir: str, internal_results: List[Dict[str,Any]], date_str: str):
+    path = os.path.join(outdir, f"top10_osint_{date_str}_internal.csv")
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["src_entity","decision","fp_score","mal_score","events","top_apps","top_ports","top_rules","reasons"])
@@ -496,82 +505,122 @@ def write_internal_csv(outdir: str, internal_results: List[Dict[str,Any]]):
             ])
     return path
 
-def write_md_report(outdir: str, analysis: Dict[str,Any], enrich_results: List[Dict[str,Any]], internal_results: List[Dict[str,Any]]):
-    device = analysis["device"]
-    date_str = (analysis["latest_ts"].strftime("%Y-%m-%d") if analysis["latest_ts"] else datetime.utcnow().strftime("%Y-%m-%d"))
-    fn = os.path.join(outdir, f"Top10_Enrichment_Report_{device}_{date_str}.md")
-    lines = []
-    lines.append(f"# Palo Alto Threat Log – Top10 IP Enrichment Report")
-    lines.append("")
-    lines.append(f"- **Device:** {device}")
-    if analysis["files"]:
-        if len(analysis["files"]) == 1:
-            lines.append(f"- **Source Log File:** `{analysis['files'][0]}`")
-        else:
-            lines.append(f"- **Source Log Files:** {len(analysis['files'])} files")
-            for p in analysis["files"][:15]:
-                lines.append(f"  - `{p}`")
-            if len(analysis["files"]) > 15:
-                lines.append(f"  - ...")
-    lines.append(f"- **Log Last Timestamp:** {date_str}")
-    lines.append(f"- **Generated:** {datetime.utcnow().isoformat()}Z")
-    lines.append("\n---\n")
+# ---------- DOCX / RTF ----------
+def write_word_report(outdir: str, analysis: Dict[str,Any], enrich_results: List[Dict[str,Any]], internal_results: List[Dict[str,Any]], date_str: str):
+    device = analysis["device"] or "device"
+    if DOCX_OK:
+        fn = os.path.join(outdir, f"top10_osint_{date_str}.docx")
+        doc = Document()
+        doc.styles['Normal'].font.name = 'Calibri'
+        doc.styles['Normal'].font.size = Pt(11)
+        doc.add_heading("Palo Alto Threat Log – Top10 IP Enrichment Report", level=1)
+        doc.add_paragraph(f"Device: {device}")
+        if analysis["files"]:
+            if len(analysis["files"]) == 1:
+                doc.add_paragraph(f"Source Log File: {analysis['files'][0]}")
+            else:
+                doc.add_paragraph(f"Source Log Files: {len(analysis['files'])} files")
+                for p in analysis["files"][:10]:
+                    doc.add_paragraph(f" - {p}")
+                if len(analysis["files"]) > 10:
+                    doc.add_paragraph(" - ...")
+        doc.add_paragraph(f"Log Last Timestamp: {date_str}")
+        doc.add_paragraph(f"Generated: {datetime.utcnow().isoformat()}Z")
 
-    lines.append("## Top 10 Source IPs")
-    for i,(ip,c) in enumerate(analysis["top_src"],1):
-        lines.append(f"{i}. `{ip}` — {c}")
-    lines.append("")
+        doc.add_heading("Top 10 Source IPs", level=2)
+        for i,(ip,c) in enumerate(analysis["top_src"],1):
+            doc.add_paragraph(f"{i}. {ip} — {c}")
 
-    lines.append("## Top 10 Threat/Content")
-    for i,(t,c) in enumerate(analysis["top_threat"],1):
-        lines.append(f"{i}. {t} — {c}")
-    lines.append("")
+        doc.add_heading("Top 10 Threat/Content", level=2)
+        for i,(t,c) in enumerate(analysis["top_threat"],1):
+            doc.add_paragraph(f"{i}. {t} — {c}")
 
-    if analysis["top_low_threat"]:
-        lines.append("## Possible False Positives (LOW severity – high frequency)")
-        for i,(t,c) in enumerate(analysis["top_low_threat"],1):
-            lines.append(f"{i}. {t} — {c}")
-        lines.append("")
+        if analysis["top_low_threat"]:
+            doc.add_heading("Possible False Positives (LOW severity – high frequency)", level=2)
+            for i,(t,c) in enumerate(analysis["top_low_threat"],1):
+                doc.add_paragraph(f"{i}. {t} — {c}")
 
-    if enrich_results:
-        lines.append("## OSINT Enrichment (Public IPs)")
-        for r in enrich_results:
-            lines.append(f"### {r['ip']}")
-            v = r["verdict"]
-            lines.append(f"- **Decision:** {v['decision']}  |  **Score:** {v['score']}  |  **Flags:** {', '.join(v['flags'])}")
-            osint = r["osint"]
-            lines.append(f"- **rDNS:** {osint.get('rdns') or '—'}")
-            info = osint.get("ipinfo") or {}
-            lines.append(f"- **Geo/ISP:** {info.get('country','')} / {info.get('org','') or info.get('hostname','')}")
-            abuse = extract_abuse_conf(osint.get('abuseipdb',{}) if isinstance(osint.get('abuseipdb'),dict) else {})
-            lines.append(f"- **AbuseIPDB:** confidence={abuse}  ([link](https://www.abuseipdb.com/check/{r['ip']}))")
-            vt_pos = extract_vt_positives(osint.get("virustotal",{}) if isinstance(osint.get("virustotal"),dict) else {})
-            lines.append(f"- **VirusTotal positives:** {vt_pos}  ([link](https://www.virustotal.com/gui/ip-address/{r['ip']}))")
-            otx_p = extract_otx_pulses(osint.get("otx",{}) if isinstance(osint.get("otx"),dict) else {})
-            lines.append(f"- **OTX pulses:** {otx_p}  ([link](https://otx.alienvault.com/indicator/ip/{r['ip']}))")
-            lines.append("")
-    if internal_results:
-        lines.append("## Internal Analysis (Private IPs/Subnets)")
-        for ent in internal_results:
-            a = ent["analysis"]
-            lines.append(f"### {ent['src_entity']}")
-            lines.append(f"- **Decision:** {a['decision']}  |  **FP Score:** {a['fp_score']}  |  **Mal Score:** {a['mal_score']}  |  **Events:** {a['events']}")
-            lines.append(f"- **Top Apps:** {a['top_apps']}")
-            lines.append(f"- **Top Ports:** {a['top_ports']}")
-            lines.append(f"- **Top Rules:** {a['top_rules']}")
-            if a['reasons']:
-                lines.append(f"- **Reasons:** " + "; ".join(a['reasons']))
-            lines.append("")
-    with open(fn, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
-    return fn
+        if enrich_results:
+            doc.add_heading("OSINT Enrichment (Public IPs)", level=2)
+            for r in enrich_results:
+                doc.add_heading(r["ip"], level=3)
+                v = r["verdict"]
+                doc.add_paragraph(f"Decision: {v['decision']} | Score: {v['score']} | Flags: {', '.join(v['flags'])}")
+                osint = r["osint"]
+                doc.add_paragraph(f"rDNS: {osint.get('rdns') or '—'}")
+                info = osint.get("ipinfo") or {}
+                doc.add_paragraph(f"Geo/ISP: {info.get('country','')} / {info.get('org','') or info.get('hostname','')}")
+                abuse = extract_abuse_conf(osint.get('abuseipdb',{}) if isinstance(osint.get('abuseipdb'),dict) else {})
+                doc.add_paragraph(f"AbuseIPDB: conf={abuse} (link: https://www.abuseipdb.com/check/{r['ip']})")
+                vt_pos = extract_vt_positives(osint.get('virustotal',{}) if isinstance(osint.get('virustotal'),dict) else {})
+                doc.add_paragraph(f"VirusTotal positives: {vt_pos} (link: https://www.virustotal.com/gui/ip-address/{r['ip']})")
+                otx_p = extract_otx_pulses(osint.get('otx',{}) if isinstance(osint.get('otx'),dict) else {})
+                doc.add_paragraph(f"OTX pulses: {otx_p} (link: https://otx.alienvault.com/indicator/ip/{r['ip']})")
+                doc.add_paragraph("---")
+
+        if internal_results:
+            doc.add_heading("Internal Analysis (Private IPs/Subnets)", level=2)
+            for ent in internal_results:
+                a = ent["analysis"]
+                doc.add_heading(str(ent["src_entity"]), level=3)
+                doc.add_paragraph(f"Decision: {a['decision']} | FP Score: {a['fp_score']} | Mal Score: {a['mal_score']} | Events: {a['events']}")
+                doc.add_paragraph(f"Top Apps: {a['top_apps']}")
+                doc.add_paragraph(f"Top Ports: {a['top_ports']}")
+                doc.add_paragraph(f"Top Rules: {a['top_rules']}")
+                if a['reasons']:
+                    doc.add_paragraph("Reasons:")
+                    for rr in a['reasons']:
+                        doc.add_paragraph(f" - {rr}")
+                doc.add_paragraph("---")
+
+        doc.save(fn)
+        return fn
+    else:
+        # RTF fallback (lihtne, kuid loetav Wordis)
+        fn = os.path.join(outdir, f"top10_osint_{date_str}.rtf")
+        lines = []
+        def esc(s): return s.replace("\\", "\\\\").replace("{","\\{").replace("}","\\}")
+        lines.append(r"{\rtf1\ansi\deff0")
+        lines.append(r"\b Palo Alto Threat Log – Top10 IP Enrichment Report\b0\line")
+        lines.append(f"Device: {esc(analysis['device'])}\\line")
+        lines.append(f"Log Last Timestamp: {date_str}\\line")
+        lines.append(f"Generated: {datetime.utcnow().isoformat()}Z\\line\\line")
+        lines.append(r"\b Top 10 Source IPs\b0\line")
+        for i,(ip,c) in enumerate(analysis["top_src"],1):
+            lines.append(f"{i}. {esc(str(ip))} — {c}\\line")
+        lines.append(r"\line\b Top 10 Threat/Content\b0\line")
+        for i,(t,c) in enumerate(analysis["top_threat"],1):
+            lines.append(f"{i}. {esc(str(t))} — {c}\\line")
+        if analysis["top_low_threat"]:
+            lines.append(r"\line\b Possible False Positives (LOW)\b0\line")
+            for i,(t,c) in enumerate(analysis["top_low_threat"],1):
+                lines.append(f"{i}. {esc(str(t))} — {c}\\line")
+        if enrich_results:
+            lines.append(r"\line\b OSINT Enrichment (Public IPs)\b0\line")
+            for r in enrich_results:
+                v = r["verdict"]; osint = r["osint"]; info = osint.get("ipinfo") or {}
+                lines.append(f"{esc(r['ip'])}\\line")
+                lines.append(f"Decision: {v['decision']} | Score: {v['score']} | Flags: {esc(', '.join(v['flags']))}\\line")
+                lines.append(f"rDNS: {esc(osint.get('rdns') or '—')}\\line")
+                lines.append(f"Geo/ISP: {esc(info.get('country',''))} / {esc(info.get('org','') or info.get('hostname',''))}\\line")
+        if internal_results:
+            lines.append(r"\line\b Internal Analysis (Private IPs)\b0\line")
+            for ent in internal_results:
+                a = ent["analysis"]
+                lines.append(f"{esc(str(ent['src_entity']))}\\line")
+                lines.append(f"Decision: {a['decision']} | FP: {a['fp_score']} | Mal: {a['mal_score']} | Events: {a['events']}\\line")
+        lines.append("}")
+        with open(fn, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+        return fn
 
 # ---------- CLI ----------
 def parse_args():
-    p = argparse.ArgumentParser(description="SOC L1 – RAW → TOP10 → OSINT/Internal → Report (no external deps)")
-    p.add_argument("--raw-dir", "-r", default="RAW", help="Sisendlogide kaust")
-    p.add_argument("--outdir", "-o", default="results", help="Väljundkaust")
-    p.add_argument("--md-report", action="store_true", help="Genereeri ka Markdown raport (.md)")
+    p = argparse.ArgumentParser(description="SOC L1 – RAW → TOP10 → OSINT/Internal → CSV + Word")
+    default_raw = os.path.expanduser("~/Documents/SOC/raw")
+    default_out = os.path.expanduser("~/Documents/SOC/tulemused")
+    p.add_argument("--raw-dir", "-r", default=default_raw, help="Sisendlogide kaust")
+    p.add_argument("--outdir", "-o", default=default_out, help="Väljundkaust (vaikimisi SOC/tulemused)")
     return p.parse_args()
 
 def main():
@@ -590,7 +639,7 @@ def main():
         show = t if len(t)<=70 else t[:67]+"..."
         print(f"  {i:>2}. {show}  {c}")
 
-    top_csv = write_top_summary(args.outdir, analysis)
+    top_csv, date_str = write_top_summary(args.outdir, analysis)
     print("[*] Salvestatud kokkuvõte:", top_csv)
 
     per_src = defaultdict(list)
@@ -650,16 +699,14 @@ def main():
                 ia = internal_context_analysis(src_entity, rows_for)
                 internal_results.append({"src_entity": src_entity, "analysis": ia})
 
-    enrich_csv = write_enrich_json_csv(args.outdir, enrich_results)
+    enrich_csv = write_enrich_json_csv(args.outdir, enrich_results, date_str)
     print("[*] Enrichment CSV:", enrich_csv)
 
-    internal_csv = write_internal_csv(args.outdir, internal_results)
+    internal_csv = write_internal_csv(args.outdir, internal_results, date_str)
     print("[*] Internal CSV:", internal_csv)
 
-    if args.md_report:
-        mdp = write_md_report(args.outdir, analysis, enrich_results, internal_results)
-        if mdp:
-            print("[*] Markdown-raport:", mdp)
+    wordp = write_word_report(args.outdir, analysis, enrich_results, internal_results, date_str)
+    print("[*] Word-raport:", wordp)
 
     print("[OK] Valmis.")
 
