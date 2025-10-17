@@ -1,7 +1,7 @@
 # 🧠 SOC Analüüsi tööriistad — v3.0.1
 
 **Autor:** Heiki Rebane (õpiprojekt)  
-**Kuupäev:** 18. oktoober 2025  
+**Kuupäev:** 17. oktoober 2025  
 
 ---
 
