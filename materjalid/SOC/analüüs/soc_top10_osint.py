@@ -1,0 +1,1 @@
+print('SOC L1 – Palo Alto Threat Log Analysis & OSINT Enrichment Tool placeholder code')
