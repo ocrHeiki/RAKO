@@ -34,21 +34,46 @@ Uus ühendasutus kannabki nüüd nime **Raplamaa Rakenduslik Kolledž (RAKO)**.
 
 ## 💡 Miks just GitHub?
 
-- Tasuta kasutada ja põhineb avatud lähtekoodi (opensource) põhimõtetel
-- Kõik failid ja koodid ühes kohas (Wiki-stiilis struktuur)
-- Versioonihaldus — näen muudatuste ajalugu
-- Lihtne jagada õpetajatele ja kaasõppijatele
-- Toetab Markdowni, pilte, faile ja ka sisseehitatud Wiki lehte
+- Tasuta kasutada ja põhineb avatud lähtekoodi (opensource) põhimõtetel  
+- Kõik failid ja koodid ühes kohas (Wiki-stiilis struktuur)  
+- Versioonihaldus — näen muudatuste ajalugu  
+- Lihtne jagada õpetajatele ja kaasõppijatele  
+- Toetab Markdowni, pilte, faile ja ka sisseehitatud Wiki lehte  
+
+---
+
+## 🔍 Võrdlus teiste teadmistebaasi platvormidega
+
+GitHubi kõrval on mitmeid teisi keskkondi, mida kasutatakse dokumentatsiooni ja teadmiste haldamiseks.  
+Allpool on lühivõrdlus mõne populaarse alternatiiviga:
+
+| Platvorm | Tugevused | Piirangud / tasulisus | Märkused |
+|-----------|------------|------------------------|-----------|
+| **Atlassian Confluence** | Väga hea meeskondlik koostöö, struktuurne dokumentatsioon, integratsioon Jira ja Bitbucketiga. | Tasuline suurematele meeskondadele (pilveteenus), tasuta ainult kuni 10 kasutajale. | Sobib hästi organisatsioonidele, kus dokumenteerimine ja projektijuhtimine on tihedalt seotud. |
+| **Notion** | Visuaalselt paindlik, sobib märkmete, juhendite ja projektide koondamiseks ühte keskkonda. | Tasuta versioonil piiratud funktsionaalsus (nt õiguste haldus, eksport). | Väga mugav individuaalseks ja väikese tiimi tööks, kuid koodi versioonihaldust ei toeta. |
+| **GitBook** | Hea arendajakeskne dokumentatsiooniplatvorm, mis sarnaneb Wiki-le ja toetab Markdowni. | Tasuta põhiplaan, kuid meeskondlik töö ja privaatsed projektid on tasulised. | Toetab sünkroniseerimist GitHubiga – sobib, kui soovitakse dokumentatsiooni ja koodi siduda. |
+
+---
+
+## 🧭 Miks valisin GitHubi
+
+Lisaks eelpool toodud võrdlusele langes minu valik **GitHubi** kasuks, sest:
+
+- see on **tasuta** ja toetab **avatud lähtekoodi** põhimõtteid;  
+- võimaldab hallata nii **koodi kui dokumentatsiooni** ühes kohas;  
+- sobib suurepäraselt **versioonihalduseks** ja muudatuste jälgimiseks;  
+- toetab **Markdowni** ja **Wiki-funktsioone** nagu spetsiaalne teadmusbaas;  
+- ning mis kõige olulisem – **õpetajad (sh programmeerimise õpetaja Mario Metshein)** soovitasid seda kui **keskkonda, kuhu koondada kõik õppematerjalid ja eksamifailid**.  
 
 ---
 
 ## 📁 Struktuur
 
-- `materjalid/` – õppematerjalid, manuaalid ja juhendid
-- `kood/` – koodijupid ja skriptid (Python, Bash, PowerShell)
-- `projektid/` – tehtud iseseisvad projektid ja koolitööd
-- `pildid/` – visuaalid, skeemid ja muud pildifailid
-- `tooriistakohver/` – sõnavara, manuaalid, playbookid, raamistikud ja mallid
+- `materjalid/` – õppematerjalid, manuaalid ja juhendid  
+- `kood/` – koodijupid ja skriptid (Python, Bash, PowerShell)  
+- `projektid/` – tehtud iseseisvad projektid ja koolitööd  
+- `pildid/` – visuaalid, skeemid ja muud pildifailid  
+- `tooriistakohver/` – sõnavara, manuaalid, playbookid, raamistikud ja mallid  
 
 ---
 
@@ -71,10 +96,10 @@ See on minu isiklik töövahendite ja teadmiste kogu, mida saan õppimise käigu
 
 ## 📝 Märkused
 
-- Repos kasutatakse `.gitignore` faili (Python), et vältida üleliigseid kompileeritud faile.
-- Litsents: MIT — lubab teistele kasutada, kui viitavad autorile.
-- **Vajadusel saan hiljem lisada uusi kaustu** (näiteks kui õppekavas tekib uusi teemasid või aineid).
-  - Uue kausta loomiseks piisab, kui loon sinna vähemalt ühe faili (nt `README.md`).
+- Repos kasutatakse `.gitignore` faili (Python), et vältida üleliigseid kompileeritud faile.  
+- Litsents: MIT — lubab teistele kasutada, kui viitavad autorile.  
+- **Vajadusel saan hiljem lisada uusi kaustu** (näiteks kui õppekavas tekib uusi teemasid või aineid).  
+  - Uue kausta loomiseks piisab, kui loon sinna vähemalt ühe faili (nt `README.md`).  
 
 ---
 
