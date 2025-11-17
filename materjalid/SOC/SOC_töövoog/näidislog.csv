@@ -1,4 +1,0 @@
-Time,Source address,Source Port,Destination address,Threat/Content Name,Severity,Action,Category,Repeat Count
-2025-10-18 12:00,192.168.1.10,54321,8.8.8.8,Nmap Scan $$94318$$,low,alert,scanning,300
-2025-10-18 12:05,10.10.1.100,80,192.168.1.5,OpenSSL Cipher $$31120$$,low,alert,ssl,250
-2025-10-18 12:10,192.168.1.45,445,192.168.1.100,SMB Bruteforce $$40004$$,high,deny,brute-force,5
