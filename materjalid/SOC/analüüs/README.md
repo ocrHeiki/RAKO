@@ -1,3 +1,5 @@
+![SOC kaaepilt](soc_raport.png)
+
 # SOC Analyst Workflow – Valepositiivsete Tuvastamise Automaatika  
 ### Autor: ocrHeiki  
 ### Versioon: Dokumenteeritud töövoog (2025)
