@@ -15,7 +15,7 @@ Töövoog algas **käsitsi CSV-failide puhastamisest**, kasvas **poolautomaatsek
 Alguses nägi töö välja nii:
 
 - Palo Alto logid tulid **toorestena CSV kujul**  
-- veerud olid ebaühtlased, kord inglise, kord prantsuse keeles  
+- veerud olid ebaühtlased, 
 - tuli käsitsi puhastada, sorteerida ja filtreerida  
 - otsida korduvaid mustreid Exceli filtrite kaudu  
 - lisada värvikoodid, pivot-tabelid, kokkuvõtted
