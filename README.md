@@ -63,7 +63,9 @@ Lisaks eelpool toodud võrdlusele langes minu valik **GitHubi** kasuks, sest:
 - võimaldab hallata nii **koodi kui dokumentatsiooni** ühes kohas;  
 - sobib suurepäraselt **versioonihalduseks** ja muudatuste jälgimiseks;  
 - toetab **Markdowni** ja **Wiki-funktsioone** nagu spetsiaalne teadmusbaas;  
-- ning mis kõige olulisem – **õpetajad (sh programmeerimise õpetaja Mario Metshein)** soovitasid seda kui **keskkonda, kuhu koondada kõik õppematerjalid ja eksamifailid**.  
+- viimase aja tähelepanekuid on see, et saan kirjutada uut või redigeerida olemasolevat lehekülge lisaks ka oma telefonis ning suvalises internetiga ühendatud arvutis. (Selle viimase punkti tegin telefoniga).
+-  ning mis kõige olulisem – **õpetajad (sh programmeerimise õpetaja Mario Metshein)** soovitasid seda kui **keskkonda, kuhu koondada kõik õppematerjalid ja eksamifailid**.
+  
 
 ---
 
