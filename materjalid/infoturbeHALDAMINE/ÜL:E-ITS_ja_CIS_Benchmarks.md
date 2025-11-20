@@ -31,13 +31,12 @@ teenused", "aktiveeri tulemüür").
 
 
 ---
-Praktiline osa
+# Praktiline osa
 
----
 ## Ülesanne 1: E-ITS põhine infovarade turvakontroll
 
 
-###Sammud:
+### Sammud:
 
 ### Valige
 3 virtuaalmasinat (nt Windows Server, Ubuntu Server, pfSense,
@@ -83,15 +82,14 @@ Koosta
 ja täida järgmine tabel.
 
 
-
+---
 🧾 Näidistabel – CIS
 Benchmark meetmete kontroll
 
 ![CIS](cis_benchmark.png)
 
 ---
-## 📋 Kokkuvõte / esitamise
-nõuded:
+## 📋 Kokkuvõte / esitamise nõuded:
 
 
 ### Esitada tuleb:
