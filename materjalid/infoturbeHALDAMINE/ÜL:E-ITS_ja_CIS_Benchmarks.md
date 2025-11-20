@@ -2,7 +2,8 @@
 **Autor:** Triin Muulmann
 ---
 
-- 100 punkti
+**Hinne:** 100 punkti
+**Tähtaeg:** Detsembri sess
 - Ülesanne: Infovarade turvameetmete hindamine ja
 rakendamine (E-ITS + CIS Benchmarks)
 
