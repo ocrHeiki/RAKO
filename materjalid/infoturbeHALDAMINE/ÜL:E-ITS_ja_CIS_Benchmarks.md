@@ -70,16 +70,11 @@ turvameetmete kontroll
 
 ### Sammud:
 
-
-Vali
-üks infovara (nt Ubuntu Server).
-Ava CIS Benchmarks leht ja
-vali sobiv juhend (nt CIS Ubuntu Linux 22.04 LTS Benchmark). Saad
-siit vaadata https://github.com/jonathanbglass/cis-benchmarks
-Vali
-10 sinu arvates kõige olulisemat turvameedet.
-Koosta
-ja täida järgmine tabel.
+- Vali üks infovara (nt Ubuntu Server).
+- Ava CIS Benchmarks leht ja vali sobiv juhend (nt CIS Ubuntu Linux 22.04 LTS Benchmark). 
+- Saad siit vaadata https://github.com/jonathanbglass/cis-benchmarks
+- Vali 10 sinu arvates kõige olulisemat turvameedet.
+- Koosta ja täida järgmine tabel.
 
 
 ---
