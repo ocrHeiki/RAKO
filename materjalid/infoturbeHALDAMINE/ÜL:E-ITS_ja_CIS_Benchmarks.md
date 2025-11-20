@@ -2,8 +2,8 @@
 **Autor:** Triin Muulmann
 ---
 
-100 punkti
-Ülesanne: Infovarade turvameetmete hindamine ja
+- 100 punkti
+- Ülesanne: Infovarade turvameetmete hindamine ja
 rakendamine (E-ITS + CIS Benchmarks)
 
 ---
