@@ -64,93 +64,7 @@ seadistate vastavat meedet
 turvameetmete kontroll
 
 
-Infovara (OS/teenus)
-
-E-ITS meede
-
-Rakendatud (X)
-
----
-Kuidas kontrollite?
-
----
-Kuidas seadistate?
-
----
-Windows Server 2022
-
----
-SYS.1.2.3.M1 – Windows Serveri kasutuselevõtu
-kavandamine
-
-
-⬜ / ✅
-
-
-
----
-
-Kontrollin dokumentatsiooni olemasolu (installiplaan,
-rollide ja funktsioonide määratlus, võrguarhitektuur, õiguste skeem).
-Kontrollin, kas kasutuselevõtuplaan on kooskõlas E-ITS nõuetega.
-
----
-
-Koostame kasutuselevõtuplaani: määrame serveri rollid (AD,
-DNS, Failiserver, RDP jne), turvapoliitikad, kasutajakontode struktuuri,
-varukoopiate vajaduse ja võrgusegmendi. Kaardistame riskid ja sõltuvused.
-
----
-
-Windows Server 2022
-
----
-SYS.1.2.3.M2 – Windows Serveri turvaline installimine
-
-
-⬜ / ✅
-
-
-
----
-
-Kontrollin, et install on tehtud ametlikult ISO-pildilt,
-kontrollin kontrollsummasid, süsteemi rolle ning põhikonfiguratsiooni (Server
-Manager → Local Server). Kontrollin, kas vaikeseaded (nt Remote Desktop) on
-turvapoliitikaga vastavuses.
-
-
----
-
-Paigaldame Windows Serveri ametlikult allikalt, keelame
-mittevajalikud rollid ja funktsioonid, paigaldame turvavärskendused,
-seadistame tulemüüri, aktiveerime Defenderi, keelame mittevajalikud kontod ja
-teenused.
-
----
-Windows Server 2022
-
----
-SYS.1.2.3.M3 – Telemeetria- ja diagnostikaandmete
-levitamise piiramine
-
-
-⬜ / ✅
-
-
----
-
-Kontrollin gpedit.msc → Computer Configuration →
-Administrative Templates → Windows Components → Data Collection and Preview
-Builds, Event Viewerit ja privaatsusseadeid. Kontrollin sidekatseid
-telemeetria teenustega (nt netstat).
-
----
-Seadistame telemeetria taseme “Security” / “Basic”,
-keelame mittevajalikud diagnostika teenused, muudame Group Policy kaudu
-privaatsus- ja andmekogumispoliitikaid, piirame andmete väljavoolu tulemüüri
-reeglitega.
-
+![E-ITS](eITS.png)
 
 ---
 ## Ülesanne 2: CIS Benchmarks põhine süsteemi kontroll
@@ -173,7 +87,7 @@ ja täida järgmine tabel.
 🧾 Näidistabel – CIS
 Benchmark meetmete kontroll
 
-
+![CIS](cis_benchmark.png)
 
 
 
@@ -482,7 +396,7 @@ Deaktiveeri usermod -L kasutaja
 
 
 
-
+---
 📋 Kokkuvõte / esitamise
 nõuded:
 
