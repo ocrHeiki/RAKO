@@ -1,17 +1,16 @@
-CIS Benchmarks
-Triin Muulmann
-•
-07:39
-on turvastandardite kogum, mille koostab . Need standardid annavad , kuidas turvata operatsioonisüsteeme, servereid, võrkusid, rakendusi ja pilvekeskkondi.
+# CIS Benchmarks
+**Autor:** Triin Muulmann
+
+---
+CIS Benchmarks on turvastandardite kogum, mille koostab . Need standardid annavad , kuidas turvata operatsioonisüsteeme, servereid, võrkusid, rakendusi ja pilvekeskkondi.
 
 Lihtsustatult:
 
 ➡️ , mis aitab seadmeid turvalisemaks teha.
 
-
 Päriselus on organisatsioonidel palju erinevaid süsteeme: Windowsi tööjaamad, Linuxi serverid, Active Directory, pilv (Azure, AWS), veebiserverid jne. Kõik need on potentsiaalsed ründepunktid.
-
-CIS Benchmark aitab:
+---
+### CIS Benchmark aitab:
 
 vähendada rünnakute riski
 
@@ -21,18 +20,11 @@ tagada vastavuse standarditega (nt ISKE/ISO 27001)
 
 muuta adminni töö lihtsamaks ja kiiremaks
 
-
-
-
 Kui ettevõttes on 100 Windowsi tööarvutit, siis CIS Benchmark määrab, millised teenused tuleb välja lülitada, millised parameetrid karmimaks keerata ja millised logid sisse lülitada. See vähendab pahavara leviku ohtu ja teeb intsidentide uurimise lihtsamaks.
 
 
-
-Iga benchmark on jagatud kindlateks osadeks:
-
-
-
-
+---
+### Iga benchmark on jagatud kindlateks osadeks:
 
 Paroolireeglid
 
@@ -40,73 +32,42 @@ Logide seadistus
 
 Võrguteenuste piirangud
 
-
-
-
-
-
 Admin-kontode õigused
 
 Lukustuspoliitikad
-
-
-
-
-
 
 Tulemüüri seaded
 
 Protokollide lubamine/keelamine
 
-
-
-
-
-
 Mittevajalikud teenused välja
 
-
-
-
-
-
 Failide ja kaustade õigused
-
-
-
-
-
-
-CIS Windows 11 Benchmark:
-
+---
+### CIS Windows 11 Benchmark:
 
 “Disable SMBv1 protocol”
 
 Põhjus: SMBv1 on vana ja sellega levitati WannaCry tüüpi ründeid.
 
-
-
-
-
 Ei sega kasutaja tööd
 
 Annab “baasturvalisuse”
 
-
-Näited:
+---
+### Näited:
 
 Parool pikkus vähemalt 12
 
 Ekraani lukustus 5 minutiga
 
 
-
 Sobib serveritele ja kõrgema riskiga süsteemidele
 
 Võib kasutada tööl ka lisakontrollide abil
 
-
-Näited:
+---
+### Näited:
 
 USB-seadmete keelamine
 
@@ -114,28 +75,11 @@ Admin-konto renamine või peitmine
 
 Kõigi auditeerimislogide sisselülitamine
 
-
-
-
 Panga serverites kasutatakse , tavakasutaja sülearvutis .
 
 
-
-CIS loob juhendeid mitmele tuhandele platvormile, näiteks:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
+### CIS loob juhendeid mitmele tuhandele platvormile, näiteks:
 
 
 Pilves (AWS) ütleb CIS Benchmark, et:
@@ -147,17 +91,14 @@ IAM kontodele tuleb panna
 Logid tuleb suunata CloudWatch’i
 
 
-
-
-
 Admin vaatab benchmarki dokumenti ja teeb seaded ise.
-
-Näide:
+---
+### Näide:
 
 Kontrollid Windowsis → Group Policy Editoriga (gpedit.msc)
 
-
-Ettevõtetes kasutatakse automatiseerimist:
+--- 
+### Ettevõtetes kasutatakse automatiseerimist:
 🔹 CIS-CAT (CIS Configuration Assessment Tool)
 
 Skaneerib süsteemi
@@ -170,13 +111,11 @@ Näitab, mis CIS reeglid on täidetud
 
 Teevad seaded automaatselt üle paljude arvutite
 
-
-
-
-IT-admin saadab Intune kaudu poliitika, mis:
+### IT-admin saadab Intune kaudu poliitika, mis:
 
 keelab Windows Run as admin UAC möödahiilimise
 
 seab tulemüüri reeglid
 
 lubab BitLockeri krüpteerimise
+
