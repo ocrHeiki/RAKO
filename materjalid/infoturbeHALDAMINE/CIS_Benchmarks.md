@@ -2,7 +2,7 @@
 **Autor:** Triin Muulmann
 
 ---
-## CIS Benchmarks on turvastandardite kogum, mille koostab. 
+### CIS Benchmarks on turvastandardite kogum, mille koostab. 
 Need standardid annavad, kuidas turvata operatsioonisüsteeme, servereid, võrkusid, rakendusi ja pilvekeskkondi.
 
 Lihtsustatult:
@@ -11,6 +11,7 @@ Lihtsustatult:
 Päriselus on organisatsioonidel palju erinevaid süsteeme: 
 Windowsi tööjaamad, Linuxi serverid, Active Directory, pilv (Azure, AWS), veebiserverid jne. Kõik need on potentsiaalsed ründepunktid.
 ---
+
 ### CIS Benchmark aitab:
 
 vähendada rünnakute riski
@@ -119,5 +120,6 @@ keelab Windows Run as admin UAC möödahiilimise
 seab tulemüüri reeglid
 
 lubab BitLockeri krüpteerimise
+
 
 
