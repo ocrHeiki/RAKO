@@ -50,13 +50,9 @@ tabel, kus on kirjas:
 - nimi
 - rakendatavad
 - turvameetmed (E-ITS põhjal)
-kas
-- meede on rakendatud (✅ / ❌
-- / ei kohaldu)
-kuidas
-kontrollisite meedet
-kuidas
-seadistate vastavat meedet
+- kas meede on rakendatud (✅ / ❌ / ei kohaldu)
+- kuidas kontrollisite meedet
+- kuidas seadistate vastavat meedet
 
 ---
 🧾 Näidistabel – E-ITS
