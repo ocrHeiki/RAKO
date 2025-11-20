@@ -95,15 +95,13 @@ Benchmark meetmete kontroll
 ### Esitada tuleb:
 
 
-Täidetud
-E-ITS meetmete tabel (3 OS + 3 teenust)
-Täidetud
-CIS Benchmark tabel (1 infovara, 10 meedet)
-Lühike
-kokkuvõte (0,5–1 lk), kus kirjeldad:
-milliseid
-probleeme avastasid kontrollimisel;
-milliseid
-meetmeid rakendasid või parandasid;
-millised
-on kõige olulisemad turvameetmed sinu süsteemis ja miks.
+Täidetud:
+- E-ITS meetmete tabel (3 OS + 3 teenust)
+
+Täidetud:
+- CIS Benchmark tabel (1 infovara, 10 meedet)
+
+Lühike kokkuvõte (0,5–1 lk), kus kirjeldad:
+- milliseid probleeme avastasid kontrollimisel;
+- milliseid meetmeid rakendasid või parandasid;
+- millised on kõige olulisemad turvameetmed sinu süsteemis ja miks.
