@@ -1,0 +1,59 @@
+ISO 27001
+Triin Muulmann
+•
+07:26
+ISO
+27001 on rahvusvaheline standard, mis käsitleb teabe turvalisuse
+juhtimissüsteemi (ISMS) loomist, rakendamist, jälgimist ja pidevat
+täiustamist. See standard on oluline vahend organisatsioonidele, kes
+soovivad tõhustada oma teabe turvalisuse protsesse ja tagada, et
+teabevarad oleksid kaitstud ohtude ja riskide eest.
+
+
+
+1. Organisatsioon peab mõistma
+oma teabe turvalisuse nõudeid, ohte ja osapooli ning määrama kindlaks
+konteksti, milles ISMS rakendatakse.
+
+2. Organisatsiooni juhtkond peab
+võtma vastutuse ja pühenduma ISMS-i tõhusale juhtimisele ning tagama, et
+ressursse eraldataks teabe turvalisusele.
+
+3. Organisatsioon
+peab tuvastama turvariskid, hindama nende mõju ja tõenäosust ning
+rakendama sobivaid kontrollimeetmeid riskide vähendamiseks.
+
+4. ISO 27001 nõuab dokumenteeritud juhtimiskorda, mis kirjeldab ISMS-i struktuuri, vastutusalasid, ressursse ja protseduure.
+
+5. ISMS-i tõhusust tuleb regulaarselt jälgida, mõõta ja hinnata, et tagada vastavus standardi nõuetele.
+
+6.
+Organisatsioon peab järjepidevalt analüüsima ISMS-i tulemusi, et
+tuvastada võimalikud puudused ja rakendada parandusmeetmeid.
+
+
+
+1. ISO 27001 aitab organisatsioonidel kindlaks teha teabe turvalisuse nõuded ja rakendada sobivaid meetmeid nende täitmiseks.
+
+2. Standard toetab
+riskianalüüsi ja kontrollide rakendamist, mis vähendab ohtusid ja
+tugevdab organisatsiooni vastupanuvõimet rünnakutele.
+
+3. ISO 27001
+sertifikaat näitab klientidele, partneritele ja osapooltele, et
+organisatsioon pöörab tõsist tähelepanu teabe turvalisusele.
+
+4. ISO 27001 aitab organisatsioonidel vastata andmekaitse seaduste ja regulatsioonide nõuetele.
+
+ISO 27001 on oluline standard, mis aitab
+organisatsioonidel luua ja haldada tõhusat teabe turvalisuse
+juhtimissüsteemi. Selle rakendamine aitab tugevdada teabe turvalisust,
+vähendada riske ning suurendada usaldusväärsust klientide ja partnerite
+silmis. Standard järgib pideva täiustamise põhimõtteid, tagades, et
+teabe turvalisuse meetmed on alati ajakohased ja tõhusad.
+
+ISO veebileht : https://www.iso.org/standard/27001
+
+
+
+https://en.wikipedia.org/wiki/ISO/IEC_27001
