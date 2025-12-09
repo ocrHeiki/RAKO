@@ -13,11 +13,9 @@ rakendamine (E-ITS + CIS Benchmarks)
 Õppida analüüsima ja hindama oma virtuaalkeskkonnas olevate
 infovarade (operatsioonisüsteemid ja teenused) infoturbe taset vastavalt:
 
-E-ITS
-(Eesti infoturbestandardi) nõuetele
-CIS
-Benchmarks soovitustele
 
+
+a) Infoturbe taseme hindamine vastavalt E-ITS (Eesti Infoturbestandardi) nõuetele.
 
 b) Mis on CIS Benchmarks?
 
