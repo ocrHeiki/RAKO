@@ -173,3 +173,13 @@ Alternatiivselt, kui laadisid alla `.exe` faili, saad selle käivitada. Enne sed
 privilege::debug
 ```
 See annab vajalikud õigused, et teiste protsesside mälu lugeda.
+
+
+*****************
+Jätkub 2.päev:
+*****************
+Eesmärk on leida CONTOSO domeeni Administrator kasutaja LTMN võtit!
+********************************************************************
+***************** c625e3e2756d9ef01881fa7ed46b49a8 *****************
+********************************************************************
+
