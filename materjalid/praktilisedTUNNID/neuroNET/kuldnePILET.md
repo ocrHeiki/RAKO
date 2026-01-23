@@ -183,9 +183,9 @@ Eesmärk on leida CONTOSO domeeni Administrator kasutaja LTMN võtit!
 ***************** c625e3e2756d9ef01881fa7ed46b49a8 *****************
 ********************************************************************
 ***** CrackStation.net **** sai sellest hash käsust jagu ***********
-****************************NTLM************stars4191* *************
+************************** NTLM *********** stars4191* *************
 ********************************************************************
-**********aga se oli praegu vale tee.. peab ootama programmi********
+********* aga se oli praegu vale tee.. peab ootama programmi *******
 ********************************************************************
 KALI masinas
 
