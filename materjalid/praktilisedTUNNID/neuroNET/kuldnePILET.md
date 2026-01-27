@@ -26,12 +26,12 @@ ip a
 # Skaneeri /24 võrku, et leida semeid, nende operatsioonisüsteeme (-O) ja teenuste versioone (-sV)
 sudo nmap -sV -O 192.168.1.0/24
 ```
+![Nmap tulemus](https://github.com/ocrHeiki/RAKO/blob/main/materjalid/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png)
 
 **Tulemused:**
 *   `192.168.1.2`: Tuvastatud kui `DC01` domeenis `contoso.com`.
 *   `192.168.1.17`: Tuvastatud avatud pordiga `3389/tcp` (RDP).
 
-![Nmap tulemus](https://github.com/ocrHeiki/RAKO/blob/main/materjalid/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png)
 
 ### 2. Sisselogimine kompromiteeritud kontoga
 
