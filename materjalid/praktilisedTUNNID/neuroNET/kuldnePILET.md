@@ -31,7 +31,7 @@ sudo nmap -sV -O 192.168.1.0/24
 *   `192.168.1.2`: Tuvastatud kui `DC01` domeenis `contoso.com`.
 *   `192.168.1.17`: Tuvastatud avatud pordiga `3389/tcp` (RDP).
 
-![Nmap skaneerimise tulemus](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png?raw=true)
+![Nmap skaneerimise tulemus](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png)
 
 ### 2. Sisselogimine kompromiteeritud kontoga
 
@@ -40,7 +40,7 @@ Kasutame lekkinud `henry` kontot, et ühenduda sihtmärkserveriga (`192.168.1.17
 ```bash
 sudo xfreerdp3 /u:henry /p:'V4hetaM1nd.' /d:contoso /v:192.168.1.17
 ```
-![RDP ühendus Henry kontoga](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_49_27.png?raw=true)
+![RDP ühendus Henry kontoga](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_49_27.png)
 
 Pärast ühendumist ava serveris PowerShell ja kontrolli kasutaja õigusi.
 
