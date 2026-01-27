@@ -31,7 +31,7 @@ sudo nmap -sV -O 192.168.1.0/24
 *   `192.168.1.2`: Tuvastatud kui `DC01` domeenis `contoso.com`.
 *   `192.168.1.17`: Tuvastatud avatud pordiga `3389/tcp` (RDP).
 
-![Nmap skaneerimise tulemus](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png)
+![Nmap tulemus](https://github.com/ocrHeiki/RAKO/praktilisedTUNNID/neuroNET/pildid/Screenshot_2026-01-23_14_53_38.png)
 
 ### 2. Sisselogimine kompromiteeritud kontoga
 
