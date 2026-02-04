@@ -1,6 +1,30 @@
+###############################################################################
+#                                                                             #
+#   █████   █████           ████                                              #
+#  ▒▒███   ▒▒███           ▒▒███                                              #
+#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
+#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
+#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
+#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
+#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
+#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
+#                                                                             #
+#   =======================================================================   #
+#   |                                                                     |   #
+#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
+#   |   FAILI NIMI:  audit.py                                             |   #
+#   |   LOODUD:      2025-11-17                                           |   #
+#   |   AUTOR:       Heiki Rebane                                         |   #
+#   |   GITHUB:      github.com/ocrHeiki                                  |   #
+#   |   KIRJELDUS:   Süsteemi esmane triaaž: protsessid, võrguühendused   |   #
+#   |                ja kasutajate audit.                                 |   #
+#   |                                                                     |   #
+#   =======================================================================   #
+#                                                                             #
+###############################################################################
+
 import os
 import subprocess
-import json
 from datetime import datetime
 
 def run_command(command):
@@ -11,9 +35,7 @@ def run_command(command):
         return f"Viga käsu käivitamisel: {str(e)}"
 
 def collect_audit():
-    print(f"[*] Käivitan süsteemi auditi: {datetime.now()}")
-    
-    # Loo kataloog tulemuste jaoks
+    print(f"[*] VALVUR: Käivitan süsteemi auditi: {datetime.now()}")
     output_dir = "audit_results"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -35,10 +57,9 @@ def collect_audit():
         with open(f"{output_dir}/{filename}.txt", "w", encoding="utf-8") as f:
             f.write(result)
 
-    # PowerShell-spetsiifiline andmekogumine (täpsem)
     ps_commands = {
         "9_Kaik_ajastatud_ulesanded": "Get-ScheduledTask | Where-Object {$_.TaskPath -notlike '\\Microsoft*'} | Select-Object TaskName, State, Actions",
-        "10_PowerShell_ajalugu": "Get-Content (Get-PSReadlineOption).HistorySavePath"
+        "10_PowerShell_ajalugu": "if (Test-Path (Get-PSReadlineOption).HistorySavePath) { Get-Content (Get-PSReadlineOption).HistorySavePath } else { 'Ajalugu puudub' }"
     }
 
     for filename, command in ps_commands.items():
@@ -47,7 +68,7 @@ def collect_audit():
         with open(f"{output_dir}/{filename}.txt", "w", encoding="utf-8") as f:
             f.write(result)
 
-    print(f"\n[!] Audit lõpetatud. Kõik failid asuvad kaustas: {output_dir}")
+    print(f"\n[!] Audit lõpetatud. Failid: {output_dir}")
 
 if __name__ == "__main__":
     collect_audit()
