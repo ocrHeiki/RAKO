@@ -4,6 +4,22 @@ See dokument kirjeldab Pythoni skripte, mis on loodud Windowsi sündmuselogide (
 
 **Märkus kronoloogia kohta:** Välja võetud logikirjed sisaldavad täpseid kuupäevi ja kellaaegu (kuni millisekunditeni). See võimaldab sündmusi kronoloogiliselt järjestada, mis on kohtuekspertiisi analüüsi ja auditeerimise jaoks ülioluline.
 
+## Ülesande kirjeldus ja algne teave
+
+**Ülesanne:**
+*   Kasutaja Pille Porgand märkas 16.11 päeval, et arvutiga toimub midagi kahtlast. Töö tegemise ajal logiti ta järsku masinast välja. Hiljem uuesti sisse logides avanesid ekraanil korraks kahtlased aknad, mida ta varem polnud märganud.
+*   IR kasutaja: Kasutaja / parool: Parool123456@
+
+**Algselt teadaolev info:**
+*   Logid:
+    *   `TRL-DC01` - Server 2019 domeenikontroller
+    *   `TRL-INFRA01` - Server 2016 rakendusserver
+    *   `TRL-WIN10-01` - Windows 10 tööjaam
+
+## Edasine strateegia
+
+Enne virtuaalmasinatele otseselt juurdepääsu loomist on meie esmane samm kaardistada olemasolev teave logifailidest. See aitab tuvastada potentsiaalseid ohuvektoreid ja sündmuste kronoloogiat, et suunata edasist uurimistööd ja vähendada riske otse süsteemides tegutsedes.
+
 ## Paigaldus
 
 Enne skriptide kasutamist peate paigaldama vajalikud Pythoni moodulid ja tagama `evtxexport` tööriista olemasolu.
@@ -42,7 +58,18 @@ Analüüsi protsess koosneb mitmest etapist, mida iga skript toetab.
     - `<väljund_leidude_fail>`: Failinimi, kuhu analüüsi leiud salvestatakse (nt `infra01_security_findings.txt`).
     - `[intsidendi_kuupäev]`: Valikuline. Intsidendi kuupäev formaadis "Nov 16, 2025". Vaikimisi "Nov 16, 2025".
 
-### 3. `analyze_infra01_system_logs.py`
+### 3. `analyze_earlier_dc_logs.py`
+- **Kirjeldus:** Analüüsib DC turvalogi varasema perioodi kohta (nt 16. oktoober 2025 kuni 15. november 2025), otsides kahtlast tegevust, mis on seotud teatud kasutajate või sündmuse ID-dega.
+- **Kasutus:**
+    ```bash
+    python analyze_earlier_dc_logs.py <sisend_teksti_fail> <väljund_leidude_fail> <alguskuupäev_format_MMM_DD_YYYY> <lõppkuupäev_format_MMM_DD_YYYY>
+    ```
+    - `<sisend_teksti_fail>`: Teisendatud DC turvalogi tekstifail (nt `dc01_security.txt`).
+    - `<väljund_leidude_fail>`: Failinimi, kuhu analüüsi leiud salvestatakse (nt `dc01_earlier_findings.txt`).
+    - `<alguskuupäev_format_MMM_DD_YYYY>`: Analüüsi alguskuupäev formaadis "Okt 16, 2025".
+    - `<lõppkuupäev_format_MMM_DD_YYYY>`: Analüüsi lõppkuupäev formaadis "Nov 15, 2025".
+
+### 4. `analyze_infra01_system_logs.py`
 - **Kirjeldus:** Analüüsib rakendusserveri `TRL-INFRA01` süsteemilogi (tekstivormingus) intsidendi kuupäeval (16. november 2025). Skript otsib süsteemi väljalülitamisi (Event ID 1074, 6006, 6008) ja kriitilisi vigu/hoiatusi.
 - **Kasutus:**
     ```bash
@@ -52,7 +79,7 @@ Analüüsi protsess koosneb mitmest etapist, mida iga skript toetab.
     - `<väljund_leidude_fail>`: Failinimi, kuhu analüüsi leiud salvestatakse (nt `infra01_system_findings.txt`).
     - `[intsidendi_kuupäev]`: Valikuline. Intsidendi kuupäev formaadis "Nov 16, 2025". Vaikimisi "Nov 16, 2025".
 
-### 4. `analyze_infra01_application_logs.py`
+### 5. `analyze_infra01_application_logs.py`
 - **Kirjeldus:** Analüüsib rakendusserveri `TRL-INFRA01` rakenduslogi (tekstivormingus) intsidendi kuupäeval (16. november 2025). Skript otsib PostgreSQL-i vigu ja väljalülitamisi ning muid kriitilisi rakendusvigu.
 - **Kasutus:**
     ```bash
@@ -74,19 +101,24 @@ Analüüsi protsess koosneb mitmest etapist, mida iga skript toetab.
     python extract_evtx_to_text.py TRL-INFRA01/winevt/logs/Application.evtx infra01_application.txt
     ```
 
-2.  **Analüüsi turvalogisid:**
+2.  **Analüüsi DC turvalogi varasemat perioodi:**
+    ```bash
+    python analyze_earlier_dc_logs.py dc01_security.txt dc01_earlier_findings.txt "Oct 16, 2025" "Nov 15, 2025"
+    ```
+
+3.  **Analüüsi turvalogisid (intsidendi kuupäev):**
     Käivita `analyze_infra01_security_logs.py` rakendusserveri turvalogi jaoks.
     ```bash
     python analyze_infra01_security_logs.py infra01_security.txt infra01_security_findings.txt
     ```
 
-3.  **Analüüsi süsteemilogisid:**
+4.  **Analüüsi süsteemilogisid (intsidendi kuupäev):**
     Käivita `analyze_infra01_system_logs.py` rakendusserveri süsteemilogi jaoks.
     ```bash
     python analyze_infra01_system_logs.py infra01_system.txt infra01_system_findings.txt
     ```
 
-4.  **Analüüsi rakenduslogisid:**
+5.  **Analüüsi rakenduslogisid (intsidendi kuupäev):**
     Käivita `analyze_infra01_application_logs.py` rakendusserveri rakenduslogi jaoks.
     ```bash
     python analyze_infra01_application_logs.py infra01_application.txt infra01_application_findings.txt
