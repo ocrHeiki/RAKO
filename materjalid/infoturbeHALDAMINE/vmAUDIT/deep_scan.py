@@ -63,7 +63,7 @@ def deep_scan():
             if not base_path or not os.path.exists(base_path):
                 continue
             
-            f.write(f"\n--- SEKTOR: {base_path} ---\n")
+            f.write(f"\n--- SEKTOR: {base_path} ---\\n")
             print(f"[+] Kontrollin: {base_path}")
             
             for root, dirs, files in os.walk(base_path):
@@ -75,7 +75,7 @@ def deep_scan():
                             ext = os.path.splitext(file)[1].lower()
                             is_suspicious = ext in SUSPICIOUS_EXTS
                             
-                            line = f"{'[!!]' if is_suspicious else '[ ]'} | {mtime.strftime('%Y-%m-%d %H:%M')} | {file_path}"
+                            line = f"{ '[!!]' if is_suspicious else '[ ]'} | {mtime.strftime('%Y-%m-%d %H:%M')} | {file_path}"
                             f.write(line + "\n")
                             
                             if is_suspicious:

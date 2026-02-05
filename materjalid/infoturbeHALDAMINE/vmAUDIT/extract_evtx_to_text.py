@@ -12,64 +12,59 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  audit.py                                             |   #
-#   |   LOODUD:      2025-11-17                                           |   #
+#   |   FAILI NIMI:  extract_evtx_to_text.py                              |   #
+#   |   LOODUD:      2026-02-05                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
-#   |   KIRJELDUS:   Süsteemi esmane triaaž: protsessid, võrguühendused   |   #
-#   |                ja kasutajate audit.                                 |   #
+#   |   KIRJELDUS:   Skript teisendab Windowsi sündmuselogide             |   #
+#   |                (`.evtx`) failid tekstivormingusse, kasutades       |   #
+#   |                `evtxexport` tööriista.                              |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 
-import os
 import subprocess
-from datetime import datetime
+import sys
+import os
 
-def run_command(command):
+def extract_evtx_to_text(evtx_file_path, output_text_file_path):
+    """
+    Teisendab .evtx logifaili loetavaks tekstivorminguks, kasutades evtxexport tööriista.
+    """
+    if not os.path.exists(evtx_file_path):
+        print(f"Viga: Sisendfaili ei leitud: {evtx_file_path}")
+        sys.exit(1)
+
     try:
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-        return result.decode('cp850', errors='replace').strip()
+        # Käivitab evtxexport käsu .evtx faili teisendamiseks tekstiks
+        # Väljund suunatakse määratud tekstifaili
+        with open(output_text_file_path, 'w', encoding='utf-8') as outfile:
+            subprocess.run(
+                ['evtxexport', evtx_file_path],
+                stdout=outfile,
+                check=True,
+                text=True,
+                encoding='utf-8'
+            )
+        print(f"Fail '{evtx_file_path}' teisendati edukalt: '{output_text_file_path}'")
+    except FileNotFoundError:
+        print("Viga: 'evtxexport' tööriista ei leitud. Palun veenduge, et see on installitud ja PATH-is.")
+        sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print(f"Viga 'evtxexport' käivitamisel: {e}")
+        print(f"Stdout: {e.stdout}")
+        print(f"Stderr: {e.stderr}")
+        sys.exit(1)
     except Exception as e:
-        return f"Viga käsu käivitamisel: {str(e)}"
-
-def collect_audit():
-    print(f"[*] VALVUR: Käivitan süsteemi auditi: {datetime.now()}")
-    output_dir = "audit_results"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    audit_data = {
-        "1_Systeemi_info": "systeminfo",
-        "2_Jooksvad_protsessid": "tasklist /v",
-        "3_Vorguyhendused": "netstat -ano",
-        "4_DNS_vahemalu": "ipconfig /displaydns",
-        "5_Teenused": "sc query type= service state= all",
-        "6_Startup_programmid": "wmic startup get caption,command",
-        "7_Kasutajakontod": "net user",
-        "8_Admin_grupp": "net localgroup administrators",
-        "9_BitLocker_staatus": "manage-bde -status"
-    }
-
-    for filename, command in audit_data.items():
-        print(f"[+] Kogumisel: {filename}...")
-        result = run_command(command)
-        with open(f"{output_dir}/{filename}.txt", "w", encoding="utf-8") as f:
-            f.write(result)
-
-    ps_commands = {
-        "9_Kaik_ajastatud_ulesanded": "Get-ScheduledTask | Where-Object {$_.TaskPath -notlike '\\Microsoft*'}" | Select-Object TaskName, State, Actions",
-        "10_PowerShell_ajalugu": "if (Test-Path (Get-PSReadlineOption).HistorySavePath) { Get-Content (Get-PSReadlineOption).HistorySavePath } else { 'Ajalugu puudub' }"
-    }
-
-    for filename, command in ps_commands.items():
-        print(f"[+] Kogumisel (PowerShell): {filename}...")
-        result = run_command(f"powershell -Command \"{command}\"")
-        with open(f"{output_dir}/{filename}.txt", "w", encoding="utf-8") as f:
-            f.write(result)
-
-    print(f"\n[!] Audit lõpetatud. Failid: {output_dir}")
+        print(f"Ootamatu viga teisendamisel: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    collect_audit()
+    if len(sys.argv) < 3:
+        print("Kasutus: python extract_evtx_to_text.py <sisend_evtx_fail> <väljund_teksti_fail>")
+        sys.exit(1)
+
+    input_evtx = sys.argv[1]
+    output_text = sys.argv[2]
+    extract_evtx_to_text(input_evtx, output_text)
