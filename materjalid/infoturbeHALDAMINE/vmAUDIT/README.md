@@ -14,7 +14,7 @@
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüsi raamistik           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   GITHUB:      [github.com/ocrHeiki](https://github.com/ocrHeiki)   |   #
+#   |   GITHUB:      ocrHeiki  -  (https://github.com/ocrHeiki)           |   #
 #   |   STATUS:      Aktiivne uurimine                                    |   #
 #   |                                                                     |   #
 #   =======================================================================   #
