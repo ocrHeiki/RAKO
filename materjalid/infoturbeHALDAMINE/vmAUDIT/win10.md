@@ -1,73 +1,68 @@
 # Pille Porgandi Juhtumi Lahendamise Töövoog (VMware & IR)
 
-See juhend kirjeldab samm-sammult tegevusi VMware keskkonnas ja vajalikke PowerShelli skripte.
+See juhend kirjeldab samm-sammult tegevusi VMware keskkonnas, kasutades eraldi virtuaalseid kettaid tööriistade ja tõendite jaoks.
 
 ## IR KASUTAJA TUNNUSED
 * **Kasutaja:** Kasutaja
 * **Parool:** Parool123456@
+* **Roll:** Local Administrator / Incident Responder
 
 ---
 
-## 1. SAMM: Masina isoleerimine ja Snapshot (VMware)
-Enne analüüsi tuleb takistada ründe levikut.
-* **Isolatsioon:** VMware seaded -> Network Adapter -> Uncheck "Connected".
-* **Snapshot:** Paremklõps VM-il -> Snapshot -> Take Snapshot (Nimi: "Enne IR analüüsi").
+## 1. SAMM: Ettevalmistus (Päris arvutis, ENNE VM-i käivitamist)
+Lood oma päris arvutis "mälupulga" laadse ketta, et viia skriptid isoleeritud masinasse.
+1. **Päris arvutis:** Win + X -> Disk Management -> Action -> Create VHD.
+2. **Seaded:** `C:\IR_Tools.vhdx`, suurus 500MB, VHDX, Fixed Size.
+3. **Sisu:** Initialize (GPT) -> New Simple Volume -> Kopeeri siia kõik vajalikud skriptid ja `eventID.md`.
+4. **Väljutamine:** Paremklõps Disk Managementis sellel kettal -> **Detach VHD**.
+5. **VMware seaded:** VM Settings -> Add -> Hard Disk -> Use an existing virtual disk -> Vali loodud `IR_Tools.vhdx`.
 
 ---
 
-## 2. SAMM: Virtuaalse ketta (VHDX) loomine tõendite jaoks
-Loo eraldi konteiner skriptide ja kahtlaste failide hoidmiseks.
-1. **Ava Disk Management:** Win + X -> Disk Management.
-2. **Loo ketas:** Action -> Create VHD.
-   - Location: `C:\evidence.vhdx`
-   - Size: 2GB, Format: VHDX, Fixed Size.
-3. **Aktiveeri:** Paremklõps uuel kettal -> Initialize Disk (GPT).
-4. **Loo partitsioon:** Paremklõps tühjal alal -> New Simple Volume -> Drive **E:**.
+## 2. SAMM: Masina käivitamine ja isolatsioon
+1. **VMware seaded:** Võta võrgukaardilt märge "Connected" ja "Connect at power on" ära.
+2. **Käivita VM:** Logi sisse IR-kasutajaga.
+3. **Snapshot:** Tee kohe Snapshot (Nimi: "Algseis enne analüüsi").
 
 ---
 
-## 3. SAMM: Sisselogimiste analüüs (PowerShell)
-Otsime, kes ja millal sisse logis (asendab domeenikontrolleri puudumist).
+## 3. SAMM: Tõendite ketta loomine (VM-i sees)
+Loo masina sees teine puhas konteiner, kuhu kogud uurimise käigus leitud failid.
+1. **VM-i sees:** Disk Management -> Action -> Create VHD.
+2. **Seaded:** `C:\evidence.vhdx`, suurus 2GB, VHDX.
+3. **Kasutuselevõtt:** Initialize -> New Simple Volume (Drive **E:**).
 
+---
+
+## 4. SAMM: Analüüs ja skriptid
+Sinu tööriistad on nüüd nähtavad uue kettana (nt **D:**). Ava PowerShell administraatorina ja kasuta neid:
+
+
+# Sisselogimiste kontroll (Otsime ID 4624 sündmusi)
 ```powershell
-# Otsib edukaid sisselogimisi (ID 4624) viimase 24 tunni jooksul
 Get-EventLog -LogName Security -InstanceId 4624 -After (Get-Date).AddDays(-1) | 
 Select-Object TimeGenerated, @{N='User';E={$_.ReplacementStrings[5]}}, @{N='Source_IP';E={$_.ReplacementStrings[18]}} | 
 Format-Table -AutoSize
 ```
+# Kahtlaste protsesside otsimine Temp kaustadest
+```powershell
+Get-Process | Select-Object Name, Id, Path | 
+Where-Object {$_.Path -like "*\Temp\*" -or $_.Path -like "*\AppData\Local\*"}
+```
+5. SAMM: Failide kogumine ja väljutamine
 
-4. SAMM: Kahtlaste protsesside tuvastamine
+    Kopeeri leitud pahavara E-kettale: Copy-Item -Path "C:\kahtlane\asukoht\fail.exe" -Destination "E:\"
 
-Uuri, mis põhjustas "kahtlased aknad" ekraanil.
-PowerShell
+    Eemalda oht süsteemist: Remove-Item -Path "C:\kahtlane\asukoht\fail.exe" -Force
 
-# Otsib protsesse, mis jooksevad Temp või AppData kaustadest
-Get-Process | Select-Object Name, Id, Path, Description | 
-Where-Object {$_.Path -like "*\Temp\*" -or $_.Path -like "*\AppData\Local\*"} | 
-Format-Table -AutoSize
+    Väljuta tõendite ketas: Disk Management -> Paremklõps Disk (vasakul paneelis) -> Detach VHD.
 
-5. SAMM: Failide kogumine ja puhastus
+    Kättesaamine: Kopeeri evidence.vhdx fail VM-ist välja (nt VMware Drag & Drop abil), et seda turvalises masinas edasi uurida.
 
-Kopeeri leitud failid E: kettale enne nende eemaldamist.
+6. SAMM: Turvapoliitika lubamine skriptideks
 
-    Kopeeri: Copy-Item -Path "C:\kahtlane\asukoht\fail.exe" -Destination "E:\"
-
-    Eemalda oht: Remove-Item -Path "C:\kahtlane\asukoht\fail.exe" -Force
-
-    Väljutamine: Disk Management -> Paremklõps Disk (vasakul ääres) -> Detach VHD.
-
-6. SAMM: Failide haldus võrguta keskkonnas
-
-Kui kopeerid skripte VM-i tekstina, kasuta PowerShellis:
-PowerShell
-
-    Set-ExecutionPolicy Bypass -Scope Process
-# Nüüd saad käivitada oma .ps1 failid
-    .\skripti_nimi.ps1
-
-MÄRKUS: Kuna ligipääs DC-le puudub, on see Win10 masin sinu ainus tõendusmaterjali allikas. Kõik tegevused ja leitud IP-aadressid logi üles!
-
-
----
-
-**Väike nipp:** Kui sa hakkad neid "kahtlaseid aknaid" uurima, siis vaata ka **Task Manageris** (Ctrl+Shift+Esc) vahekaarti **Startup**. Tihti peidavad ründajad sinna skripte, mis peale väljalogimist ja uuesti sisselogimist uuesti käivituvad.
+Kui skriptid ei käivitu, kasuta seda käsku:
+```PowerShell
+Set-ExecutionPolicy Bypass -Scope Process
+```
+MÄRKUS: Kuna võrk on maas ja ligipääs DC-le puudub, on see Win10 masin sinu ainus infoallikas. Logi üles kõik leitud IP-aadressid ja protsesside nimed!
