@@ -1,6 +1,6 @@
 # FORENSIC REPORT: TRL-Win11-02 (Offline Activity Detected)
 **Uurimise kuupäev:** 06.02.2026
-**Uurija:** [Sinu Nimi]
+**Uurija:** [Heiki Rebane]
 **Intsidendi tüüp:** Andmete eksfiltratsioon ja autonoomne püsivus (Persistence)
 
 ---
