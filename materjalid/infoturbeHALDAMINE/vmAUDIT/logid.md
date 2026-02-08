@@ -91,4 +91,4 @@ Võrguühenduseta virtuaalkeskkonnas läbi viidud süvaanalüüsi käigus rakend
 
 ### 8. Ootamatu süsteemi väljalülitamine (TRL-INFRA01 rakendusserver)
 -   **Kuupäev ja aeg:** 16. november 2025, 14:21:26 UTC
--   **Sündmus:** Server kukkus kokku või lülitati jõuga välja (Event ID 6008). See seletab Pille Porgandi 
+-   **Sündmus:** Server kukkus kokku või lülitati jõuga välja (Event ID 6008). See seletab Pille Porgandi kirjeldusi.
