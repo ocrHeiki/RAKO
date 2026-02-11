@@ -6,6 +6,8 @@ siis tuleb appi teine ehk taustal töötav tarkvara, mis blokeerib ühenduse õn
 kui kasutaja jõuab sinna oma andmed sisestada 
 
 Kihilist kaitset ja varulahenduste-rohkeid teenuseid!
+
+"RIA - Küberturvalisuse Aastaraamat 2026"
 ```
 ## Arvestades kevadist eksamid
 
@@ -30,9 +32,15 @@ Local Server:
 - Defender Antivirus, miks Off
 - Timezone
 
-Tools - Computer Management:
-- Task Scheduler Libraries - Vahel võib näidata kui lülitada `Display All Running Tasks` ja siis vaadata, mis karjuma hakkab
-- Event Viewer     NXLog - on hea agent, mis aitab logisid kokku koguda
+Tools 
+- Computer Management:
+ - Task Scheduler Libraries - Vahel võib näidata kui lülitada `Display All Running Tasks` ja siis vaadata, mis karjuma hakkab
+ - Event Viewer     NXLog - on hea agent, mis aitab logisid kokku koguda
 Logide kokku kogumise koht ei tohiks olla kunagi Domeeniserver
-- Shared Folders - Shares , siin tulevad välja ka peidetud failid, mis on kuhugi jagatud
-- Storage - Windows Server Backup, kas saame teha backupi
+ - Shared Folders - Shares , siin tulevad välja ka peidetud failid, mis on kuhugi jagatud
+  - Storage
+    - Windows Server Backup, kas saame teha backupi
+    - Disk Management
+Tools - Group Policy Management:
+- Policies-Windows Settings-Security Settings-Account Policy-Password Policy - parem klõps-Edit
+- 
