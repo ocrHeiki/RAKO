@@ -1,4 +1,5 @@
-## Küberturve peaks olema kihiline nagu Napoleoni kook.
+# Küberturve peaks olema kihiline nagu Napoleoni kook.
+**11.veebruar.2026**
 
 ```
 Kui esimene kiht ei suuda ründaja teed sulgeda ja petukirja saaja vajutab selles oleval lingil,
@@ -42,5 +43,12 @@ Logide kokku kogumise koht ei tohiks olla kunagi Domeeniserver
     - Windows Server Backup, kas saame teha backupi
     - Disk Management
 Tools - Group Policy Management:
-- Policies-Windows Settings-Security Settings-Account Policy-Password Policy - parem klõps-Edit
-- 
+- Policies-Windows Settings-Security Settings
+  - Account Policy-Password Policy - parem klõps-Edit
+  - Security Options:
+    - Network security:Restrict NTLM: Audit Incoming NTLM Traffic - Enable all (siis annab märku kui Kuldpääsu ründed toimuvad... vm sellist)
+    - Network security:Restrict NTLM: Incoming NTLM traffic - Deny All
+    - Network security:Restrict NTLM: NTLM authentication in this domain - Deny All
+      - Seejärel PS: `gpupdate /force` suruda jõuga õigused peale.. restart ei aita
+    - Network security:Force logoff when logon hours expire
+
