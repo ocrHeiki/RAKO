@@ -34,13 +34,19 @@ Split view terminalis - terminali aknal parem hiireklõps ja sama käsk vastupid
 ```
 sudo arpspoof -i eth0 -t 192.168.1.1 192.168.1.2
 ```
+Uuendame süsteemi
+```
+sudo apt update
+```
+Paigaldame Bettercap tarkvara:
+```
+sudo apt install bettercap -y
+```
+sudo bettercap
+help net.probe
 
-
-
-
-
-### Seletus
-ARP spoofing (tuntud ka kui ARP poisoning) on küberründe tüüp, kus ründaja saadab kohalikku võrku võltsitud ARP-teateid.
+## Seletus
+### ARP spoofing** (tuntud ka kui ARP poisoning) on küberründe tüüp, kus ründaja saadab kohalikku võrku võltsitud ARP-teateid.
 
 Selle eesmärk on "petta" sinu arvutit ja ruuterit arvama, et ründaja seade on keegi teine (tavaliselt on ründaja eesmärk teeselda väravat ehk ruuterit).
 Kuidas see toimib?
@@ -74,3 +80,43 @@ Kuidas end kaitsta?
     Staatilised ARP-kirjed: Väga turvalistes võrkudes määratakse oluliste seadmete (nagu ruuter) aadressid käsitsi, et neid ei saaks dünaamiliselt muuta.
 
     Tuvastustarkvara: On olemas tööriistad (nt Arpwatch), mis annavad märku, kui ühe IP-aadressiga seotud MAC-aadress ootamatult muutub.
+
+**Bettercap** on võimas ja kaasaegne avatud lähtekoodiga tööriist, mida kasutatakse võrkude turvatestimiseks (penetratsioonitestimiseks). 
+Kui varem oli sarnaste rünnete (nagu ARP spoofing) läbiviimiseks populaarseim tööriist Ettercap, 
+siis Bettercap on selle kiirem, stabiilsem ja tunduvalt funktsionaalsem järglane.
+
+See on nagu "Šveitsi armee nuga" häkkerile või süsteemiadministraatorile, kes soovib testida võrgu vastupidavust rünnakutele.
+
+**Mida Bettercap teha suudab?**
+
+Bettercap ei piirdu ainult ARP-tabelite mürgitamisega. Selle võimalused on väga laialdased:
+```
+Võrgu skaneerimine: See tuvastab automaatselt kõik võrgus olevad seadmed, nende operatsioonisüsteemid ja avatud pordid.
+
+WiFi ründed: See suudab rünnata WiFi-võrke, püüda kinni "kätlemisi" (handshakes) paroolide murdmiseks või luua võltsitud pääsupunkte (rogue access points).
+
+Andmete pealtkuulamine (Sniffing): See suudab jälgida võrguliiklust ja automaatselt välja noppida sealt sisselogimisandmed, küpsised ja külastatud veebilehed.
+
+DNS Spoofing: See võib suunata kasutaja õigelt veebilehelt (nt pank.ee) ründaja kontrolli all olevale võltslehele.
+
+Bluetooth (BLE) ründed: Bettercap suudab skaneerida ja manipuleerida ka Bluetooth-seadmete vahelist suhtlust.
+```
+**Kuidas see töötab?**
+
+Bettercap loob interaktiivse keskkonna (või veebiliidese), kus ründaja saab sisse lülitada erinevaid "mooduleid". Näiteks:
+```
+Käivitatakse net.probe, et leida seadmed.
+
+Käivitatakse arp.spoof, et suunata liiklus läbi ründaja arvuti.
+
+Käivitatakse net.sniff, et hakata andmeid salvestama.
+```
+**Miks see ohtlik on?**
+
+Tööriist on disainitud olema väga kasutajasõbralik. Kui vanasti nõudis selliste rünnakute tegemine sügavaid teadmisi käsureast ja protokollist, 
+siis Bettercap automatiseerib suure osa tööst. 
+See tähendab, et isegi vähesemate teadmistega ründaja võib avalikus kohvikuvõrgus teiste kasutajate andmeid varastada.
+```
+Oluline märkus: Bettercapi kasutamine võrkudes, mille omanik sa ei ole või kus sul puudub luba testimiseks,
+on ebaseaduslik ja karistatav.
+See on mõeldud eetilistele häkkeritele oma süsteemide kaitsmiseks.
