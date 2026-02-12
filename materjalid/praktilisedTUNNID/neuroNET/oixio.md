@@ -64,9 +64,11 @@ U: `user`
 
 P: `pass`
 
+LAN
+`Start net.probe module`
+ja siis `Scan Ports`
 
-
-
+Brauseris: `testphp.vulnweb.com`
 
 
 
@@ -138,3 +140,6 @@ See tähendab, et isegi vähesemate teadmistega ründaja võib avalikus kohvikuv
 **Oluline märkus:** Bettercapi kasutamine võrkudes, mille omanik sa ei ole või kus sul puudub luba testimiseks,
 on ebaseaduslik ja karistatav.
 See on mõeldud eetilistele häkkeritele oma süsteemide kaitsmiseks.
+
+## Olulised pordid, mida peab teadma
+
