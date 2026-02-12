@@ -51,7 +51,7 @@ Tegemist oli koordineeritud mitmeetapilise siber-rünnakuga, mille eesmärk oli 
 
 **Tulemüür / võrguühendused:**
 - Võimaldatud Remote Desktop ühendused (port 3389)
-- Tuvestati netsh käsklusid tulemüüri reeglite muutmiseks
+- Tuvestati netsh käskluseid tulemüüri reeglite muutmiseks
 - Anonymous sisselogimised võrgust IP-aadressilt 10.10.80.16
 
 **Kas süsteemi uuendused olid paigaldatud:**
@@ -67,7 +67,9 @@ Tegemist oli koordineeritud mitmeetapilise siber-rünnakuga, mille eesmärk oli 
 ## 5. Põhjuse analüüs
 
 **Kuidas intsident tõenäoliselt alguse sai:**
-Rünnak algas võrguskannimisega WIN10-01 tööjaamal, kus Rapid7 Nexpose abil skaneeriti võrku ja identifitseeriti nõrgad kohad. Seejärel toimus brute-force rünnak administraatorikontodele, mille käigus õnnestus ründajal saada juurdepääs "jaak-admin" kontole. Pärast esmast juurdepääsu alustas ründaja lateraalset liikumist teistesse süsteemidesse.
+Rünnak algas võrguskannimisega WIN10-01 tööjaamal, kus Rapid7 Nexpose abil skaneeriti võrku ja identifitseeriti nõrgad kohad. 
+Seejärel toimus brute-force rünnak administraatorikontodele, mille käigus õnnestus ründajal saada juurdepääs "jaak-admin" kontole. 
+Pärast esmast juurdepääsu alustas ründaja lateraalset liikumist teistesse süsteemidesse.
 
 **Inimlik eksimus / tehniline puudujääk:**
 - Nõrkade paroolide kasutamine administraatorikontodel
@@ -79,7 +81,7 @@ Rünnak algas võrguskannimisega WIN10-01 tööjaamal, kus Rapid7 Nexpose abil s
 1. Võrgureconnaissance (Nmap skaneerimine)
 2. Brute-force rünnakud (61 nurjunud katset DC01-l, 56 INFRA01-l)
 3. Privileegide eskaleerimine (ntdsutil kasutamine)
-4. Andmevarastus (Robocopy, ZIP-arhiivimine)
+4. Andmevargus (Robocopy, ZIP-arhiivimine)
 
 ## 6. Riskide hinnang
 
@@ -88,8 +90,8 @@ Rünnak algas võrguskannimisega WIN10-01 tööjaamal, kus Rapid7 Nexpose abil s
 | Andmavargus (isikuandmed) | Kõrge | Kõrge | KRIITILINE | Pille.Porgandi Documents kausta massiivne ligipääs |
 | Domeeni kompromiteerimine | Kõrge | KRIITILINE | KRIITILINE | AD andmebaasi ekspordi katse |
 | Hilisemad rünnakud | Kõrge | Kõrge | KÕRGE | Ründaja omab täielikku kontrolli |
-| Business continuity | Keskmine | Keskmine | KESKMINE | Võimalik teenuste katkestused |
-| Reputatsioonikahju | Keskmine | Kõrge | KÕRGE | Kliendiannameede lekke risk |
+| Business continuity | Keskmine | Keskmine | KESKMINE | Võimalikud teenuste katkestused |
+| Reputatsioonikahju | Keskmine | Kõrge | KÕRGE | Kliendi andmete lekke risk |
 
 ## 7. Parandus- ja ennetusmeetmed
 
@@ -107,7 +109,7 @@ Rünnak algas võrguskannimisega WIN10-01 tööjaamal, kus Rapid7 Nexpose abil s
 3. **Rakenda paroolipoliitika** - kompleksed paroolid, regulaarne vahetus
 4. **Vähenda administraatorite õigusi** - kasuta just-in-time (JIT) põhimõtet
 5. **Segmenteeri võrk** - erista kriitilised süsteemid tavakasutajatest
-6. **Rakenda võrguliikluse analüüs** tuvastama anomaalsed ühendused
+6. **Rakenda võrguliikluse analüüs** tuvasta anomaalsed ühendused
 7. **Koolita kasutajad** infoturbeküsimustes ja tehniliste ohtude eest
 8. **Regulaarne auditeerimine** ja penetreerimistestid
 9. **Varundussüsteemide parandamine** ja regulaarne testimine
@@ -116,10 +118,12 @@ Rünnak algas võrguskannimisega WIN10-01 tööjaamal, kus Rapid7 Nexpose abil s
 ## 8. Kokkuvõte ja järeldused
 
 **Kas intsident oli tõsine?**
-Jah, intsident oli äärmiselt tõsine, kuna see viis domeenikontrolleri potentsiaalse kompromiteerimiseni, mis mõjutab kogu organisatsiooni IT infrastruktuuri ja võib põhjustada täieliku andmelekke.
+Jah, intsident oli äärmiselt tõsine, kuna see viis domeenikontrolleri potentsiaalse kompromiteerimiseni, 
+mis mõjutab kogu organisatsiooni IT infrastruktuuri ja võib põhjustada täieliku andmelekke.
 
 **Kas protseduurid olid piisavad?**
-Ei, olemasolevad protseduurid ei olnud piisavad. Logide analüüs näitas, et rünnak kestis mitmeid kuus enne avastamist, mis viitab puudulikule monitoorimisele ja reageerimisele. Võrguliikluse ja sisselogimise katsete monitorimis puudusid tõhusad mehhanismid.
+Ei, olemasolevad protseduurid ei olnud piisavad. Logide analüüs näitas, et rünnak kestis mitmeid kuid enne avastamist, mis viitab puudulikule monitoorimisele ja reageerimisele. 
+Võrguliikluse ja sisselogimise katsete monitorimis puudusid tõhusad mehhanismid.
 
 **Kas on vaja muudatusi infoturbe poliitikas?**
 Kindlasti on vaja põhjalikke muudatusi:
@@ -129,4 +133,5 @@ Kindlasti on vaja põhjalikke muudatusi:
 - Regulaarsed turvaauditid ja penetreerimistestid
 - Personali pidev infoturbe koolitus
 
-**Prioriteetne järeldus:** Domeenikontrolleri kompromiteerimise risk nõuab kohest täielikku süsteemide taastamist puhtatelt varukoopiatelt ja kõigi kasutajakontode läbivaatamist. Kuni süsteemide taastamiseni peaks kogu võrkutöö olema piiratud ja kriitilised operatsioonid viidava läbi eraldiseisvate turvaliste kanalite.
+**Prioriteetne järeldus:** Domeenikontrolleri kompromiteerimise risk nõuab kohest täielikku süsteemide taastamist puhtatelt varukoopiatelt ja kõigi kasutajakontode läbivaatamist. 
+Kuni süsteemide taastamiseni peaks kogu võrkutöö olema piiratud ja kriitilised operatsioonid viia läbi eraldiseisvate turvaliste kanalite kaudu.
