@@ -6,7 +6,7 @@
 
 **Kuupäev:** 11.02.2026
 
-**Auditi koostaja:** Kübersecurity analüütik
+**Auditi koostaja:** Heiki Rebane
 
 **Auditeeritavad seadmed:**
 - DC01 - Server 2019 domeenikontroller (WIN-OLT3UOTFTHC)
