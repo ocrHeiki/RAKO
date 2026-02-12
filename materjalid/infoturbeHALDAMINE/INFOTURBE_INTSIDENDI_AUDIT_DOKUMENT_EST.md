@@ -28,7 +28,7 @@ Tegemist oli koordineeritud mitmeetapilise siber-rünnakuga, mille eesmärk oli 
 
 ✅ **Isikuandmed:** Pille.Porgandi kasutaja Documents kaustale tehti üle 50 juurdepääsu katset, mis viitab isikuandmete potentsiaalsele varastamisele.
 
-✅ **Ettevõtte siseandmed:** Domeenikontrolleril kasutati Robocopy-tööriista täielike õigustega, mis viitab suuremahulisele andmevarastusele, sh kõikide kasutajakontode ja volituste varastamise oht.
+✅ **Ettevõtte siseandmed:** Domeenikontrolleril kasutati Robocopy-tööriista täielike õigustega, mis viitab suuremahulisele andmevargusele, sh kõikide kasutajakontode ja volituste varastamise oht.
 
 **Kas intsident mõjutas:**
 
