@@ -142,4 +142,28 @@ on ebaseaduslik ja karistatav.
 See on mõeldud eetilistele häkkeritele oma süsteemide kaitsmiseks.
 
 ## Olulised pordid, mida peab teadma
+Need pordid on Active Directory (AD) selgroog. 
+Ilma nendeta ei suuda Windowsi arvuti domeenikontrollerit üles leida, end autoriseerida ega rühmapoliitikaid (GPO) alla laadida.
+
+Need pordid peavad olema tulemüüris avatud, et "Client-to-DC" side toimiks:
+
+| Port | Protokoll | Teenus | Selgitus |
+| :--- | :--- | :--- | :--- |
+| **53** | UDP | DNS | **Vundament.** Arvuti peab leidma DC IP-aadressi nime järgi. Ilma selleta ei tea arvuti, kuhu pöörduda. |
+| **88** | TCP | Kerberos | **Autentimine.** Peamine süsteem, mis kontrollib kasutaja parooli ja väljastab "pileti" võrguteenuste kasutamiseks. |
+| **135** | TCP | RPC Endpoint Mapper | **Sillapea.** Arvuti küsib siit, millistel kõrgetel portidel konkreetne teenus (nt GPO rakendamine) parajasti töötab. |
+| **139** | TCP | NetBIOS Session | **Ühilduvus.** Kasutatakse vanemate süsteemide ja teatud failiteenuste sessioonide haldamiseks. |
+| **389** | TCP/UDP | LDAP / DC Locator | **Otsing.** TCP-d kasutatakse päringuteks AD andmebaasist; UDP-d kasutatakse domeenikontrolleri asukoha leidmiseks võrgus. |
+| **445** | TCP | SMB / NetLogon | **Poliitikad.** Selle kaudu loetakse sisselogimisskripte ja Group Policy (GPO) faile kaustast SYSVOL. |
+| **49152-65535**| TCP | RPC Dynamic Ports | **Töökanalid.** Pärast pordiga 135 ühendumist "hüppab" side nendesse portidesse, et täita konkreetseid ülesandeid. |
+
+Täiendavad teenused spetsiifiliste funktsioonide jaoks
+
+| Port | Protokoll | Teenus | Selgitus |
+| :--- | :--- | :--- | :--- |
+| **123** | UDP | NTP | **Aja sünkroniseerimine.** Kerberos nõuab, et kellaaeg oleks DC-ga sünkroonis (max 5 min erinevus). |
+| **464** | TCP | Kerberos Password | Võimaldab kasutajatel oma parooli muuta otse tööjaamast. |
+| **636** | TCP/UDP | LDAP over SSL | Turvaline ja krüpteeritud ligipääs Active Directory andmebaasile. |
+| **137/138** | UDP | NetBIOS Name/DG | Vanemad protokollid nimelahenduseks ja andmepakettide saatmiseks (WINS ajastu). |
+| **3268** | TCP | Global Catalog | Vajalik suurtes võrkudes, kus on mitu domeeni, et leida objekte kogu "metsast". |
 
