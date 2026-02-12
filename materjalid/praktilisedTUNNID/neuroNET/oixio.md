@@ -1,9 +1,12 @@
 ## Wireshark
 
 ### Filtrid
+
+Hüümärk `!` filtri ees keelab seda otsingut
+
 Microsoft:
 ```
-!(ip.geoip.as_org == "MICROSOFT-CORP-MSN-AS-BLOCK")
+!(ip.geoip.dst_org == "MICROSOFT-CORP-MSN-AS-BLOCK")
 ```
 Kerberose filter:
 ```
@@ -11,5 +14,5 @@ Kerberose filter:
 ```
 Mõlemad koos:
 ```
-!(ip.geoip.as_org == "MICROSOFT-CORP-MSN-AS-BLOCK") && !(nbns) && !(llmnr) && !(kerberos)
+!(ip.geoip.dst_org == "MICROSOFT-CORP-MSN-AS-BLOCK") && !(nbns) && !(llmnr) && !(kerberos)
 ```
