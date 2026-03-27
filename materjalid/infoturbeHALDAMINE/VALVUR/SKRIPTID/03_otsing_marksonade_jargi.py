@@ -24,7 +24,7 @@ LOGO = r"""
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  03_otsing_marksonade_jargi.py                        |   #
-#   |   LOODUD:      2025-11-17                                           |   #
+#   |   LOODUD:      26.03.2026                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   Kahtlaste märksõnade otsing logide tekstist.         |   #
