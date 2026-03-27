@@ -23,13 +23,6 @@
 #                                                                             #
 ###############################################################################
 ```
-# Projekti ülevaade: VALVUR
-
-Nimi **VALVUR** tähistab kompromissitut järelevalvet ja analüütilist täpsust. See raamistik on loodud Windowsi logide automatiseeritud töötlemiseks, muutes toored binaarandmed professionaalseks raportiks.
-
-ASCII-põhine visuaalne identiteet on kummardus klassikalisele küberkaitse- ja *forensics*-kultuurile, kus selgus ja funktsionaalsus on alati esikohal.
-
----
 
 # Windowsi intsidentide analüüsi juhend (v3.1)
 
