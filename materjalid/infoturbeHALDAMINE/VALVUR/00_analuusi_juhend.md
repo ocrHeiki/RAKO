@@ -74,4 +74,4 @@ Lisaks Excelile on tungivalt soovitatav kasutada professionaalset tööriista:
 | **PowerShell Operational** | **KÕRGEM** | Ründajate poolt käivitatud skriptide sisu (4104). |
 
 ---
-*Edu Pythoni õppimisel ja turbeintsidentide lahendamisel!*
+
