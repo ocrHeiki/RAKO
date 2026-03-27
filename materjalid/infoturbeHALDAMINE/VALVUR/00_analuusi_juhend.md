@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,7 +13,7 @@
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  00_analuusi_juhend.md                                |   #
-#   |   LOODUD:      27:03:2027                                           |   #
+#   |   LOODUD:      2025-11-17                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   Windowsi intsidentide analüüsi koondjuhend.          |   #
@@ -22,27 +21,27 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
+
 # Projekti ülevaade
 
 ### Miks "VALVUR"?
 
-Nimi **VALVUR** valiti tähistama kompromissitut järelevalvet ja analüütilist täpsust. Infosüsteemi uurimisel ei piisa vaid pealiskaudsest vaatlusest – vaja on "valvurit", kes märkab ka kõige väiksemaid kõrvalekaldeid tavapärasest käitumisest, kaardistab sündmuste kronoloogia ja tuvastab ründaja poolt jäetud varjatud jäljed.
+Nimi **VALVUR** valiti tähistama kompromissitut järelevalvet ja analüütilist täpsust. Infosüsteemi uurimisel ei piisa vaid pealiskaudsest vaatlusest – vaja on "valvurit", kes märkab ka kõige väiksemaid kõrvalekaldeveid tavapärasest käitumisest, kaardistab sündmuste kronoloogia ja tuvastab ründaja poolt jäetud varjatud jäljed.
 
 ASCII-põhine visuaalne identiteet on kummardus klassikalisele küberkaitse ja *forensics* kultuurile, kus selgus ja funktsionaalsus on alati esikohal.
 
 ---
 
-# Windowsi intsidentide analüüsi juhend (v1.9)
+# Windowsi intsidentide analüüsi juhend (v2.0)
 
 See on professionaalne ja struktureeritud tööraamistik Windowsi operatsioonisüsteemi logide analüüsimiseks rünnete korral.
 
-## 1. Kaustastruktuur ja Ettevalmistus
+## 1. Kuldreeglid ja ettevalmistus
 
-Hoiame andmeid ja skripte eraldi kaustades, et vältida segadust:
-*   **VALVUR/LOGID/** - Siia pane oma uuritavad `.evtx` failid.
-*   **VALVUR/SKRIPTID/** - Siin asuvad Pythoni skriptid.
-*   **VALVUR/TULEMUSED/** - Siia salvestuvad kõik skriptide loodud CSV-failid.
+### **TÄHTIS: Analüüsi välisel andmekandjal!**
+Ära kunagi teosta analüüsi ega salvesta tulemusi otse uuritava masina kõvakettale. Iga uus fail, mille masinasse lood, võib üle kirjutada ründaja poolt kustutatud andmed või muuta olulisi metaandmeid (*TimeStamps*). 
+*   Kopeeri logid välisele mälupulgale või kettale.
+*   Käivita skriptid ja salvesta `TULEMUSED` välisele andmekandjale.
 
 ### Vajalikud teegid (Libraries)
 Enne alustamist paigalda vajalik raamatukogu:
@@ -50,15 +49,22 @@ Enne alustamist paigalda vajalik raamatukogu:
 pip install python-evtx
 ```
 
-## 2. Analüüsi töövoog (Workflow)
+## 2. Kaustastruktuur ja töövoog
 
-Käivita skriptid **VALVUR** peakaustas olles:
+Hoiame andmeid ja skripte eraldi kaustades:
+*   **VALVUR/LOGID/** - Siia kopeeri uuritavad `.evtx` failid.
+*   **VALVUR/SKRIPTID/** - Siin asuvad Pythoni skriptid.
+*   **VALVUR/TULEMUSED/** - Siia salvestuvad kõik skriptide loodud CSV-failid.
 
-1.  **01_konverteering_evtx_csv.py** - Loeb `.evtx` failid `LOGID` kaustast ja teeb neist loetavad CSV-d `TULEMUSED` kausta.
-2.  **02_turvafiltreering.py** - Filtreerib `TULEMUSED` kaustas olevaid CSV-sid ja otsib kriitilisi Event ID-sid.
-3.  **03_otsing_marksonade_jargi.py** - Otsib `TULEMUSED` kaustas olevatest CSV-dest kahtlaseid märksõnu.
+Käivita skriptid järjekorras **01**, **02**, **03**.
 
-## 3. Milliseid logifaile uurida? (Prioriteedid)
+## 3. Analüüsi tööriistad
+
+Lisaks Excelile on tungivalt soovitatav kasutada professionaalset tööriista:
+*   **Timeline Explorer (Eric Zimmerman)** - See on parim vahend suurte CSV-failide analüüsiks. See võimaldab välkkiiret sorteerimist, grupeerimist ja filtreerimist. 
+    *   *Märkus:* Timeline Explorer on Windowsi tööriist, kuid töötab Linuxis suurepäraselt läbi **Wine** keskkonna.
+
+## 4. Milliseid logifaile uurida? (Prioriteedid)
 
 | Logifail | Tähtsus | Mida sealt otsida? |
 | :--- | :--- | :--- |
@@ -67,4 +73,4 @@ Käivita skriptid **VALVUR** peakaustas olles:
 | **PowerShell Operational** | **KÕRGEM** | Ründajate poolt käivitatud skriptide sisu (4104). |
 
 ---
-
+*Edu Pythoni õppimisel ja turbeintsidentide lahendamisel!*
