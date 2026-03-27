@@ -14,7 +14,7 @@
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  00_MITRE_ATTCK_juhend_vol2.md                        |   #
-#   |   LOODUD:      2025-11-17                                           |   #
+#   |   LOODUD:      27.03.2026                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   MITRE ATT&CK ründeahela ja logide seostamine.        |   #
