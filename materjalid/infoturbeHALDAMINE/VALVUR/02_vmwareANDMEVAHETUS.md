@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -21,7 +22,7 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 # Turvaline andmete eraldamine (Forensic Data Extraction)
 
 Käesolev juhend käsitleb meetodeid, kuidas eraldada logifaile ja muid tõendeid kompromiteeritud Windowsi masinast VMware keskkonnas nii, et säiliks andmete terviklikkus ja välditaks uuritava süsteemi "saastamist".
@@ -45,29 +46,39 @@ Tuvasta ketas ja vorminda see failisüsteemi, mida Windows tunneb (nt NTFS).
 lsblk                      # Leia uus seade, nt /dev/sdb
 sudo fdisk /dev/sdb        # Loo uus partitsioon (n -> p -> default -> w)
 sudo mkfs.ntfs -L TOENDID /dev/sdb1
+```
 1. Lülita Kali Linux välja.
 3. samm: Ketta ühendamine Windowsiga ja andmete kopeerimine
 1. Mine Windowsi masina seadetesse: Add... -> Hard Disk.
 2. Vali Use an existing virtual disk ja vali eelnevalt loodud toendid.vmdk.
 3. Käivita Windows. Ketas ilmub uue draivina (nt E:).
-4. Kopeeri (Copy) logid: C:\Windows\System32\winevt\Logs\* -> E:\LOGID\.
-5. Lülita Windows välja ja eemalda (Remove) ketas seadetest (valikutest vali "Remove", mitte "Delete from disk").
+4. Kopeeri (Copy) logid:
+```
+C:\Windows\System32\winevt\Logs\* -> E:\LOGID\.
+```
+6. Lülita Windows välja ja eemalda (Remove) ketas seadetest (valikutest vali "Remove", mitte "Delete from disk").
 4. samm: Analüüs Kalis
 1. Ühenda ketas tagasi Kali külge.
 2. Käivita Kali ja haagi ketas külge:
+```
 sudo mount /dev/sdb1 /mnt
 cd /mnt/LOGID
+```
 MEETOD B: SMB-serveri kaudu (Kiire meetod)
 Kasuta seda juhul, kui masinad on samas isoleeritud sisevõrgus (LAN Segment) ja sa ei soovi masinaid taaskäivitada.
 1. samm: Pane Kalis püsti vastuvõttev server
 # Loo kaust ja käivita Impacket SMB server
+```
 mkdir ~/VALVUR/LOGID
 sudo impacket-smbserver VALVUR ~/VALVUR/LOGID -smb2support
+```
 2. samm: Saada andmed Windowsist
 Ava Windowsis Command Prompt (Admin):
+```
 net use Z: \\<KALI_IP>\VALVUR
 xcopy C:\Windows\System32\winevt\Logs\*.evtx Z:\ /S
 net use Z: /delete
+```
 Kriitilised märkused
 • Ära lõika (Cut) faile, vaid alati kopeeri (Copy).
 • Ajalised märkmed: Pane kirja kellaaeg, mil ühendasid välise ketta, et eristada enda tegevust ründaja tegevusest logides.
