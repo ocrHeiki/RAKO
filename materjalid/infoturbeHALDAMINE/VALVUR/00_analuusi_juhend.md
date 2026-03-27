@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,7 +13,7 @@
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  00_analuusi_juhend.md                                |   #
-#   |   LOODUD:      26.03.2026                                           |   #
+#   |   LOODUD:      27.03.2026 (UUENDATUD v3.1)                          |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   Windowsi intsidentide analüüsi koondjuhend.          |   #
@@ -22,56 +21,50 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
-# Projekti ülevaade
 
-### Miks "VALVUR"?
+# Projekti ülevaade: VALVUR
 
-Nimi **VALVUR** valiti tähistama kompromissitut järelevalvet ja analüütilist täpsust. Infosüsteemi uurimisel ei piisa vaid pealiskaudsest vaatlusest – vaja on "valvurit", kes märkab ka kõige väiksemaid kõrvalekaldeveid tavapärasest käitumisest, kaardistab sündmuste kronoloogia ja tuvastab ründaja poolt jäetud varjatud jäljed.
+Nimi **VALVUR** tähistab kompromissitut järelevalvet ja analüütilist täpsust. See raamistik on loodud Windowsi logide automatiseeritud töötlemiseks, muutes toored binaarandmed professionaalseks raportiks.
 
-ASCII-põhine visuaalne identiteet on kummardus klassikalisele küberkaitse ja *forensics* kultuurile, kus selgus ja funktsionaalsus on alati esikohal.
+ASCII-põhine visuaalne identiteet on kummardus klassikalisele küberkaitse- ja *forensics*-kultuurile, kus selgus ja funktsionaalsus on alati esikohal.
 
 ---
 
-# Windowsi intsidentide analüüsi juhend (v2.0)
+# Windowsi intsidentide analüüsi juhend (v3.1)
 
-See on professionaalne ja struktureeritud tööraamistik Windowsi operatsioonisüsteemi logide analüüsimiseks rünnete korral.
+## 1. Ettevalmistus ja nõuded
 
-## 1. Kuldreeglid ja ettevalmistus
+### **TÄHTIS: Tõendite puutumatus!**
+* **Analüüsi välisel andmekandjal!** Ära kunagi teosta analüüsi uuritava masina kõvakettal.
+* **Andmete terviklikkus:** Iga uus fail uuritavas masinas võib üle kirjutada ründaja poolt kustutatud andmed.
 
-### **TÄHTIS: Analüüsi välisel andmekandjal!**
-Ära kunagi teosta analüüsi ega salvesta tulemusi otse uuritava masina kõvakettale. Iga uus fail, mille masinasse lood, võib üle kirjutada ründaja poolt kustutatud andmed või muuta olulisi metaandmeid (*TimeStamps*). 
-*   Kopeeri logid välisele mälupulgale või kettale.
-*   Käivita skriptid ja salvesta `TULEMUSED` välisele andmekandjale.
-
-### Vajalikud teegid (Libraries)
-Enne alustamist paigalda vajalik raamatukogu:
+### Vajalikud Pythoni teegid
+Enne süsteemi käivitamist paigalda vajalikud raamatukogud:
 ```bash
-pip install python-evtx
-```
-
-## 2. Kaustastruktuur ja töövoog
-
-Hoiame andmeid ja skripte eraldi kaustades:
-*   **VALVUR/LOGID/** - Siia kopeeri uuritavad `.evtx` failid.
-*   **VALVUR/SKRIPTID/** - Siin asuvad Pythoni skriptid.
-*   **VALVUR/TULEMUSED/** - Siia salvestuvad kõik skriptide loodud CSV-failid.
-
-Käivita skriptid järjekorras **01**, **02**, **03**.
-
-## 3. Analüüsi tööriistad
-
-Lisaks Excelile on tungivalt soovitatav kasutada professionaalset tööriista:
-*   **Timeline Explorer (Eric Zimmerman)** - See on parim vahend suurte CSV-failide analüüsiks. See võimaldab välkkiiret sorteerimist, grupeerimist ja filtreerimist. 
-    *   *Märkus:* Timeline Explorer on Windowsi tööriist, kuid töötab Linuxis suurepäraselt läbi **Wine** keskkonna.
-
-## 4. Milliseid logifaile uurida? (Prioriteedid)
-
-| Logifail | Tähtsus | Mida sealt otsida? |
+pip install python-evtx python-docx
+2. Kaustastruktuur ja failid
+Kõik skriptid asuvad üheskoos ühes kaustas (nt SKRIPTID/ või projekti juurkaust):
+• valvurMASTER.py - Keskne juhtpult (Mootor).
+• 01_konverteering_evtx_csv.py - Logide dešifreerimine.
+• 02_turvafiltreering.py - Kriitiliste ID-de Timeline.
+• 03_otsing_marksonade_jargi.py - Tööriistade ja IOC-de tuvastus.
+• 04_powershell_dekodeerimine.py - Base64 lahkamine.
+• 05_genereeriRAPORT.py - Wordi raporti koostamine.
+Andmete jaoks kasutatakse (vastavalt seadistusele) naaberkaustu:
+• ../LOGID/ - Toored .evtx failid.
+• ../TULEMUSED/ - Valmis raportid ja CSV-tabelid.
+3. Analüüsi ahel (Pipeline)
+VALVUR läbib viis automaatset etappi, mida juhib valvurMASTER.py. See mootor kutsub skripte järjestikku, kontrollides iga etapi edukust.
+Märkus: 5. etapis teisendatakse ajatemplid automaatselt Eesti ajavööndisse (Europe/Tallinn), et tagada sünkroniseeritus kohaliku kellaajaga.
+4. Prioriteetsed logifailid
+| Logifail | Tähtsus | Mida sealt otsime? |
 | :--- | :--- | :--- |
-| **Security.evtx** | **KRIITILINE** | Sisselogimised (4624), ebaõnnestunud katsed (4625), protsesside loomine (4688). |
-| **System.evtx** | **OLULINE** | Uute teenuste paigaldamine (4697, 7045), logide kustutamine (1102). |
-| **PowerShell Operational** | **KÕRGEM** | Ründajate poolt käivitatud skriptide sisu (4104). |
-
----
-
+| **Security.evtx** | **KRIITILINE** | Sisselogimised (4624), protsesside loomine (4688). |
+| **System.evtx** | **OLULINE** | Teenuste paigaldamine (7045), logide kustutamine (1102). |
+| **PowerShell Operational**| **KÕRGEM** | Ründajate skriptide sisu (4104). |
+5. Kasutamine
+1. Pane .evtx failid kausta LOGID.
+2. Mine terminalis skriptide kausta.
+3. Käivita peaskript:
+python3 valvurMASTER.py
+4. Leia lõplik raport kaustast TULEMUSED.
