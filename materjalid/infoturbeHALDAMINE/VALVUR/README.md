@@ -24,8 +24,8 @@
 # VALVUR - Windows Forensics Toolset
 
 **VALVUR** on Pythoni-põhine tööriistakomplekt digitaalseks ekspertiisiks (*Digital Forensics*). 
-See automatiseerib Windowsi sündmuslogide (.evtx) töötlemise, filtreerimise ja analüüsi, v
-äljastades lõpptulemusena struktureeritud Wordi raporti.
+See automatiseerib Windowsi sündmuslogide (.evtx) töötlemise, filtreerimise ja analüüsi, 
+väljastades lõpptulemusena struktureeritud Wordi raporti.
 
 
 ## Projekti ülevaade: VALVUR
@@ -56,26 +56,24 @@ Süsteem eeldab järgmist ülesehitust:
 ```text
 VALVUR/
 ├── README.md               <-- See fail (ülevaade)
-├── 00_analuusi_juhend.md    <-- Põhjalik metoodiline juhend
+├── 00_analuusi_juhend.md   <-- Põhjalik metoodiline juhend
 ├── LOGID/                  <-- Sisendkaust (pane siia .evtx failid)
 ├── TULEMUSED/              <-- Väljundkaust (CSV-d ja Wordi raport)
 └── SKRIPTID/               <-- Tööriistakaust (kõik .py skriptid)
 ```
-🛠️ Paigaldamine ja Kasutamine
+## 🛠️ Paigaldamine ja Kasutamine
 
-Sõltuvused: 
+**Sõltuvused:** 
 Veendu, et sul on Python 3 ja vajalikud teegid:
-Bash
 ```
 pip install python-evtx python-docx
 ```
-Käivitamine:
+**Käivitamine:**
 Liigu SKRIPTID/ kausta ja käivita peaskript:
-Bash
 ```
 python3 valvurMASTER.py
 ```
-🛡️ Miks VALVUR?
+## 🛡️ Miks VALVUR?
 
 Erinevalt tavalisest logivaaturist keskendub VALVUR "ründaja loogikale". 
 See ei näita lihtsalt andmeid, vaid proovib leida seoseid, dekodeerida peidetud käske 
