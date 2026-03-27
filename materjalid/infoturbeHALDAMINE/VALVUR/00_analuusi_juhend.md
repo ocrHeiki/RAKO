@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -13,7 +14,7 @@
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  00_analuusi_juhend.md                                |   #
-#   |   LOODUD:      2025-11-17                                           |   #
+#   |   LOODUD:      27:03:2027                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   Windowsi intsidentide analüüsi koondjuhend.          |   #
@@ -21,7 +22,7 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 # Projekti ülevaade
 
 ### Miks "VALVUR"?
