@@ -26,7 +26,7 @@ LOGO = r"""
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  01_konverteering_evtx_csv.py                         |   #
-#   |   LOODUD:      2025-11-17                                           |   #
+#   |   LOODUD:      27:03:2027                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   Konverteerib .evtx logid CSV formaati.               |   #
