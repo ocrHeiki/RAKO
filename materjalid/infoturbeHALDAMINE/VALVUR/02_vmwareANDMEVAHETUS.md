@@ -13,7 +13,7 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - VMware Andmevahetus                         |   #
-#   |   FAILI NIMI:  03_vmwareANDMEVAHETUS.md                             |   #
+#   |   FAILI NIMI:  02_vmwareANDMEVAHETUS.md                             |   #
 #   |   LOODUD:      27.03.2026                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
