@@ -1,6 +1,6 @@
 # MUUDATUSTE JA KONFIGURATSIOONI HALDUSE PLAAN
 **Ettevõte:** Digitaalne Innovatsioon OÜ
-**Koostaja:** [Sinu Nimi]
+**Koostaja:** Heiki Rebane
 **Kuupäev:** 22. aprill 2026
 
 ---
