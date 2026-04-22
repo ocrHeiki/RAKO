@@ -54,7 +54,7 @@ Vastavalt lisatud joonisele on võrk üles ehitatud hierarhiliselt:
 *   **Tagasipöördumisplaan:** Kasutajaandmete varundamine enne installi (OneDrive/Veeam). Ebaõnnestumisel ajutine asendusmasin.
 
 ### 5. CAB (Change Advisory Board)
-*   **Rollid:** IT-juht (Heakskiit), Süsteemiadmin (Teostus), HR/Haldusjuht (Kasutajate teavitamine).
+*   **Rollid:** IT-juht (Heakskiit), Süsteemiadmin (Teostus), Personalijuht/Haldusjuht (Kasutajate teavitamine).
 *   **Protsess:** Muudatused viiakse sisse lainetena (Deployment Waves): 1. Testgrupp (IT), 2. Pilootgrupp (1 osakond), 3. Ülejäänud ettevõte.
 
 ---
