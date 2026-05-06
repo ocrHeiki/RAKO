@@ -21,8 +21,8 @@ See annab väga täpse koha kätte, kus on viga
 - **Ruuter koos 2 network adapteriga**
 
 ---
-## :computer: kyberpood: paneme lihtsalt tööle
-## :computer: kyberpank: paneme lihtsalt tööle
+### :computer: kyberpood: paneme lihtsalt tööle
+### :computer: kyberpank: paneme lihtsalt tööle
 
 ## :computer: Kali:
 ### Alustame NMAP-iga (võrgu skännimine)
