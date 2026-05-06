@@ -32,8 +32,8 @@ See annab väga täpse koha kätte, kus on viga
 
 --- 
 - Kontrolli protokolle terminalis:  
-  `whatweb 192.168.1.61` (näitab veebilehe ehitust). 
-  `whatweb 192.168.1.63` (näitab veebilehe ehitust). 
+- `whatweb 192.168.1.61` (näitab veebilehe ehitust). 
+- `whatweb 192.168.1.63` (näitab veebilehe ehitust). 
 ---
 - Ava skännis leitud IP (nt 192.168.1.61) brauseris: Näen KüberPood sisselogimis lehte
 
@@ -41,13 +41,16 @@ Proovisin kasutaja: `admin` ja parool: `1' OR '1'='1` ning logis sisse. Logisin 
 
 Proovisin ka SQL käsku ainult kasutaja väljal: `'UNION SELECT 1, password, 'admin' FROM users WHERE username='admin'#` ja logis sisse ning logis admin kasutaja rolliga sisse ning kuvab ka suurelt ekraanile **VagaSalajaneAdminParool_MidaKeegiEiTea! (Roll: admin)**.
 
-Lisasime uue toote kus toote nimeks panime: **kohvi** ja Kirjelduse reale lisasime skripti, mille eesmärk oli muuta veebilehe taustavärvi:
+Lisasime uue toote kus toote nimeks panime: `kohvi` ja 
+Kirjelduse reale lisasime skripti, mille eesmärk oli muuta veebilehe taustavärvi:
 
-`<script>
+```
+<script>
   document.body.style.setProperty("background-color", "black", "important");
   document.body.style.setProperty("color", "#00FF00", "important");
   alert( "Süsteemis on kala sees" );
-</script>`
+</script>
+```
 
 
 ---  
