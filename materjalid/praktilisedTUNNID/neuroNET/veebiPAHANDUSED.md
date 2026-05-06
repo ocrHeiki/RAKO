@@ -58,6 +58,15 @@ Inspect Line toote peal, saab selles poes tootenime ja kirjeldust muuta, kuid ei
 ---  
 - Ava skännis leitud IP (nt 192.168.1.63) brauseris: Näen Apache2 Default lehte
 
+lisasin aadressi real veel ka pank.php ja sisenes KüberPank lehele, kus on link mis laseb otse sisse logida kasutaja Juhan kontole.
+
+Oletame, et saime meili aadressi ja avasime uue TABiga selle sisu 192.168.1.63/kuri.html , kus saime võita uue iPhone telefoni. Kui vajutasime "ilusale lingile", siis se käivitas skripti, mis loes lahti olevalt TABilt panga konto andmeid ja tegi selle konto tühjaks. Ehk siis leidis brauserist aktiivse panga sessiooniküpsise.
+
+Päriselus on se CSRF aga "null-klick" /Zero-Click) rünnak. Kus rünnak toimub sama millisekundi jooksul, mil leht avatakse.
+Pangad kaitsevad ed Anti-CSRF Tokeniga: iga kord kui avad panga lehe, siis genereeritakse unikaalne salakood. Ründaja ei tea seda koodi. 
+
+
+
 
 
 
