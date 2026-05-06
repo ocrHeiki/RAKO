@@ -65,8 +65,24 @@ Oletame, et saime meili aadressi ja avasime uue TABiga selle sisu 192.168.1.63/k
 Päriselus on se CSRF aga "null-klick" /Zero-Click) rünnak. Kus rünnak toimub sama millisekundi jooksul, mil leht avatakse.
 Pangad kaitsevad ed Anti-CSRF Tokeniga: iga kord kui avad panga lehe, siis genereeritakse unikaalne salakood. Ründaja ei tea seda koodi. 
 
+---
+# Ülesanne
+Kali masinaga tuleb sisse logida interneti võrgu kaudu
+
+http://10.0.20.250:32768/guacamole/
+u: user
+p: Passw0rd1
 
 
+- Windos:
+  mis eriline kasutaja üritas sisse häkkida
 
+Kasutaja, kasutaja, **user**, Administartor, 
+  
+- Linux:
+  leia tarkvara, mida ürtas kasutaja "kalasaba" installeerida
+  
+VNC Server - VALE VASTUS!
+fwupd-refresh.service - VALE VASTUS
 
 
