@@ -51,6 +51,8 @@ Kirjelduse reale lisasime skripti, mille eesmärk oli muuta veebilehe taustavär
   alert( "Süsteemis on kala sees" );
 </script>
 ```
+Inspect Line toote peal, saab selles poes tootenime ja kirjeldust muuta, kuid ei tohiks.
+
 
 
 ---  
