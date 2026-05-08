@@ -38,7 +38,7 @@ def filter_security_events(in_dir='TULEMUSED', out_file='TULEMUSED/02_tulemus_tu
     """Funktsioon kriitiliste sündmuste filtreerimiseks CSV-failidest."""
     print(LOGO) # Kuvame logo
     # Määrame kriitilised Event ID-d, mida otsime
-    critical_ids = [4624, 4625, 4688, 4672, 4697, 7045, 1102, 4720, 4732, 4104]
+    critical_ids = [4624, 4625, 4688, 4672, 4697, 7045, 1102, 4720, 4732, 4104, 4634, 4647, 4648, 4768, 4769, 4776]
     all_results = [] # Siia kogume kõik leitud sündmused
     
     # Kontrollime, kas sisendkaust on olemas
