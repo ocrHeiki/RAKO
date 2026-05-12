@@ -1,82 +1,33 @@
-```
-###############################################################################
-#                                                                             #
-#   █████   █████           ████                                              #
-#  ▒▒███   ▒▒███           ▒▒███                                              #
-#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
-#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
-#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
-#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
-#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
-#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
-#                                                                             #
-#   =======================================================================   #
-#   |                                                                     |   #
-#   |   PROJEKT:     VALVUR - Automaatne Intsidentide Analüüsi Ahel       |   #
-#   |   VERSIOON:    3.1                                                  |   #
-#   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Windowsi logide süvaanalüüs ja raporti koostamine.   |   #
-#   |                                                                     |   #
-#   =======================================================================   #
-#                                                                             #
-###############################################################################
-```
-# VALVUR - Windows Forensics Toolset
+# VALVUR - Intsidendi süvaanalüüsi ja auditeerimise tööriist
 
-**VALVUR** on Pythoni-põhine tööriistakomplekt digitaalseks ekspertiisiks (*Digital Forensics*). 
-See automatiseerib Windowsi sündmuslogide (.evtx) töötlemise, filtreerimise ja analüüsi, 
-väljastades lõpptulemusena struktureeritud Wordi raporti.
+VALVUR on võimas platvormiülene (Windows & Linux) tööriistakomplekt digitaalseks ekspertiisiks, logide süvaanalüüsiks ja süsteemseks turvaauditiks (E-ITS).
 
+## Põhivõimekused
 
-## Projekti ülevaade: VALVUR
+- **Platvormiülene logianalüüs**: Toetab nii Windowsi `.evtx` kui ka Linuxi süsteemiloge (`auth.log`, `syslog`).
+- **Süvaanalüüs (Deep Forensics)**: PowerShell Base64 ja XOR dekodeerimine, IP-aadresside ja ründeindikaatorite (IOC) tuvastamine.
+- **Live System Scan**: Reaalajas kontroll kahtlastele failidele (`.exe`, `.ps1`, `.sh`, `.php`) ajutistes kaustades.
+- **Võrgu skaneerimine**: Automaatne hostide ja teenuste tuvastamine (nmap) võrgujoonise koostamiseks.
+- **E-ITS Turvaaudit & GPO seire**: Süsteemi seadete ja Group Policy muudatuste kontroll.
+- **Professionaalne raporteerimine**: Genereerib detailse `.docx` tööraporti ja tehnilise `.pdf` ülevaate.
 
-Nimi **VALVUR** tähistab kompromissitut järelevalvet ja analüütilist täpsust. 
-See raamistik on loodud Windowsi logide automatiseeritud töötlemiseks, muutes toored binaarandmed professionaalseks raportiks.
+## Kasutamine
 
-ASCII-põhine visuaalne identiteet on kummardus klassikalisele küberkaitse- ja *forensics*-kultuurile, kus selgus ja funktsionaalsus on alati esikohal.
+VALVUR on loodud töötama kõikjal - mälupulgal, välisel kettal või süsteemselt.
 
----
+1. Aseta logifailid kausta `LOGID/`.
+2. Käivita peaskript:
+   ```bash
+   python3 SKRIPTID/valvurMASTER.py
+   ```
+3. Tulemused ja raportid leiad kaustast `TULEMUSED/`.
 
-## 🚀 Keskne Funktsionaalsus
+## Nõuded
 
-VALVUR läbib viis automaatset etappi, mida juhib **`valvurMASTER.py`**:
+- Python 3.x
+- Vajalikud teegid: `pip install evtx python-docx fpdf`
+- Süsteemne tööriist: `nmap` (võrgu skaneerimiseks)
 
-1.  **Konverteerimine**: Binaarsed logid teisendatakse CSV-vormingusse.
-2.  **Filtreerimine**: Sõelutakse välja kriitilised sündmused (sisselogimised, teenused, kustutamised).
-3.  **IOC Otsing**: Tuvastatakse tuntud ründevara ja häkkerite tööriistad (Mimikatz, PsExec jne).
-4.  **Süvaanalüüs**: PowerShell skriptide dekodeerimine (Base64) ja ründaja IP-aadresside leidmine.
-5.  **Raporteerimine**: Koostatakse kronoloogiline raport **Eesti ajavööndis** (.docx).
-
----
-
-## 📂 Kaustastruktuur
-
-Süsteem eeldab järgmist ülesehitust:
-
-```text
-VALVUR/
-├── README.md               <-- See fail (ülevaade)
-├── 00_analuusi_juhend.md   <-- Põhjalik metoodiline juhend
-├── LOGID/                  <-- Sisendkaust (pane siia .evtx failid)
-├── TULEMUSED/              <-- Väljundkaust (CSV-d ja Wordi raport)
-└── SKRIPTID/               <-- Tööriistakaust (kõik .py skriptid)
-```
-## 🛠️ Paigaldamine ja Kasutamine
-
-**Sõltuvused:** 
-Veendu, et sul on Python 3 ja vajalikud teegid:
-```
-pip install python-evtx python-docx
-```
-**Käivitamine:**
-Liigu SKRIPTID/ kausta ja käivita peaskript:
-```
-python3 valvurMASTER.py
-```
-## 🛡️ Miks VALVUR?
-
-Erinevalt tavalisest logivaaturist keskendub VALVUR "ründaja loogikale". 
-See ei näita lihtsalt andmeid, vaid proovib leida seoseid, dekodeerida peidetud käske 
-ja esitada need uurijale loetaval kujul, hoides samal ajal kokku tunde rutiinset tööd.
-
-Loodud õppe- ja uurimistöö eesmärgil. Hoia süsteemidel silm peal!
+## Autor
+**Heiki Rebane**
+VALVUR Projekt 2026

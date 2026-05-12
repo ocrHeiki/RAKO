@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-03_otsing_marksonade_jargi.py - Otsib kahtlaseid märksõnu logide tekstist.
-Kasutamine: python3 SKRIPTID/03_otsing_marksonade_jargi.py
+03_otsing_marksonade_jargi.py - Otsib kahtlaseid märksõnu logide tekstist + MITRE & CVE mapping.
 """
 
-import os # Impordime mooduli operatsioonisüsteemi toiminguteks
-import csv # Impordime mooduli CSV failide töötlemiseks
+import os
+import csv
 
-# ASCII Logo ja metainfo definitsioon
+# ASCII Logo (VALVUR standard)
 LOGO = r"""
 ###############################################################################
 #                                                                             #
@@ -22,12 +21,10 @@ LOGO = r"""
 #                                                                             #
 #   =======================================================================   #
 #   |                                                                     |   #
-#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
+#   |   PROJEKT:     VALVUR - MITRE & CVE Maatriks                        |   #
 #   |   FAILI NIMI:  03_otsing_marksonade_jargi.py                        |   #
-#   |   LOODUD:      26.03.2026                                           |   #
-#   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   GITHUB:      github.com/ocrHeiki                                  |   #
-#   |   KIRJELDUS:   Kahtlaste märksõnade otsing logide tekstist.         |   #
+#   |   LOODUD:      2025-11-17                                           |   #
+#   |   KIRJELDUS:   Kahtlaste märksõnade otsing ja ründe klassifitseerimine. |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -35,67 +32,59 @@ LOGO = r"""
 """
 
 def search_suspicious_keywords(in_dir='TULEMUSED', out_file='TULEMUSED/03_tulemus_kahtlased_marksonad.csv'):
-    """Funktsioon kahtlaste märksõnade otsimiseks logide sisu hulgast."""
-    print(LOGO) # Kuvame logo
-    # Nimekiri märksõnadest ja käskudest, mida ründajad sageli kasutavad
-    suspicious_keywords = [
-        "mimikatz", "psexec", "whoami", "net user", "net group", "net localgroup",
-        "ipconfig /all", "tasklist", "encodedcommand", "iex", "invoke-expression",
-        "rubeus", "bloodhound", "adfind", "net view", "net share", "quser", 
-        "query user", "netdom", "nltest", "gpresult"
-    ]
+    print(LOGO)
     
-    all_results = [] # Siia kogume sündmused, millest leidsime märksõnu
-    
-    # Kontrollime, kas kaust on olemas
-    if not os.path.exists(in_dir):
-        print(f"VIGA: Kausta {in_dir} ei leitud.")
-        return
+    # Ründemaatriks: Märksõna -> (MITRE ID, CVE viide, Kirjeldus)
+    attack_mapping = {
+        "mimikatz": ("T1003", "CVE-2014-0322", "OS Credential Dumping"),
+        "psexec": ("T1570", "N/A", "Lateral Tool Transfer"),
+        "whoami": ("T1033", "N/A", "System Owner/User Discovery"),
+        "net user": ("T1087", "N/A", "Account Discovery"),
+        "encodedcommand": ("T1027", "N/A", "Obfuscated Files or Information"),
+        "vssadmin": ("T1490", "N/A", "Inhibit System Recovery (Ransomware sidekick)"),
+        "certutil": ("T1105", "CVE-2021-40444", "Ingress Tool Transfer (Download)"),
+        "bitsadmin": ("T1197", "N/A", "BITS Jobs (Persistence/Download)"),
+        "rubeus": ("T1558", "N/A", "Steal or Forge Kerberos Tickets"),
+        "bloodhound": ("T1482", "N/A", "Domain Trust Discovery"),
+        "printnightmare": ("T1068", "CVE-2021-34527", "Exploitation for Privilege Escalation"),
+        "proxyshell": ("T1190", "CVE-2021-34473", "Exploit Public-Facing Application"),
+        "log4j": ("T1190", "CVE-2021-44228", "Log4Shell Exploit attempt"),
+        "powershell -enc": ("T1059.001", "N/A", "PowerShell Obfuscation")
+    }
 
-    # Otsime kõik CSV-d, mis on konverteeritud esimese skriptiga
+    all_results = []
+    if not os.path.exists(in_dir): return
+
     csv_files = [f for f in os.listdir(in_dir) if f.startswith('01_tulemus_eksport_') and f.endswith('.csv')]
-    print(f"--- Kahtlaste märksõnade otsing ({len(csv_files)} faili) ---")
+    print(f"--- MITRE & CVE analüüs ({len(csv_files)} faili) ---")
     
-    # Töötleme iga faili eraldi
     for file_name in csv_files:
-        print(f"Otsin failist: {file_name}...")
         try:
-            # Avame CSV faili lugemiseks
             with open(os.path.join(in_dir, file_name), mode='r', encoding='utf-8') as f:
-                reader = csv.DictReader(f) # Loeme CSV kui sõnastiku
+                reader = csv.DictReader(f)
                 for row in reader:
-                    # Võtame sündmuse kirjelduse (Message) ja muudame selle väiketähtedeks
                     message = row.get('Message', '').lower()
-                    # Kontrollime iga märksõna olemasolu sõnumis
-                    for word in suspicious_keywords:
+                    for word, info in attack_mapping.items():
                         if word in message:
-                            # Kui leidsime, lisame info selle kohta
-                            row['MatchedKeyword'] = word # Märksõna, mis leiti
-                            row['SourceFile'] = file_name # Allikas, kus leiti
-                            all_results.append(row) # Lisame tulemustesse
-                            break # Ühe sündmuse kohta piisab ühest leitud märksõnast
+                            row['MatchedKeyword'] = word
+                            row['MITRE_ID'] = info[0]
+                            row['CVE_ID'] = info[1]
+                            row['Attack_Type'] = info[2]
+                            row['SourceFile'] = file_name
+                            all_results.append(row)
+                            break
         except Exception as e:
-            print(f"VIGA failiga {file_name}: {e}")
+            print(f"VIGA: {e}")
 
-    # Kui leidsime kahtlaseid sündmusi, salvestame need uude faili
     if all_results:
-        print(f"Leiti {len(all_results)} kahtlast märksõna.")
-        # Sorteerime tulemused kronoloogiliselt
-        try:
-            all_results.sort(key=lambda x: x.get('TimeCreated', ''))
-        except Exception:
-            pass # Kui sorteerimine ebaõnnestub, liigume edasi
-            
-        # Määrame väljundfaili veerud (võtame esimesest sündmusest)
+        print(f"[+] Tuvastati {len(all_results)} ründeindikaatorit.")
         fieldnames = list(all_results[0].keys())
-        # Avame faili kirjutamiseks
         with open(out_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader() # Kirjutame CSV päise
-            writer.writerows(all_results) # Kirjutame kõik sündmused faili
-        print(f"VALMIS! Tulemus salvestatud: {out_file}")
+            writer.writeheader()
+            writer.writerows(all_results)
     else:
-        print("Märksõnu ei leitud.")
+        print("[-] Ründeindikaatoreid ei leitud.")
 
 if __name__ == "__main__":
-    search_suspicious_keywords() # Käivitame otsingu
+    search_suspicious_keywords()

@@ -24,7 +24,7 @@ LOGO = r"""
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  02_turvafiltreering.py                               |   #
-#   |   LOODUD:      26.03.2026                                           |   #
+#   |   LOODUD:      2025-11-17                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   Kriitiliste Event ID-de filtreerimine CSV-dest.      |   #
@@ -38,7 +38,20 @@ def filter_security_events(in_dir='TULEMUSED', out_file='TULEMUSED/02_tulemus_tu
     """Funktsioon kriitiliste sündmuste filtreerimiseks CSV-failidest."""
     print(LOGO) # Kuvame logo
     # Määrame kriitilised Event ID-d, mida otsime
-    critical_ids = [4624, 4625, 4688, 4672, 4697, 7045, 1102, 4720, 4732, 4104, 4634, 4647, 4648, 4768, 4769, 4776]
+    critical_ids = [
+        4624, 4625, 4634, 4647, 4648, 4672, 4768, 4769, 4776, # Authentication & Logon
+        4720, 4722, 4723, 4724, 4725, 4726, 4732, 4733, 4756, 4781, # Account Management
+        4739, 5136, 5137, 5141, # Group Policy & Directory Service Changes
+        4688, 4689, 4697, 7045, 4698, 4699, # Process & Service
+        4663, 4656, 4658, 4660, 5145, # Object Access
+        5156, 5157, 5158, 5152, # Network & Firewall
+        1102, 104, 4719, # Log Clearing
+        1116, 1117, 5007, # Windows Defender
+        4104, # PowerShell Script Block Logging
+        4778, 4779, # RDP Sessions
+        1, 3, 7, 8, 11, 22, 23, # Sysmon
+        1000 # Linux General Events
+    ]
     all_results = [] # Siia kogume kõik leitud sündmused
     
     # Kontrollime, kas sisendkaust on olemas

@@ -56,8 +56,14 @@ def create_word_report():
     
     meta = doc.add_paragraph()
     meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = meta.add_run(f"Raporti koostamise aeg (Eesti): {datetime.now().strftime('%d.%m.%Y %H:%M')}")
+    import socket
+    hostname = socket.gethostname()
+    run = meta.add_run(f"Auditeeritud masin: {hostname}\nRaporti koostamise aeg (Eesti): {datetime.now().strftime('%d.%m.%Y %H:%M')}")
     run.italic = True
+
+    # --- UUS: ISMS KIRJELDUS ---
+    doc.add_heading('Infoturbe juhtimissüsteemi (ISMS) rakendamine', level=1)
+    p = doc.add_paragraph("Näidisettevõttes rakendatakse infoturvet tuginedes E-ITS standardile. Juhtimissüsteem põhineb pideval parandamisel (PDCA tsükkel), kus teostatakse regulaarseid turvaauditeid (käesolev raport on osa sellest) ja riskihindamist. Tehnilised meetmed on kooskõlas riikliku infoturbe standardi baasturbe nõuetega.")
 
     # --- 2. KRONOLOOGILINE TIMELINE (Skriptist 02) ---
     doc.add_heading('1. Sündmuste kronoloogia (Timeline)', level=1)
@@ -97,13 +103,32 @@ def create_word_report():
             for row in reader:
                 p = doc.add_paragraph(style='List Bullet')
                 p.add_run(f"MÄRKSÕNA: {row.get('MatchedKeyword')}").bold = True
+                p.add_run(f" (MITRE: {row.get('MITRE_ID')}, CVE: {row.get('CVE_ID')})")
+                p.add_run(f"\nKirjeldus: {row.get('Attack_Type', row.get('Description', ''))}")
                 p.add_run(f"\nAeg: {convert_to_ee_time(row.get('TimeCreated'))}")
-                p.add_run(f"\nAllikas: {row.get('SourceFile')}")
     else:
         doc.add_paragraph("Kahtlaseid märksõnu logidest ei leitud.")
 
-    # --- 4. DEKODEERITUD POWERSHELL (Skriptist 04) ---
-    doc.add_heading('3. Dekodeeritud PowerShell käsud', level=1)
+    # --- 4. DEKODEERITUD POWERSHELL JA THREAT INTEL ---
+    doc.add_heading('3. Süvaanalüüs ja Threat Intelligence', level=1)
+    
+    ti_path = 'TULEMUSED/09_tulemus_threat_intel.csv'
+    if os.path.exists(ti_path):
+        doc.add_paragraph("Tuvastatud välisühenduste maine kontroll:")
+        with open(ti_path, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            table = doc.add_table(rows=1, cols=3)
+            table.style = 'Table Grid'
+            hdr = table.rows[0].cells
+            hdr[0].text = "IP Aadress"
+            hdr[1].text = "Maine"
+            hdr[2].text = "Soovitus"
+            for row in reader:
+                cells = table.add_row().cells
+                cells[0].text = row.get('IP')
+                cells[1].text = row.get('Reputation')
+                cells[2].text = row.get('Action_Required')
+
     deep_path = 'TULEMUSED/04_tulemus_suvaanaluusi_raport.txt'
     
     if os.path.exists(deep_path):
@@ -115,6 +140,85 @@ def create_word_report():
             run.font.size = Pt(8)
     else:
         doc.add_paragraph("Süvaanalüüsi raportit ei leitud.")
+
+    # --- 5. KAHTLASED FAILID JA ALLALAADIMISED (Skriptist 06) ---
+    doc.add_heading('4. Kahtlased failid ja allalaadimised', level=1)
+    files_path = 'TULEMUSED/06_tulemus_kahtlased_failid.csv'
+    
+    if os.path.exists(files_path):
+        with open(files_path, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                p = doc.add_paragraph(style='List Bullet')
+                p.add_run(f"PÕHJUS: {row.get('DetectionReason')}").bold = True
+                p.add_run(f"\nAeg: {convert_to_ee_time(row.get('TimeCreated'))}")
+                msg = row.get('Message', 'N/A')
+                p.add_run(f"\nSisu: {(msg[:200] + '...') if len(msg) > 200 else msg}")
+    else:
+        doc.add_paragraph("Kahtlaseid failioperatsioone ei leitud.")
+
+    # --- 6. E-ITS TURVAAUDIT (Skriptist 07) ---
+    doc.add_heading('5. E-ITS Turvaaudit ja vastavuskontroll', level=1)
+    audit_path = 'TULEMUSED/07_tulemus_turvaaudit.csv'
+    
+    if os.path.exists(audit_path):
+        with open(audit_path, mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            table = doc.add_table(rows=1, cols=5)
+            table.style = 'Table Grid'
+            
+            # Päis
+            hdr_cells = table.rows[0].cells
+            for i, text in enumerate(['Kontroll', 'Hetkeseis', 'Ootus', 'Staatus', 'Parandusmeede']):
+                hdr_cells[i].text = text
+                hdr_cells[i].paragraphs[0].runs[0].font.bold = True
+
+            for row in reader:
+                row_cells = table.add_row().cells
+                row_cells[0].text = row.get('Kontroll', '')
+                row_cells[1].text = row.get('Hetkeseis', '')
+                row_cells[2].text = row.get('Ootus', '')
+                
+                # Värvime FAIL staatuse punaseks
+                status = row.get('Staatus', '')
+                run = row_cells[3].paragraphs[0].add_run(status)
+                if status == "FAIL":
+                    run.font.color.rgb = RGBColor(255, 0, 0)
+                    run.bold = True
+                
+                row_cells[4].text = row.get('Meede', '')
+    else:
+        doc.add_paragraph("Auditi andmeid ei leitud.")
+
+    # --- 7. VÕRGU SKANEERIMISE TULEMUSED (Skriptist 10) ---
+    doc.add_heading('6. Tuvastatud võrguseadmed ja hostid', level=1)
+    net_path = 'TULEMUSED/10_tulemus_vorgu_skaneerimine.txt'
+    
+    if os.path.exists(net_path):
+        with open(net_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            para = doc.add_paragraph()
+            run = para.add_run(content)
+            run.font.name = 'Courier New'
+            run.font.size = Pt(8)
+    else:
+        doc.add_paragraph("Võrgu skaneerimise andmeid ei leitud.")
+
+    # --- 8. TUVASTATUD KONTOD (Skriptist 11) ---
+    doc.add_heading('7. Tuvastatud kasutajakontod', level=1)
+    user_path = 'TULEMUSED/11_tulemus_kasutajad.txt'
+    if os.path.exists(user_path):
+        with open(user_path, 'r', encoding='utf-8') as f:
+            doc.add_paragraph(f.read())
+
+    # --- 9. INTSIDENDI TEAVITUSE MUSTAND ---
+    doc.add_heading('8. Intsidendi teavituse mustand (Juhtkonnale)', level=1)
+    notify = doc.add_paragraph()
+    notify.add_run("TEEMA: KRIITILINE - Turvaintsidendi tuvastamine ja esmane reageerimine\n").bold = True
+    notify.add_run("LUGUPEETUD JUHTKOND,\n\nTeavitame teid, et VALVUR seiresüsteem tuvastas kahtlase tegevuse meie sisevõrgus. ")
+    notify.add_run("Esialgsel hinnangul on tegu ründega [SISESTA RÜNDE TÜÜP], mis puudutab [SISESTA MASINATE ARV] seadet. ")
+    notify.add_run("Oleme rakendanud esmased piiramismeetmed ja jätkame süvaanalüüsiga. Täpsem detailne raport on lisatud käesoleva dokumendi tehnilistes sektsioonides.\n\n")
+    notify.add_run("SOOVITUS: Rakendada paroolide sundvahetus ja kontrollida kriitiliste süsteemide varukoopiaid.").italic = True
 
     # --- SALVESTAMINE ---
     output_docx = 'TULEMUSED/VALVUR_LOPLIK_RAPORT.docx'

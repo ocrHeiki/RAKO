@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,7 +13,7 @@
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  00_MITRE_ATTCK_juhend_vol2.md                        |   #
-#   |   LOODUD:      27.03.2026                                           |   #
+#   |   LOODUD:      2025-11-17                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
 #   |   GITHUB:      github.com/ocrHeiki                                  |   #
 #   |   KIRJELDUS:   MITRE ATT&CK ründeahela ja logide seostamine.        |   #
@@ -22,7 +21,7 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
+
 # MITRE ATT&CK ründeahela analüüs
 
 See juhend aitab kaardistada logidest leitud sündmused vastavalt **MITRE ATT&CK** raamistikule. Ründe mõistmine läbi taktika aitab tuvastada ründaja järgmisi võimalikke samme.
