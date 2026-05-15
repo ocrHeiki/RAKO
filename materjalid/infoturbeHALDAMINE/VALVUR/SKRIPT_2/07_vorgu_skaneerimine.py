@@ -27,14 +27,9 @@
 import os
 import sys
 import subprocess
-import platform
 
-# Lisame teekonna utils.py jaoks
 sys.path.append(os.path.join(os.path.dirname(__file__), "."))
-try:
-    import utils
-except ImportError:
-    pass
+import utils
 
 LOGO = r"""
 ###############################################################################
@@ -51,20 +46,26 @@ LOGO = r"""
 ###############################################################################
 """
 
+logger = utils.setup_logging("VORGU_SCAN")
+
 def run_nmap_scan():
     print(LOGO)
-    out_dir = os.environ.get("VALVUR_OUT", "TULEMUSED")
+    out_dir = utils.get_output_dir()
     out_file = os.path.join(out_dir, "07_tulemus_vorgu_skaneerimine.txt")
-    print("[*] Alustan võrgu skaneerimist...")
+    target = utils.get_local_subnet()
+    logger.info(f"Alustan võrgu skaneerimist sihtmärgiga: {target}")
     try:
-        # Tuvastame alamvõrgu (lihtsustatud)
-        target = "127.0.0.1" # Default
         cmd = ["nmap", "-sn", target]
-        result = subprocess.check_output(cmd).decode()
-        with open(out_file, "w", encoding="utf-8") as f: f.write(result)
-        print(f"[+] Tulemused: {out_file}")
+        result = subprocess.check_output(cmd, timeout=120).decode()
+        with open(out_file, "w", encoding="utf-8") as f:
+            f.write(result)
+        logger.info(f"Tulemused salvestatud: {out_file}")
+    except FileNotFoundError:
+        logger.error("Nmap pole paigaldatud. Paigaldamiseks: sudo apt install nmap")
+    except subprocess.TimeoutExpired:
+        logger.error("Skaneerimine võttis liiga kaua aega (>120s)")
     except Exception as e:
-        print(f"[!] Skaneerimine ebaõnnestus (Nmap puudu?): {e}")
+        logger.error(f"Skaneerimine ebaõnnestus: {e}")
 
 if __name__ == "__main__":
     run_nmap_scan()

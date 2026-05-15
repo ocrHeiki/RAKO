@@ -25,9 +25,12 @@
 """
 
 import os
+import sys
 import csv
 import re
-from datetime import datetime
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "."))
+import utils
 
 LOGO = r"""
 ###############################################################################
@@ -44,18 +47,19 @@ LOGO = r"""
 ###############################################################################
 """
 
+logger = utils.setup_logging("LINUX_CSV")
+
 def parse_linux_logs():
     print(LOGO)
-    out_dir = os.environ.get("VALVUR_OUT", "TULEMUSED")
+    out_dir = utils.get_output_dir()
     if not os.path.exists(out_dir): os.makedirs(out_dir, exist_ok=True)
-    
-    # Kontrollime nii süsteemset kausta kui ka LOGID kausta
-    search_dirs = ["/var/log", "LOGID"]
+
+    search_dirs = ["/var/log", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "LOGID")]
     log_files_to_find = ["auth.log", "syslog", "messages", "secure"]
-    
+
     headers = ['TimeCreated', 'Id', 'LevelDisplayName', 'Message', 'MachineName', 'RecordId']
     count = 0
-    
+
     for d in search_dirs:
         if not os.path.exists(d): continue
         for f_name in os.listdir(d):
@@ -80,7 +84,9 @@ def parse_linux_logs():
                             elif "new user" in msg: event_id = "4720"
                             writer.writerow({'TimeCreated': time_str, 'Id': event_id, 'LevelDisplayName': 'Info', 'Message': msg, 'MachineName': machine, 'RecordId': str(i)})
                             count += 1
-                except: continue
+                except Exception as e:
+                    logger.error(f"Viga faili {log_path} töötlemisel: {e}")
+                    continue
     print(f"[+] Kokku konverteeritud {count} logirida.")
 
 if __name__ == "__main__":

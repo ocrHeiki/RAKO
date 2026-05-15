@@ -25,7 +25,11 @@
 """
 
 import os
+import sys
 import hashlib
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "."))
+import utils
 
 LOGO = r"""
 ###############################################################################
@@ -42,6 +46,8 @@ LOGO = r"""
 ###############################################################################
 """
 
+logger = utils.setup_logging("TERVIKLUS")
+
 def calculate_sha256(file_path):
     sha256_hash = hashlib.sha256()
     with open(file_path, "rb") as f:
@@ -49,23 +55,31 @@ def calculate_sha256(file_path):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
 
-def check_all_logs(log_dir='LOGID', out_report='TULEMUSED/00_terviklus_raport.txt'):
+def check_all_logs():
     print(LOGO)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    log_dir = os.path.join(base_dir, "LOGID")
+    out_dir = utils.get_output_dir()
+    out_report = os.path.join(out_dir, '00_terviklus_raport.txt')
+
     if not os.path.exists(log_dir):
         os.makedirs(log_dir, exist_ok=True)
-        print(f"[!] Hoiatus: Kausta {log_dir} ei leitud, see loodi.")
+        logger.warning(f"Kausta {log_dir} ei leitud, see loodi.")
         return
 
     results = []
-    print(f"[*] Arvutan räsid logidele asukohas: {log_dir}")
-    
+    logger.info(f"Arvutan räsid logidele asukohas: {log_dir}")
+
     for root, dirs, files in os.walk(log_dir):
         for file in files:
             if file.lower().endswith(('.evtx', '.log', '.syslog')):
                 full_path = os.path.join(root, file)
-                file_hash = calculate_sha256(full_path)
-                results.append(f"{file}: {file_hash}")
-                print(f"  [OK] {file}")
+                try:
+                    file_hash = calculate_sha256(full_path)
+                    results.append(f"{file}: {file_hash}")
+                    print(f"  [OK] {file}")
+                except Exception as e:
+                    logger.error(f"Räsi arvutamine ebaõnnestus {file}: {e}")
 
     if results:
         with open(out_report, 'w', encoding='utf-8') as f:
@@ -73,9 +87,9 @@ def check_all_logs(log_dir='LOGID', out_report='TULEMUSED/00_terviklus_raport.tx
             f.write("="*60 + "\n")
             for res in results:
                 f.write(res + "\n")
-        print(f"\n[+] Tervikluse raport loodud: {out_report}")
+        logger.info(f"Tervikluse raport loodud: {out_report}")
     else:
-        print("[!] Hoiatus: Ühtegi logifaili ei leitud.")
+        logger.warning("Ühtegi logifaili ei leitud.")
 
 if __name__ == "__main__":
     check_all_logs()

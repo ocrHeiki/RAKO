@@ -25,12 +25,16 @@
 """
 
 import os
+import sys
 import csv
 import argparse
 import xml.etree.ElementTree as ET
 import shutil
 import tempfile
 from Evtx.Evtx import Evtx
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "."))
+import utils
 
 LOGO = r"""
 ###############################################################################
@@ -47,15 +51,18 @@ LOGO = r"""
 ###############################################################################
 """
 
+logger = utils.setup_logging("EVTX_CSV")
+
 def parse_evtx(evtx_path, out_csv):
     headers = ['TimeCreated', 'Id', 'LevelDisplayName', 'Message', 'MachineName', 'RecordId']
     temp_dir = tempfile.gettempdir()
     temp_evtx = os.path.join(temp_dir, os.path.basename(evtx_path))
-    
+
     try:
         shutil.copy2(evtx_path, temp_evtx)
         path_to_analyze = temp_evtx
-    except:
+    except Exception as e:
+        logger.warning(f"Ei saanud kopeerida {evtx_path}: {e}, kasutan originaali")
         path_to_analyze = evtx_path
 
     try:
@@ -83,14 +90,18 @@ def parse_evtx(evtx_path, out_csv):
                                 msg_parts.append(f"{name}: {val}")
                         message = " | ".join(msg_parts)
                         writer.writerow({'TimeCreated': time_created, 'Id': event_id, 'LevelDisplayName': level, 'Message': message, 'MachineName': machine_name, 'RecordId': record_id})
-                    except: continue
+                    except Exception as e:
+                        logger.debug(f"Kirje töötlemine ebaõnnestus: {e}")
+                        continue
         print(f"SALVESTATUD: {out_csv}")
     except Exception as e:
         print(f"VIGA: {evtx_path} -> {e}")
     finally:
         if path_to_analyze == temp_evtx and os.path.exists(temp_evtx):
-            try: os.remove(temp_evtx)
-            except: pass
+            try:
+                os.remove(temp_evtx)
+            except:
+                pass
 
 def main():
     print(LOGO)

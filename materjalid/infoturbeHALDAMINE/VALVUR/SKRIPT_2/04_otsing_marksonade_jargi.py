@@ -32,6 +32,8 @@ from difflib import SequenceMatcher
 sys.path.append(os.path.join(os.path.dirname(__file__), "."))
 import utils
 
+logger = utils.setup_logging("MARKSONAD")
+
 LOGO = r"""
 ###############################################################################
 #                                                                             #
