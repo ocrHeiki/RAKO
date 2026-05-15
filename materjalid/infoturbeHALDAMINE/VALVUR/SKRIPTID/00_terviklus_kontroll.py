@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+LOGO = """
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 
-
+"""
 00_terviklus_kontroll.py - Arvutab algallika logide räsid (Data Integrity).
 Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
 """
@@ -31,8 +31,6 @@ Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
 import os
 import hashlib
 
-# ASCII Logo (VALVUR standard)
-r
 
 def calculate_sha256(file_path):
     sha256_hash = hashlib.sha256()
