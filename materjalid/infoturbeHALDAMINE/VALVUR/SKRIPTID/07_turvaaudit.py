@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 07_turvaaudit.py - Süsteemi turvaaudit (E-ITS vastavuskontroll).
 Võrdleb seadeid standardiga ja annab parandusmeetmed.
 """
@@ -31,8 +32,6 @@ import os
 import platform
 import subprocess
 
-# ASCII Logo (VALVUR standard)
-r
 
 def check_windows():
     results = []
