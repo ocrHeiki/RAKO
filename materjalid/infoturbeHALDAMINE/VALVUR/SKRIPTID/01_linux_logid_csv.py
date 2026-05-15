@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 01_linux_logid_csv.py - Linuxi logide (/var/log/auth.log jne) konverteerimine CSV-ks.
 """
 
@@ -31,8 +32,6 @@ import csv
 import re
 from datetime import datetime
 
-# ASCII Logo (VALVUR standard)
-r
 
 def parse_linux_logs():
     print(LOGO)
