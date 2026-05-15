@@ -23,13 +23,13 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 12_malu_analuus.py - Liides Volatility 3 jaoks mälutõmmiste analüüsimiseks.
 """
 
 import os
 import subprocess
 
-r
 
 def run_volatility(image_path, plugin):
     """Käivitab Volatility 3 plugina antud mälutõmmisel."""
