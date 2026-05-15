@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -22,7 +21,7 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
+
 # Turvaline andmete eraldamine (Forensic Data Extraction)
 
 Käesolev juhend käsitleb meetodeid, kuidas eraldada logifaile ja muid tõendeid kompromiteeritud Windowsi masinast VMware keskkonnas nii, et säiliks andmete terviklikkus ja välditaks uuritava süsteemi "saastamist".
@@ -41,7 +40,7 @@ See on kõige puhtam meetod, kuna see ei nõua rünnatud masinas võrguühendust
 5. Käivita Kali.
 
 ### 2. samm: Ketta ettevalmistamine Kalis
-Tuvasta ketas ja vorminda see failisüsteemi, mida Windows tunneb (nt NTFS).
+Tuvasta ketas ja vorminda see failisüsteemi, mida Windows tunnelo (nt NTFS).
 ```bash
 lsblk                      # Leia uus seade, nt /dev/sdb
 sudo fdisk /dev/sdb        # Loo uus partitsioon (n -> p -> default -> w)
