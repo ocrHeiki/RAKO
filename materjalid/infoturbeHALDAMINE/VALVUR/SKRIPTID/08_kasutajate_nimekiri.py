@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  08_kasutajate_nimekiri.py                     |   #
+#   |   FAILI NIMI:  08_kasutajate_nimekiri.py                            |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Süsteemi ja logide kasutajakontode audit.     |   #
+#   |   KIRJELDUS:   Süsteemi ja logide kasutajakontode audit.            |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -31,8 +31,6 @@ Aitab täita infovarade tabelit (kontod).
 import os
 import csv
 
-# ASCII Logo (VALVUR standard)
-r
 
 def get_linux_system_users():
     """Loeb Linuxi kasutajad otse süsteemifailist /etc/passwd."""
