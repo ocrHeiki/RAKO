@@ -23,14 +23,12 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 08_tehniline_raport_pdf.py - Genereerib tehnilise PDF raporti juhtkonnale.
 Selgitab VALVURi võimekust (XOR, Fuzzy matching jne).
 """
 
 import os
-
-# ASCII Logo (VALVUR standard)
-r
 
 def generate_technical_info():
     print(LOGO)
