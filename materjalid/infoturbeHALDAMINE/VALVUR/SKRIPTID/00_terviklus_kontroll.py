@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  00_terviklus_kontroll.py                      |   #
+#   |   FAILI NIMI:  00_terviklus_kontroll.py                             |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Logifailide SHA-256 räside arvutamine.        |   #
+#   |   KIRJELDUS:   Logifailide SHA-256 räside arvutamine.               |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -31,8 +31,6 @@ Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
 import os
 import hashlib
 
-# ASCII Logo (VALVUR standard)
-r
 
 def calculate_sha256(file_path):
     sha256_hash = hashlib.sha256()
