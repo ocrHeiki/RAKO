@@ -31,8 +31,6 @@ Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
 import os
 import hashlib
 
-# ASCII Logo (VALVUR standard)
-r
 
 def calculate_sha256(file_path):
     sha256_hash = hashlib.sha256()
