@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 03_otsing_marksonade_jargi.py - Otsib kahtlaseid märksõnu logide tekstist + MITRE & CVE mapping.
 """
 
