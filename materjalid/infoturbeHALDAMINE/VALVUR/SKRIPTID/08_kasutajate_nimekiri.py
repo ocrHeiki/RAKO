@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 11_kasutajate_nimekiri.py - Tuvastab logidest kõik unikaalsed kasutajakontod.
 Aitab täita infovarade tabelit (kontod).
 """
