@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  13_koond_ajajoon.py                           |   #
+#   |   FAILI NIMI:  13_koond_ajajoon.py                                  |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Ühtse kronoloogilise ajajoone genereerimine.  |   #
+#   |   KIRJELDUS:   Ühtse kronoloogilise ajajoone genereerimine.         |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 13_koond_ajajoon.py - Ühtse kronoloogilise ajajoone loomine kõikidest logiallikatest.
 """
