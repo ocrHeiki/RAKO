@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 02_turvafiltreering.py - Filtreerib eksporditud CSV-dest välja kriitilised sündmused.
 Kasutamine: python3 SKRIPTID/02_turvafiltreering.py
 """
