@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  10_vorgu_skaneerimine.py                      |   #
+#   |   FAILI NIMI:  10_vorgu_skaneerimine.py                             |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.        |   #
+#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.               |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 10_vorgu_skaneerimine.py - Teostab võrgu skaneerimist (nmap) infovarade kaardistamiseks.
 """
