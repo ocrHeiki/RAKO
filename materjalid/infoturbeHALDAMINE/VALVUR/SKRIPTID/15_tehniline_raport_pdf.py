@@ -24,7 +24,7 @@ import gzip
 #                                                                             #
 ###############################################################################
 """
-
+"""
 14_linux_syvaanaluus.py - Linuxi logide terviklus ja süvaanalüüs (SSH, Auditd).
 Tuvastab "Log Tampering" (ajalehed logides).
 """
@@ -34,7 +34,6 @@ import re
 import csv
 from datetime import datetime
 
-r
 
 def detect_log_tampering(log_path):
     """Otsib logifailist suuri ajalisi auke."""
