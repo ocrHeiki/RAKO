@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -12,15 +13,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  DEMO_SPIKK.md                                 |   #
+#   |   FAILI NIMI:  DEMO_SPIKK.md                                        |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Eksami esitlusspikker ja tehniline tugi.      |   #
+#   |   KIRJELDUS:   Eksami esitlusspikker ja tehniline tugi.             |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 
 # VALVUR - Eksami Esitlusspikker (Demo Cheat Sheet)
 
