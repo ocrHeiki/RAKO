@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -13,15 +12,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  README.md                                            |   #
+#   |   FAILI NIMI:  README.md                                     |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Projekti koondülevaade ja kiirkäivitusjuhend.        |   #
+#   |   KIRJELDUS:   Projekti koondülevaade ja kiirkäivitusjuhend. |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
+
 
 # VALVUR - Intsidendi süvaanalüüsi ja turvaauditi platvorm
 
@@ -30,7 +29,7 @@
 ## 🚀 Kiirkäivitus (Remote Launch)
 VALVUR-i saab käivitada otse GitHubist ilma käsitsi installita:
 ```bash
-python3 -c "$(curl -fsSL https://raw.githubusercontent.com/ocrHeiki/VALVUR/main/launch_VALVUR.py)"
+python3 -c "$(curl -fsSL https://raw.githubusercontent.com/ocrHeiki/RAKO/main/materjalid/infoturbeHALDAMINE/VALVUR/launch_VALVUR.py)"
 ```
 
 ## 🛡️ Strateegiline raamistik: NIST CSF 2.0
