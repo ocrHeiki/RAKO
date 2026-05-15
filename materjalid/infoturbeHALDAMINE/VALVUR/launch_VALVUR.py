@@ -30,7 +30,8 @@ import subprocess
 import shutil
 import tempfile
 
-REPO_URL = "https://github.com/ocrHeiki/VALVUR.git"
+REPO_URL = "https://github.com/ocrHeiki/RAKO.git"
+SUBDIR = "materjalid/infoturbeHALDAMINE/VALVUR"
 
 def run_cmd(cmd):
     try:
@@ -52,9 +53,17 @@ def main():
     os.chdir(tmp_dir)
 
     # 2. Kloonime repositooriumi
-    print(f"[*] Kloonitakse VALVUR GitHubist ({REPO_URL})...")
+    print(f"[*] Kloonitakse RAKO repositoorium ({REPO_URL})...")
     if not run_cmd(f"git clone {REPO_URL} ."):
-        print("[!] VIGA: Giti kloonimine ebaõnnestus. Kontrolli internetiühendust.")
+        print("[!] VIGA: Giti kloonimine ebaõnnestus.")
+        sys.exit(1)
+
+    # Liigume VALVUR-i alamkataloogi
+    if os.path.exists(SUBDIR):
+        print(f"[*] Liigun projekti kausta: {SUBDIR}")
+        os.chdir(SUBDIR)
+    else:
+        print(f"[!] VIGA: Alamkataloogi {SUBDIR} ei leitud!")
         sys.exit(1)
 
     # 3. Kontrollime ja installeerime sõltuvused
