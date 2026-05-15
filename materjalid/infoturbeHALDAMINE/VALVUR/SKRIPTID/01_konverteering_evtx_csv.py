@@ -36,8 +36,7 @@ import shutil # Moodul failide kopeerimiseks
 import tempfile # Moodul ajutiste failide loomiseks
 from Evtx.Evtx import Evtx # Impordime spetsiaalse teegi .evtx failide lugemiseks
 
-# ASCII Logo ja metainfo definitsioon
-r
+
 
 def parse_evtx(evtx_path, out_csv):
     """Funktsioon ühe .evtx faili konverteerimiseks CSV-ks."""
