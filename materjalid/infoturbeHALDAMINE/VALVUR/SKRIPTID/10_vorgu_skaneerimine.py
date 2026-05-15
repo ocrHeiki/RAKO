@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 10_vorgu_skaneerimine.py - Teostab võrgu skaneerimist (nmap) infovarade kaardistamiseks.
 """
 
@@ -31,8 +32,6 @@ import subprocess
 import platform
 import csv
 
-# ASCII Logo (VALVUR standard)
-r
 
 def check_nmap():
     """Kontrollib, kas nmap on süsteemis olemas."""
