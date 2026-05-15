@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  11_kasutajate_nimekiri.py                     |   #
+#   |   FAILI NIMI:  11_kasutajate_nimekiri.py                            |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Süsteemi ja logide kasutajakontode audit.     |   #
+#   |   KIRJELDUS:   Süsteemi ja logide kasutajakontode audit.            |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 11_kasutajate_nimekiri.py - Tuvastab logidest kõik unikaalsed kasutajakontod.
 Aitab täita infovarade tabelit (kontod).
