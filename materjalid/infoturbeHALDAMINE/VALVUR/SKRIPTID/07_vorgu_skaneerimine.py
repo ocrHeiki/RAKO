@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 10_vorgu_skaneerimine.py - Teostab võrgu skaneerimist (nmap) infovarade kaardistamiseks.
 """
 
