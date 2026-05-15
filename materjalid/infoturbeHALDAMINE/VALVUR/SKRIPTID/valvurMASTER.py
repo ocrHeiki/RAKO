@@ -39,7 +39,6 @@ def run_step(script_name, critical=False, args=None):
     if args: cmd.extend(args)
 
     try:
-        # Määrame kaustaks RESULT_DIR keskkonnamuutuja kaudu, et skriptid teaksid kuhu salvestada
         env = os.environ.copy()
         env["VALVUR_OUT"] = RESULT_DIR
         subprocess.run(cmd, check=True, cwd=BASE_DIR, env=env)
@@ -56,22 +55,26 @@ if __name__ == "__main__":
     log_event("="*60)
     log_event(f"VALVUR - ANALÜÜS KÄIVITATUD MASINAL: {HOSTNAME}")
     log_event(f"Tulemused: {RESULT_DIR}")
+    log_event("Analüüs teostatud süsteemi kloonil. Algne tõendusmaterjal on puutumatu.")
     log_event("="*60)
 
     if not is_admin():
-        log_event("[HOIATUS] Käivitatud ilma ADMIN/ROOT õigusteta.")
+        log_event("[HOIATUS] Käivitatud ilma ADMIN/ROOT õigusteta. Raport tuleb puudulik.")
 
-    # KRIITILISED ETAPID
-    run_step("00_terviklus_kontroll.py", critical=True)
-    
+    # 1. ACQUISITION (Andmete hankimine)
+    # Kui LOGID on tühi, proovime live-kopeerimist
     live_args = ["--live"] if platform.system() == "Windows" and not os.listdir(os.path.join(BASE_DIR, "LOGID")) else []
     
+    # 2. KRIITILISED ETAPID (Järjekord: Konverteerimine/Kopeerimine -> Räsimine)
     if platform.system() == "Windows":
         run_step("01_konverteering_evtx_csv.py", critical=True, args=live_args)
     else:
         run_step("01_linux_logid_csv.py", critical=True)
 
-    # ANALÜÜSI ETAPID
+    # Nüüd kui andmed on olemas (kopeeritud), arvutame räsid
+    run_step("00_terviklus_kontroll.py", critical=True)
+
+    # 3. ANALÜÜSI ETAPID
     steps = [
         "02_turvafiltreering.py", "03_otsing_marksonade_jargi.py", 
         "04_powershell_dekodeerimine.py", "06_kahtlased_failid.py", 
@@ -82,7 +85,7 @@ if __name__ == "__main__":
     for step in steps:
         run_step(step, critical=False)
 
-    # LÕPPVIIMISTLUS
+    # 4. LÕPPVIIMISTLUS
     run_step("05_genereeriRAPORT.py", critical=False)
 
     log_event("ANALÜÜS LÕPETATUD.")
