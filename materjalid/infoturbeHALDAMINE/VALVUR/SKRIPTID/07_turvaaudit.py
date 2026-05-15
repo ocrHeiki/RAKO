@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  07_turvaaudit.py                              |   #
+#   |   FAILI NIMI:  07_turvaaudit.py                                     |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   E-ITS vastavuskontroll ja Roadmap.            |   #
+#   |   KIRJELDUS:   E-ITS vastavuskontroll ja Roadmap.                   |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 07_turvaaudit.py - Süsteemi turvaaudit (E-ITS vastavuskontroll).
 Võrdleb seadeid standardiga ja annab parandusmeetmed.
