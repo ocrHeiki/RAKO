@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 13_koond_ajajoon.py - Ühtse kronoloogilise ajajoone loomine kõikidest logiallikatest.
 """
 
@@ -30,7 +31,6 @@ import os
 import csv
 from datetime import datetime
 
-r
 
 def generate_unified_timeline(in_dir='TULEMUSED', out_file='TULEMUSED/13_tulemus_koond_ajajoon.csv'):
     print(LOGO)
