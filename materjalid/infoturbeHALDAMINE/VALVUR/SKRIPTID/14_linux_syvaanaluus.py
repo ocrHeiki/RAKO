@@ -1,5 +1,6 @@
+import gzip
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,16 +15,16 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  14_linux_syvaanaluus.py                              |   #
+#   |   FAILI NIMI:  14_linux_syvaanaluus.py                       |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Linuxi logide terviklus ja SSH süvaanalüüs.          |   #
+#   |   KIRJELDUS:   Linuxi logide terviklus ja SSH süvaanalüüs.   |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 14_linux_syvaanaluus.py - Linuxi logide terviklus ja süvaanalüüs (SSH, Auditd).
 Tuvastab "Log Tampering" (ajalehed logides).
 """
@@ -33,6 +34,7 @@ import re
 import csv
 from datetime import datetime
 
+r
 
 def detect_log_tampering(log_path):
     """Otsib logifailist suuri ajalisi auke."""
@@ -47,7 +49,8 @@ def detect_log_tampering(log_path):
     time_pattern = r'^[A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2}'
     
     try:
-        with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
+        opener = gzip.open if log_path.endswith(".gz") else open
+    with opener(log_path, "rt", encoding="utf-8", errors="ignore") as f:
             for line in f:
                 match = re.search(time_pattern, line)
                 if match:
@@ -82,7 +85,8 @@ def analyze_ssh_logins(log_path):
     pattern = r'(Accepted|Failed) password for (invalid user )?(\w+) from ([\d.]+) port \d+ ssh2'
     
     try:
-        with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
+        opener = gzip.open if log_path.endswith(".gz") else open
+    with opener(log_path, "rt", encoding="utf-8", errors="ignore") as f:
             for line in f:
                 match = re.search(pattern, line)
                 if match:

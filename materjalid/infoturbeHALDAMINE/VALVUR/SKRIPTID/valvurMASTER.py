@@ -1,65 +1,46 @@
 #!/usr/bin/env python3
-LOGO = """
-###############################################################################
-#                                                                             #
-#   █████   █████           ████                                              #
-#  ▒▒███   ▒▒███           ▒▒███                                              #
-#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
-#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
-#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
-#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
-#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
-#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
-#                                                                             #
-#   =======================================================================   #
-#   |                                                                     |   #
-#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  valvurMASTER.py                                      |   #
-#   |   LOODUD:      2026-05-15                                           |   #
-#   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   VALVUR-i peamootor ja kontrollmoodul.                |   #
-#   |                                                                     |   #
-#   =======================================================================   #
-#                                                                             #
-###############################################################################
-"""
-
 import os
 import sys
-import platform
-import ctypes
 import subprocess
 import socket
 from datetime import datetime
 
+# Proovime importida rich, kui see on venv-is olemas
+try:
+    from rich.console import Console
+    from rich.table import Table
+    from rich.progress import Progress
+    console = Console()
+except ImportError:
+    console = None
+
+# Impordime oma uue utils mooduli
+sys.path.append(os.path.join(os.path.dirname(__file__), "SKRIPTID"))
+try:
+    import utils
+except ImportError:
+    # Kui utils on mujal, kohandame teed
+    sys.path.append("SKRIPTID")
+    import utils
+
 # DÜNAAMILINE ASUKOHT
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOG_FILE = os.path.join(BASE_DIR, "valvur_protsess.log")
 HOSTNAME = socket.gethostname()
 RESULT_DIR = os.path.join(BASE_DIR, "TULEMUSED", HOSTNAME)
 
-def log_event(message):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    formatted_msg = f"[{timestamp}] {message}"
-    print(formatted_msg)
-    with open(LOG_FILE, "a", encoding="utf-8") as f:
-        f.write(formatted_msg + "\n")
+logger = utils.setup_logging("MASTER")
 
-def is_admin():
-    if platform.system() == "Windows":
-        try: return ctypes.windll.shell32.IsUserAnAdmin() != 0
-        except: return False
-    return os.getuid() == 0
+def escalate_privileges():
+    """Linuxis automaatne sudo taaskäivitus, kui õigusi napib (Punkt 3)."""
+    if os.name != "nt" and os.getuid() != 0:
+        logger.info("Privileegid puuduvad. Proovin sudo taaskäivitust...")
+        args = ["sudo", sys.executable] + sys.argv
+        os.execvp("sudo", args)
 
 def run_step(script_name, critical=False, args=None):
-    log_event(f"KÄIVITAN: {script_name} (Kriitiline: {critical})")
+    logger.info(f"Etapp: {script_name}")
     script_path = os.path.join(BASE_DIR, "SKRIPTID", script_name)
     
-    if not os.path.exists(script_path):
-        log_event(f"[!] VIGA: Skripti {script_name} ei leitud.")
-        if critical: sys.exit(1)
-        return False
-
     cmd = [sys.executable, script_path]
     if args: cmd.extend(args)
 
@@ -67,39 +48,30 @@ def run_step(script_name, critical=False, args=None):
         env = os.environ.copy()
         env["VALVUR_OUT"] = RESULT_DIR
         subprocess.run(cmd, check=True, cwd=BASE_DIR, env=env)
-        log_event(f"[OK] {script_name} lõpetas edukalt.")
         return True
-    except subprocess.CalledProcessError as e:
-        log_event(f"[!] VIGA: {script_name} ebaõnnestus (Kood: {e.returncode}).")
+    except Exception as e:
+        logger.error(f"Viga etapis {script_name}: {e}")
         if critical: sys.exit(1)
         return False
 
-if __name__ == "__main__":
-    os.makedirs(RESULT_DIR, exist_ok=True)
+def main():
+    escalate_privileges()
+    utils.ensure_folders(BASE_DIR)
     
-    log_event("="*60)
-    log_event(f"VALVUR - ANALÜÜS KÄIVITATUD MASINAL: {HOSTNAME}")
-    log_event(f"Tulemused: {RESULT_DIR}")
-    log_event("Analüüs teostatud süsteemi kloonil. Algne tõendusmaterjal on puutumatu.")
-    log_event("="*60)
-
-    if not is_admin():
-        log_event("[HOIATUS] Käivitatud ilma ADMIN/ROOT õigusteta. Raport tuleb puudulik.")
-
-    # 1. ACQUISITION (Andmete hankimine)
-    # Kui LOGID on tühi, proovime live-kopeerimist
-    live_args = ["--live"] if platform.system() == "Windows" and not os.listdir(os.path.join(BASE_DIR, "LOGID")) else []
-    
-    # 2. KRIITILISED ETAPID (Järjekord: Konverteerimine/Kopeerimine -> Räsimine)
-    if platform.system() == "Windows":
-        run_step("01_konverteering_evtx_csv.py", critical=True, args=live_args)
+    if console:
+        console.print("[bold cyan]VALVUR - PROFESSIONAALNE ANALÜÜSI PLATVORM[/bold cyan]", justify="center")
+        console.print(f"Masin: [green]{HOSTNAME}[/green] | Kaust: {RESULT_DIR}")
+        print("="*80)
     else:
-        run_step("01_linux_logid_csv.py", critical=True)
+        logger.info(f"VALVUR START - Masin: {HOSTNAME}")
 
-    # Nüüd kui andmed on olemas (kopeeritud), arvutame räsid
+    # KRIITILISED ETAPID
     run_step("00_terviklus_kontroll.py", critical=True)
+    
+    # 01_konverteering toetab nüüd --live argumenti
+    run_step("01_konverteering_evtx_csv.py", critical=True, args=["--live"] if os.name == "nt" else [])
 
-    # 3. ANALÜÜSI ETAPID
+    # ANALÜÜSIMOODULID
     steps = [
         "02_turvafiltreering.py", "03_otsing_marksonade_jargi.py", 
         "04_powershell_dekodeerimine.py", "06_kahtlased_failid.py", 
@@ -107,11 +79,17 @@ if __name__ == "__main__":
         "13_koond_ajajoon.py", "14_linux_syvaanaluus.py"
     ]
 
-    for step in steps:
-        run_step(step, critical=False)
+    if console:
+        with Progress() as progress:
+            task = progress.add_task("[cyan]Analüüsin...", total=len(steps))
+            for step in steps:
+                run_step(step)
+                progress.update(task, advance=1)
+    else:
+        for step in steps: run_step(step)
 
-    # 4. LÕPPVIIMISTLUS
-    run_step("05_genereeriRAPORT.py", critical=False)
+    run_step("05_genereeriRAPORT.py")
+    logger.info("ANALÜÜS LÕPETATUD.")
 
-    log_event("ANALÜÜS LÕPETATUD.")
-    log_event("="*60)
+if __name__ == "__main__":
+    main()

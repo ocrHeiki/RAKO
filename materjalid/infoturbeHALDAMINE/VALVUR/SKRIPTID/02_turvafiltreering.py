@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,16 +14,16 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  02_turvafiltreering.py                               |   #
+#   |   FAILI NIMI:  02_turvafiltreering.py                        |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Kriitiliste sündmuste eraldamine logidest.           |   #
+#   |   KIRJELDUS:   Kriitiliste sündmuste eraldamine logidest.    |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 02_turvafiltreering.py - Filtreerib eksporditud CSV-dest välja kriitilised sündmused.
 Kasutamine: python3 SKRIPTID/02_turvafiltreering.py
 """
@@ -31,6 +31,8 @@ Kasutamine: python3 SKRIPTID/02_turvafiltreering.py
 import os # Impordime mooduli failisüsteemi toiminguteks
 import csv # Impordime mooduli CSV failide töötlemiseks
 
+# ASCII Logo definitsioon koos metainfoga
+r
 
 def filter_security_events(in_dir='TULEMUSED', out_file='TULEMUSED/02_tulemus_turvafiltreering.csv'):
     """Funktsioon kriitiliste sündmuste filtreerimiseks CSV-failidest."""

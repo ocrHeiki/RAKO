@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,21 +14,24 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  08_tehniline_raport_pdf.py                           |   #
+#   |   FAILI NIMI:  08_tehniline_raport_pdf.py                    |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Tehnilise PDF-raporti genereerimine.                 |   #
+#   |   KIRJELDUS:   Tehnilise PDF-raporti genereerimine.          |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 08_tehniline_raport_pdf.py - Genereerib tehnilise PDF raporti juhtkonnale.
 Selgitab VALVURi võimekust (XOR, Fuzzy matching jne).
 """
 
 import os
+
+# ASCII Logo (VALVUR standard)
+r
 
 def generate_technical_info():
     print(LOGO)

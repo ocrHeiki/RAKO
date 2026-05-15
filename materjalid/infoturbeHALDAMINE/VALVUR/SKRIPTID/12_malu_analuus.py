@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,22 +14,23 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  12_malu_analuus.py                                   |   #
+#   |   FAILI NIMI:  12_malu_analuus.py                            |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Volatility 3 mäluanalüüsi liides.                    |   #
+#   |   KIRJELDUS:   Volatility 3 mäluanalüüsi liides.             |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 12_malu_analuus.py - Liides Volatility 3 jaoks mälutõmmiste analüüsimiseks.
 """
 
 import os
 import subprocess
 
+r
 
 def run_volatility(image_path, plugin):
     """Käivitab Volatility 3 plugina antud mälutõmmisel."""
@@ -37,7 +38,8 @@ def run_volatility(image_path, plugin):
     try:
         # Eeldame, et vol.py või volatility on PATH-is
         cmd = ["vol", "-f", image_path, plugin]
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        with open("TULEMUSED/volatility_raw.log", "a") as out_f:
+            subprocess.run(cmd, stdout=out_f, stderr=out_f)
         return result.stdout
     except Exception as e:
         return f"VIGA: Volatility käivitamine ebaõnnestus ({e})"

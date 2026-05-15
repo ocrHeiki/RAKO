@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,17 +14,20 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  04_powershell_dekodeerimine.py                       |   #
+#   |   FAILI NIMI:  04_powershell_dekodeerimine.py                |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   PowerShell Base64 ja XOR deobfuskatsioon.            |   #
+#   |   KIRJELDUS:   PowerShell Base64 ja XOR deobfuskatsioon.     |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
+
 import os, csv, re, base64
 
+# ASCII Logo (VALVUR standard)
+r
 
 def xor_decrypt(data, key):
     """

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,16 +14,16 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  13_koond_ajajoon.py                                  |   #
+#   |   FAILI NIMI:  13_koond_ajajoon.py                           |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Ühtse kronoloogilise ajajoone genereerimine.         |   #
+#   |   KIRJELDUS:   Ühtse kronoloogilise ajajoone genereerimine.  |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 13_koond_ajajoon.py - Ühtse kronoloogilise ajajoone loomine kõikidest logiallikatest.
 """
 
@@ -31,6 +31,7 @@ import os
 import csv
 from datetime import datetime
 
+r
 
 def generate_unified_timeline(in_dir='TULEMUSED', out_file='TULEMUSED/13_tulemus_koond_ajajoon.csv'):
     print(LOGO)

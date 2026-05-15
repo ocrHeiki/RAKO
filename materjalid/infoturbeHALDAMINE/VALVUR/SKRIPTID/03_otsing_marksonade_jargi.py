@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,16 +14,16 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  03_otsing_marksonade_jargi.py                        |   #
+#   |   FAILI NIMI:  03_otsing_marksonade_jargi.py                 |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   MITRE ATT&CK märksõnade otsing ja analüüs.           |   #
+#   |   KIRJELDUS:   MITRE ATT&CK märksõnade otsing ja analüüs.    |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 03_otsing_marksonade_jargi.py - Otsib kahtlaseid märksõnu logide tekstist + MITRE & CVE mapping.
 """
 
@@ -39,6 +39,8 @@ def fuzzy_match(a, b):
     """
     return SequenceMatcher(None, a, b).ratio()
 
+# ASCII Logo (VALVUR standard)
+r
 
 def search_suspicious_keywords(in_dir='TULEMUSED', out_file='TULEMUSED/03_tulemus_kahtlased_marksonad.csv'):
     print(LOGO)

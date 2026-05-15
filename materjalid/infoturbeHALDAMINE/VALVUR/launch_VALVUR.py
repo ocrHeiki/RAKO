@@ -17,13 +17,13 @@
 #   |   FAILI NIMI:  launch_VALVUR.py                                     |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Süsteemi kiirkäivitus ja keskkonna ettevalmistus.    |   #
+#   |   KIRJELDUS:   Süsteemi kiirkäivitus virtuaalkeskkonnas (venv).     |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
 """
+
 import os
 import sys
 import subprocess
@@ -33,54 +33,40 @@ import tempfile
 REPO_URL = "https://github.com/ocrHeiki/RAKO.git"
 SUBDIR = "materjalid/infoturbeHALDAMINE/VALVUR"
 
-def run_cmd(cmd):
-    try:
-        subprocess.run(cmd, shell=True, check=True)
-        return True
-    except:
-        return False
-
 def main():
-    print("[*] VALVUR REMOTE LAUNCHER ALUSTAB...")
-
-    # 1. Loome ajutise töökeskkonna
-    tmp_dir = os.path.join(tempfile.gettempdir(), "VALVUR_EXAM")
-    if os.path.exists(tmp_dir):
-        shutil.rmtree(tmp_dir)
+    print("[*] VALVUR BOOTSTRAP ALUSTAB...")
     
-    print(f"[*] Luuakse ajutine keskkond: {tmp_dir}")
-    os.makedirs(tmp_dir)
-    os.chdir(tmp_dir)
+    # 1. Ajutise kausta loomine
+    work_dir = os.path.join(tempfile.gettempdir(), "VALVUR_LIVE")
+    if os.path.exists(work_dir): shutil.rmtree(work_dir)
+    os.makedirs(work_dir)
+    os.chdir(work_dir)
 
-    # 2. Kloonime repositooriumi
-    print(f"[*] Kloonitakse RAKO repositoorium ({REPO_URL})...")
-    if not run_cmd(f"git clone {REPO_URL} ."):
-        print("[!] VIGA: Giti kloonimine ebaõnnestus.")
-        sys.exit(1)
+    # 2. Kloonimine
+    print(f"[*] Kloonitakse repositoorium: {REPO_URL}")
+    subprocess.run(["git", "clone", REPO_URL, "."], check=True)
+    os.chdir(SUBDIR)
 
-    # Liigume VALVUR-i alamkataloogi
-    if os.path.exists(SUBDIR):
-        print(f"[*] Liigun projekti kausta: {SUBDIR}")
-        os.chdir(SUBDIR)
+    # 3. Virtuaalkeskkonna loomine (Punkt 3)
+    print("[*] Luuakse isoleeritud virtuaalkeskkond (venv)...")
+    subprocess.run([sys.executable, "-m", "venv", "venv"], check=True)
+    
+    # Määrame venv interpretaatori tee
+    if os.name == "nt":
+        python_exe = os.path.join("venv", "Scripts", "python.exe")
     else:
-        print(f"[!] VIGA: Alamkataloogi {SUBDIR} ei leitud!")
-        sys.exit(1)
+        python_exe = os.path.join("venv", "bin", "python")
 
-    # 3. Kontrollime ja installeerime sõltuvused
-    print("[*] Kontrollin vajalikke Pythoni teeke...")
-    run_cmd("pip install python-evtx python-docx python-pptx fpdf --user")
+    # 4. Sõltuvuste paigaldamine
+    print("[*] Paigaldatakse sõltuvused ja Rich UI...")
+    subprocess.run([python_exe, "-m", "pip", "install", "--upgrade", "pip"], check=True)
+    subprocess.run([python_exe, "-m", "pip", "install", "python-evtx", "python-docx", "rich", "psutil"], check=True)
 
-    # 4. Käivitame MASTER-skripti
-    master_script = "SKRIPTID/valvurMASTER.py"
-    if os.path.exists(master_script):
-        print("
-" + "="*60)
-        print("   KÄIVITAN VALVUR MASTER CONTROL...")
-        print("="*60 + "
-")
-        subprocess.run([sys.executable, master_script])
-    else:
-        print(f"[!] VIGA: Master skripti ({master_script}) ei leitud!")
+    # 5. Käivitamine
+    print("\n" + "="*60)
+    print("   VALVUR KÄIVITUB VIRTUAALKESKKONNAS")
+    print("="*60 + "\n")
+    subprocess.run([python_exe, "SKRIPTID/valvurMASTER.py"])
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,16 +14,17 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  05_genereeriRAPORT.py                                |   #
+#   |   FAILI NIMI:  05_genereeriRAPORT.py                         |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Lõpliku koondraporti genereerimine.                  |   #
+#   |   KIRJELDUS:   Lõpliku koondraporti genereerimine.           |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
 
+LOGO = r
 import os
 import csv
 from datetime import datetime

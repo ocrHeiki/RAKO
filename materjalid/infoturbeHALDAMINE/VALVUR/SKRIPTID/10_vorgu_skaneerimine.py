@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,24 +14,29 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  10_vorgu_skaneerimine.py                             |   #
+#   |   FAILI NIMI:  10_vorgu_skaneerimine.py                      |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.               |   #
+#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.        |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 10_vorgu_skaneerimine.py - Teostab võrgu skaneerimist (nmap) infovarade kaardistamiseks.
 """
 
 import os
+import sys
+sys.path.append("SKRIPTID")
+import utils
 import subprocess
 import platform
 import csv
 
+# ASCII Logo (VALVUR standard)
+r
 
 def check_nmap():
     """Kontrollib, kas nmap on süsteemis olemas."""
@@ -42,16 +47,7 @@ def check_nmap():
         return False
 
 def get_local_subnet():
-    """Proovib tuvastada kohaliku alamvõrgu."""
-    if platform.system() == "Linux":
-        try:
-            route_out = subprocess.check_output(["ip", "route", "show"]).decode()
-            for line in route_out.splitlines():
-                if "default" not in line and "link" in line:
-                    return line.split()[0]
-        except: pass
-    return "192.168.1.0/24" # Default fallback
-
+    return utils.get_local_subnet()
 def run_nmap_scan(target=None):
     print(LOGO)
     if not check_nmap():

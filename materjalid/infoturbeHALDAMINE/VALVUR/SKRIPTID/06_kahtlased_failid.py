@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-LOGO = """
+"""
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,22 +14,25 @@ LOGO = """
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  06_kahtlased_failid.py                               |   #
+#   |   FAILI NIMI:  06_kahtlased_failid.py                        |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Kahtlaste failide süvaskann (Live & Logid).          |   #
+#   |   KIRJELDUS:   Kahtlaste failide süvaskann (Live & Logid).   |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-"""
+
 06_kahtlased_failid.py - Tuvastab kahtlased failid nii logidest kui ka süsteemist (Live Scan).
 """
 
 import os
 import csv
 import platform
+
+# ASCII Logo (VALVUR standard)
+r
 
 def live_system_scan():
     print("[*] Alustan süsteemi reaalajas kontrolli (Live Scan)...")
