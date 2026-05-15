@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -12,15 +13,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  README.md                                     |   #
+#   |   FAILI NIMI:  README.md                                            |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Projekti koondülevaade ja kiirkäivitusjuhend. |   #
+#   |   KIRJELDUS:   Projekti koondülevaade ja kiirkäivitusjuhend.        |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 
 # VALVUR - Intsidendi süvaanalüüsi ja turvaauditi platvorm
 
