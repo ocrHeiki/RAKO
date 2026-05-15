@@ -41,12 +41,6 @@ VALVUR on ehitatud NIST põhisammastele:
 - **RESPOND**: Automatiseeritud normaliseeritud raporteerimine.
 - **RECOVER**: Kronoloogiline ajajoon (Timeline) süsteemi taastamiseks.
 
-## 🧠 HeRe kontseptsioon: Väe ja Tarkuse Liit
-Esitlusmaterjalides kannab projekt nime **HeRe** (Heiki Rebane & Helena Reinhold):
-- **HE (Might)**: Tehniline kaitsevõimekus (krüptograafia, tulemüürid).
-- **RE (Mind)**: Strateegiline analüüs ja ründaja kavaluse mõistmine.
-- **Moto**: *"Vägi ilma tarkuseta on pime, tarkus ilma väeta on võimetu."*
-
 ## 🛠️ Töövoog (Workflow)
 Analüüs toimub järgmises järjekorras (MASTER Control):
 1.  **Terviklus (00)**: SHA-256 räside arvutamine (Forensiliselt korrektne).
