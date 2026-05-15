@@ -1,77 +1,50 @@
-###############################################################################
-#                                                                             #
-#   █████   █████           ████                                              #
-#  ▒▒███   ▒▒███           ▒▒███                                              #
-#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
-#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
-#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
-#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
-#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
-#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
-#                                                                             #
-#   =======================================================================   #
-#   |                                                                     |   #
-#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  03_skriptid.md                                       |   #
-#   |   LOODUD:      2026-05-15                                           |   #
-#   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   VALVUR-i analüüsimoodulite detailne kirjeldus.       |   #
-#   |                                                                     |   #
-#   =======================================================================   #
-#                                                                             #
-###############################################################################
-
 # VALVUR Skriptide Ülevaade
 
-VALVUR koosneb etapiviisilistest skriptidest, mida juhib `valvurMASTER.py`.
-
 ### 00_terviklus_kontroll.py
-Arvutab algallika logide (EVTX, syslog) SHA-256 räsid enne analüüsi alustamist.
+Logifailide SHA-256 räside arvutamine.
 
 ### 01_konverteering_evtx_csv.py
-Teisendab Windowsi .evtx logid CSV formaati. Toetab lukus failide kopeerimist.
+Windowsi .evtx logide konverteerimine CSV-ks.
 
 ### 02_linux_logid_csv.py
-Teisendab Linuxi syslogid ühtsesse CSV formaati.
+Linuxi logide konverteerimine ja normaliseerimine.
 
 ### 03_turvafiltreering.py
-Eraldab logidest kriitilised turvasündmused (GPO, Logon jne).
+Kriitiliste sündmuste eraldamine logidest.
 
 ### 04_otsing_marksonade_jargi.py
-Otsib logidest ründetööriistade jälgi (MITRE ATT&CK / CVE).
+MITRE ATT&CK märksõnade otsing ja analüüs.
 
 ### 05_powershell_dekodeerimine.py
-Dekodeerib obfuskeeritud PowerShell koodi (Base64/XOR).
+PowerShell Base64 ja XOR deobfuskatsioon.
 
 ### 06_kahtlased_failid.py
-Teostab süsteemi reaalajas kontrolli (Live Scan) ja otsib peidetud faile.
+Kahtlaste failide süvaskann (Live & Logid).
 
-### 07_turvaaudit.py
-Kontrollib vastavust E-ITS standardile ja koostab Roadmapi.
+### 07_vorgu_skaneerimine.py
+Võrguvarade ja teenuste kaardistamine.
 
-### 08_genereeriRAPORT.py
-Koostab lõpliku koondraporti (Executive Summary + detailid).
+### 08_kasutajate_nimekiri.py
+Süsteemi ja logide kasutajakontode audit.
 
-### 09_tehniline_raport_pdf.py
-Genereerib tehnilise PDF ülevaate.
+### 09_turvaaudit.py
+E-ITS vastavuskontroll ja Roadmap.
 
 ### 10_threat_intel.py
-Kontrollib IP-aadresside mainet välisandmebaasidest.
+IP-aadresside maine kontroll (AbuseIPDB).
 
-### 11_vorgu_skaneerimine.py
-Kaardistab võrgu varad ja teenused (nmap).
+### 11_malu_analuus.py
+Volatility 3 mäluanalüüsi liides.
 
-### 12_kasutajate_nimekiri.py
-Loetleb süsteemi kasutajad ja tuvastab UID 0 kontod.
+### 12_linux_syvaanaluus.py
+Linuxi logide terviklus ja SSH süvaanalüüs.
 
-### 13_malu_analuus.py
-Liides Volatility 3 jaoks mäluanalüüsiks.
+### 13_koond_ajajoon.py
+Ühtse kronoloogilise ajajoone genereerimine.
 
-### 14_koond_ajajoon.py
-Genereerib ühtse kronoloogilise ajajoone (Unified Timeline).
+### 14_genereeriRAPORT.py
+Lõpliku koondraporti genereerimine.
 
-### 15_linux_syvaanaluus.py
-Tuvastab logide manipuleerimist (Log Tampering) ja analüüsib SSH-d.
+### 15_tehniline_raport_pdf.py
+Tehnilise PDF-raporti genereerimine.
 
-### valvurMASTER.py
-Süsteemi peamootor, mis juhib kogu analüüsiahelat.
