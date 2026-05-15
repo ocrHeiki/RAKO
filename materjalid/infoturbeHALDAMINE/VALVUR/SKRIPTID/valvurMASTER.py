@@ -31,7 +31,7 @@ RESULT_DIR = os.path.join(BASE_DIR, "TULEMUSED", HOSTNAME)
 logger = utils.setup_logging("MASTER")
 
 def escalate_privileges():
-    """Linuxis automaatne sudo taaskäivitus, kui õigusi napib (Punkt 3)."""
+    """Linuxis automaatne sudo taaskäivitus, kui õigusi napib."""
     if os.name != "nt" and os.getuid() != 0:
         logger.info("Privileegid puuduvad. Proovin sudo taaskäivitust...")
         args = ["sudo", sys.executable] + sys.argv
@@ -65,20 +65,22 @@ def main():
     else:
         logger.info(f"VALVUR START - Masin: {HOSTNAME}")
 
-    # KRIITILISED ETAPID
+    # 1. KRIITILISED ETAPID
     run_step("00_terviklus_kontroll.py", critical=True)
     
-    # 01_konverteering toetab nüüd --live argumenti
-    run_step("01_konverteering_evtx_csv.py", critical=True, args=["--live"] if os.name == "nt" else [])
+    # Valime impordi vastavalt platvormile või teeme mõlemad
+    if os.name == "nt":
+        run_step("01_konverteering_evtx_csv.py", critical=True, args=["--live"])
+    else:
+        run_step("02_linux_logid_csv.py", critical=True)
 
-    # ANALÜÜSIMOODULID
+    # 2. ANALÜÜSIMOODULID
     steps = [
         "03_turvafiltreering.py",
         "04_otsing_marksonade_jargi.py",
         "05_powershell_dekodeerimine.py",
         "06_kahtlased_failid.py",
         "07_turvaaudit.py",
-        "08_genereeriRAPORT.py",
         "09_tehniline_raport_pdf.py",
         "10_threat_intel.py",
         "11_vorgu_skaneerimine.py",
@@ -97,8 +99,10 @@ def main():
     else:
         for step in steps: run_step(step)
 
-    run_step("08_genereeriRAPORT.py")
-    logger.info("ANALÜÜS LÕPETATUD.")
+    # 3. LÕPPVIIMISTLUS
+    run_step("08_genereeriRAPORT.py", critical=False)
+    
+    logger.info(f"ANALÜÜS LÕPETATUD. Raport asub: {RESULT_DIR}")
 
 if __name__ == "__main__":
     main()

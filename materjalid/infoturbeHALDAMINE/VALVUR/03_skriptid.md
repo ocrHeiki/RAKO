@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -21,56 +20,58 @@
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
 
 # VALVUR Skriptide Ülevaade
 
-VALVUR koosneb mitmest etapilisest skriptist, mida juhib `valvurMASTER.py`.
+VALVUR koosneb etapiviisilistest skriptidest, mida juhib `valvurMASTER.py`.
 
 ### 00_terviklus_kontroll.py
-Arvutab algallika logide (EVTX, syslog) SHA-256 räsid enne analüüsi alustamist. Tagab andmete puutumatuse tõendamise.
+Arvutab algallika logide (EVTX, syslog) SHA-256 räsid enne analüüsi alustamist.
 
-### 01_konverteering_evtx_csv.py / 01_linux_logid_csv.py
-Teisendavad algallika logid ühtsesse CSV formaati. Linuxi puhul tuvastab sisselogimised ja omistab neile vastavad ID-d (4624, 4625).
+### 01_konverteering_evtx_csv.py
+Teisendab Windowsi .evtx logid CSV formaati. Toetab lukus failide kopeerimist.
 
-### 02_turvafiltreering.py
-Eraldab kriitilised sündmused, sealhulgas GPO muudatused ja SOC standardile vastavad ID-d.
+### 02_linux_logid_csv.py
+Teisendab Linuxi syslogid ühtsesse CSV formaati.
 
-### 09_threat_intel.py
-Võtab süvaanalüüsist leitud IP-aadressid ja kontrollib nende mainet (AbuseIPDB valmidus).
+### 03_turvafiltreering.py
+Eraldab logidest kriitilised turvasündmused (GPO, Logon jne).
 
-### 03_otsing_marksonade_jargi.py
-Otsib logidest ründetööriistade jälgi ja seostab need **MITRE ATT&CK** taktikate ning **CVE** koodidega.
+### 04_otsing_marksonade_jargi.py
+Otsib logidest ründetööriistade jälgi (MITRE ATT&CK / CVE).
 
-### 04_powershell_dekodeerimine.py
-Teostab süvaanalüüsi, dekodeerides peidetud PowerShell skripte ja eraldades ründajate IP-aadressid.
+### 05_powershell_dekodeerimine.py
+Dekodeerib obfuskeeritud PowerShell koodi (Base64/XOR).
 
 ### 06_kahtlased_failid.py
-Teostab süsteemi reaalajas kontrolli (Live Scan) ajutistes kaustades ja otsib viiteid logidest.
+Teostab süsteemi reaalajas kontrolli (Live Scan) ja otsib peidetud faile.
 
 ### 07_turvaaudit.py
-Kontrollib süsteemi vastavust E-ITS standardile ja pakub parandusmeetmeid.
-
-### 10_vorgu_skaneerimine.py
-Kaardistab võrgus olevad hostid ja teenused (nmap), et aidata koostada infovarade võrgujoonist.
+Kontrollib vastavust E-ITS standardile ja koostab Roadmapi.
 
 ### 08_genereeriRAPORT.py
-Koostab kronoloogilise ja struktureeritud Wordi (.docx) raporti, koondades kõik analüüsi tulemused.
+Koostab lõpliku koondraporti (Executive Summary + detailid).
 
-### 08_tehniline_raport_pdf.py
-Genereerib juhtkonnale suunatud tehnilise ülevaate VALVURI süvaanalüüsi võimekusest.
+### 09_tehniline_raport_pdf.py
+Genereerib tehnilise PDF ülevaate.
 
-### 11_kasutajate_nimekiri.py
-Loetleb kõik unikaalsed kasutajad nii logidest kui ka süsteemist (/etc/passwd), tuvastades peidetud root-õigustega kontod (UID 0).
+### 10_threat_intel.py
+Kontrollib IP-aadresside mainet välisandmebaasidest.
 
-### 12_malu_analuus.py
-Liides Volatility 3 jaoks. Analüüsib mälutõmmiseid (.raw, .mem), tuvastades mälus peituvat pahavara (malfind, pslist).
+### 11_vorgu_skaneerimine.py
+Kaardistab võrgu varad ja teenused (nmap).
+
+### 12_kasutajate_nimekiri.py
+Loetleb süsteemi kasutajad ja tuvastab UID 0 kontod.
+
+### 13_malu_analuus.py
+Liides Volatility 3 jaoks mäluanalüüsiks.
 
 ### 14_koond_ajajoon.py
-Genereerib ühtse kronoloogilise ajajoone (Unified Timeline) kõikidest logiallikatest, visualiseerides ründaja teekonda.
+Genereerib ühtse kronoloogilise ajajoone (Unified Timeline).
 
 ### 15_linux_syvaanaluus.py
-Linuxi spetsiifiline süvakontroll: logide tervikluse kontroll (Log Tampering) ja SSH sisselogimiste normaliseeritud analüüs.
+Tuvastab logide manipuleerimist (Log Tampering) ja analüüsib SSH-d.
 
 ### valvurMASTER.py
-Süsteemi peamootor, mis juhib kogu analüüsiahelat. Sisaldab admin-õiguste kontrolli, metoodilist "klooni" märget ja robustset veatöötlust.
+Süsteemi peamootor, mis juhib kogu analüüsiahelat.
