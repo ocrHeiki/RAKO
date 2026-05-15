@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  12_malu_analuus.py                            |   #
+#   |   FAILI NIMI:  12_malu_analuus.py                                   |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Volatility 3 mäluanalüüsi liides.             |   #
+#   |   KIRJELDUS:   Volatility 3 mäluanalüüsi liides.                    |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 12_malu_analuus.py - Liides Volatility 3 jaoks mälutõmmiste analüüsimiseks.
 """
