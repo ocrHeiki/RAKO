@@ -23,7 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
-LOGO = r
+
 import os
 import csv
 from datetime import datetime
