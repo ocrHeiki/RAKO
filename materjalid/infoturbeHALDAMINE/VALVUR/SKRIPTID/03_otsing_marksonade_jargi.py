@@ -23,6 +23,7 @@ OGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 03_otsing_marksonade_jargi.py - Otsib kahtlaseid märksõnu logide tekstist + MITRE & CVE mapping.
 """
 
@@ -38,8 +39,6 @@ def fuzzy_match(a, b):
     """
     return SequenceMatcher(None, a, b).ratio()
 
-# ASCII Logo (VALVUR standard)
-r
 
 def search_suspicious_keywords(in_dir='TULEMUSED', out_file='TULEMUSED/03_tulemus_kahtlased_marksonad.csv'):
     print(LOGO)
