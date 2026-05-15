@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -12,15 +13,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  TULEVIKU_MOTTED.md                            |   #
+#   |   FAILI NIMI:  TULEVIKU_MOTTED.md                                   |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   VALVUR-i tulevikuvisioon ja arendusplaan.     |   #
+#   |   KIRJELDUS:   VALVUR-i tulevikuvisioon ja arendusplaan.            |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 
 # VALVUR - Tulevikuarendused ja ideed
 
