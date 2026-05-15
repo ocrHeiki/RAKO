@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -12,15 +13,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  03_skriptid.md                                |   #
+#   |   FAILI NIMI:  03_skriptid.md                                       |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   VALVUR-i analüüsimoodulite detailne kirjeldus. |   #
+#   |   KIRJELDUS:   VALVUR-i analüüsimoodulite detailne kirjeldus.       |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 
 # VALVUR Skriptide Ülevaade
 
