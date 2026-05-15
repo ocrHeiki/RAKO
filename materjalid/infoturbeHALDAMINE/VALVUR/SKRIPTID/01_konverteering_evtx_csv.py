@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  01_konverteering_evtx_csv.py                  |   #
+#   |   FAILI NIMI:  01_konverteering_evtx_csv.py                         |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Windowsi .evtx logide konverteerimine CSV-ks. |   #
+#   |   KIRJELDUS:   Windowsi .evtx logide konverteerimine CSV-ks.        |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 01_konverteering_evtx_csv.py - Windowsi .evtx logide konverteerimine CSV-formaati.
 Kasutamine: python3 SKRIPTID/01_konverteering_evtx_csv.py --path LOGID
