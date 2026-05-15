@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 00_terviklus_kontroll.py - Arvutab algallika logide räsid (Data Integrity).
 Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
 """
