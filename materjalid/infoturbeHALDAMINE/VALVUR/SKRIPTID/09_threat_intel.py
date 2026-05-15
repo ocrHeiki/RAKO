@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  09_threat_intel.py                            |   #
+#   |   FAILI NIMI:  09_threat_intel.py                                   |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   IP-aadresside maine kontroll (AbuseIPDB).     |   #
+#   |   KIRJELDUS:   IP-aadresside maine kontroll (AbuseIPDB).            |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 09_threat_intel.py - IP maine kontroll ja Threat Intelligence liides.
 """
