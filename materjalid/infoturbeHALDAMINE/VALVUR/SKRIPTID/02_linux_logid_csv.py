@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 01_linux_logid_csv.py - Linuxi logide (/var/log/auth.log jne) konverteerimine CSV-ks.
 """
 
