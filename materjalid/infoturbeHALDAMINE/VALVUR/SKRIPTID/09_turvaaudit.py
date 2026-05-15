@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 07_turvaaudit.py - Süsteemi turvaaudit (E-ITS vastavuskontroll).
 Võrdleb seadeid standardiga ja annab parandusmeetmed.
 """
