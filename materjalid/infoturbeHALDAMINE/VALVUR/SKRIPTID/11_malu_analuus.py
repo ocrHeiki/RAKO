@@ -14,23 +14,22 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  11_malu_analuus.py                            |   #
+#   |   FAILI NIMI:  11_malu_analuus.py                                   |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Volatility 3 mäluanalüüsi liides.             |   #
+#   |   KIRJELDUS:   Volatility 3 mäluanalüüsi liides.                    |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-
+"""
 12_malu_analuus.py - Liides Volatility 3 jaoks mälutõmmiste analüüsimiseks.
 """
 
 import os
 import subprocess
 
-r
 
 def run_volatility(image_path, plugin):
     """Käivitab Volatility 3 plugina antud mälutõmmisel."""
