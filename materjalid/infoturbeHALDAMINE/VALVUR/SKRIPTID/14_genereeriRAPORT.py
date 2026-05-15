@@ -14,17 +14,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  14_genereeriRAPORT.py                         |   #
+#   |   FAILI NIMI:  14_genereeriRAPORT.py                                |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Lõpliku koondraporti genereerimine.           |   #
+#   |   KIRJELDUS:   Lõpliku koondraporti genereerimine.                  |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-
-LOGO = r
 import os
 import csv
 from datetime import datetime
