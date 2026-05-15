@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  10_threat_intel.py                            |   #
+#   |   FAILI NIMI:  10_threat_intel.py                                   |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   IP-aadresside maine kontroll (AbuseIPDB).     |   #
+#   |   KIRJELDUS:   IP-aadresside maine kontroll (AbuseIPDB).            |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -31,8 +31,6 @@ import os
 import re
 import csv
 
-# ASCII Logo (VALVUR standard)
-r
 
 # Testimiseks: tuntud pahatahtlikud IP-d (simuleerime andmebaasi)
 KNOWN_BAD_IPS = ["1.2.3.4", "8.8.8.8", "192.168.1.100", "45.33.32.156"]
