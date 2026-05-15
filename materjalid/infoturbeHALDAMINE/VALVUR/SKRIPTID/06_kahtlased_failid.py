@@ -23,15 +23,13 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 06_kahtlased_failid.py - Tuvastab kahtlased failid nii logidest kui ka süsteemist (Live Scan).
 """
 
 import os
 import csv
 import platform
-
-# ASCII Logo (VALVUR standard)
-r
 
 def live_system_scan():
     print("[*] Alustan süsteemi reaalajas kontrolli (Live Scan)...")
