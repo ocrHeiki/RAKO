@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  01_konverteering_evtx_csv.py                  |   #
+#   |   FAILI NIMI:  01_konverteering_evtx_csv.py                         |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Windowsi .evtx logide konverteerimine CSV-ks. |   #
+#   |   KIRJELDUS:   Windowsi .evtx logide konverteerimine CSV-ks.        |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -36,8 +36,6 @@ import shutil # Moodul failide kopeerimiseks
 import tempfile # Moodul ajutiste failide loomiseks
 from Evtx.Evtx import Evtx # Impordime spetsiaalse teegi .evtx failide lugemiseks
 
-# ASCII Logo ja metainfo definitsioon
-r
 
 def parse_evtx(evtx_path, out_csv):
     """Funktsioon ühe .evtx faili konverteerimiseks CSV-ks."""
