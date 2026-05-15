@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 09_threat_intel.py - IP maine kontroll ja Threat Intelligence liides.
 """
 
@@ -30,8 +31,6 @@ import os
 import re
 import csv
 
-# ASCII Logo (VALVUR standard)
-r
 
 # Testimiseks: tuntud pahatahtlikud IP-d (simuleerime andmebaasi)
 KNOWN_BAD_IPS = ["1.2.3.4", "8.8.8.8", "192.168.1.100", "45.33.32.156"]
