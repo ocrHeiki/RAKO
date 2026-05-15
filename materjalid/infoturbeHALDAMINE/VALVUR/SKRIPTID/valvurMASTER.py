@@ -73,10 +73,19 @@ def main():
 
     # ANALÜÜSIMOODULID
     steps = [
-        "02_turvafiltreering.py", "03_otsing_marksonade_jargi.py", 
-        "04_powershell_dekodeerimine.py", "06_kahtlased_failid.py", 
-        "07_turvaaudit.py", "11_kasutajate_nimekiri.py", 
-        "13_koond_ajajoon.py", "14_linux_syvaanaluus.py"
+        "03_turvafiltreering.py",
+        "04_otsing_marksonade_jargi.py",
+        "05_powershell_dekodeerimine.py",
+        "06_kahtlased_failid.py",
+        "07_turvaaudit.py",
+        "08_genereeriRAPORT.py",
+        "09_tehniline_raport_pdf.py",
+        "10_threat_intel.py",
+        "11_vorgu_skaneerimine.py",
+        "12_kasutajate_nimekiri.py",
+        "13_malu_analuus.py",
+        "14_koond_ajajoon.py",
+        "15_linux_syvaanaluus.py"
     ]
 
     if console:
@@ -88,7 +97,7 @@ def main():
     else:
         for step in steps: run_step(step)
 
-    run_step("05_genereeriRAPORT.py")
+    run_step("08_genereeriRAPORT.py")
     logger.info("ANALÜÜS LÕPETATUD.")
 
 if __name__ == "__main__":

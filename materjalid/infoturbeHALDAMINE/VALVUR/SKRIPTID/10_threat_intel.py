@@ -14,59 +14,66 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  00_terviklus_kontroll.py                      |   #
+#   |   FAILI NIMI:  10_threat_intel.py                            |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Logifailide SHA-256 räside arvutamine.        |   #
+#   |   KIRJELDUS:   IP-aadresside maine kontroll (AbuseIPDB).     |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
 
-00_terviklus_kontroll.py - Arvutab algallika logide räsid (Data Integrity).
-Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
+09_threat_intel.py - IP maine kontroll ja Threat Intelligence liides.
 """
 
 import os
-import hashlib
+import re
+import csv
 
 # ASCII Logo (VALVUR standard)
 r
 
-def calculate_sha256(file_path):
-    sha256_hash = hashlib.sha256()
-    with open(file_path, "rb") as f:
-        for byte_block in iter(lambda: f.read(4096), b""):
-            sha256_hash.update(byte_block)
-    return sha256_hash.hexdigest()
+# Testimiseks: tuntud pahatahtlikud IP-d (simuleerime andmebaasi)
+KNOWN_BAD_IPS = ["1.2.3.4", "8.8.8.8", "192.168.1.100", "45.33.32.156"]
 
-def check_all_logs(log_dir='LOGID', out_report='TULEMUSED/00_terviklus_raport.txt'):
+def check_ip_reputation(ip):
+    """Siia saab lisada AbuseIPDB või VirusTotal API väljakutse."""
+    if ip in KNOWN_BAD_IPS:
+        return "MALICIOUS (Known C2)"
+    return "CLEAN / UNKNOWN"
+
+def run_threat_intel(in_file='TULEMUSED/04_tulemus_suvaanaluusi_raport.txt'):
     print(LOGO)
-    if not os.path.exists(log_dir):
-        print(f"[!] VIGA: Kausta {log_dir} ei leitud.")
+    if not os.path.exists(in_file):
+        print("Süvaanalüüsi raportit ei leitud.")
         return
 
-    results = []
-    print(f"[*] Arvutan räsid logidele asukohas: {log_dir}")
+    print("[*] Teostan IP maine kontrolli...")
     
-    for root, dirs, files in os.walk(log_dir):
-        for file in files:
-            if file.lower().endswith(('.evtx', '.log', '.syslog')):
-                full_path = os.path.join(root, file)
-                file_hash = calculate_sha256(full_path)
-                results.append(f"{file}: {file_hash}")
-                print(f"  [OK] {file}")
+    with open(in_file, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Leiame kõik IP-d raportist
+    ips = re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', content)
+    unique_ips = set(ips)
+    
+    if not unique_ips:
+        print("Raportist IP-sid ei leitud.")
+        return
 
-    if results:
-        with open(out_report, 'w', encoding='utf-8') as f:
-            f.write("VALVUR - LOGIDE TERVIKLUSE RAPORT (SHA-256)\n")
-            f.write("="*60 + "\n")
-            for res in results:
-                f.write(res + "\n")
-        print(f"\n[+] Tervikluse raport loodud: {out_report}")
-    else:
-        print("[!] Hoiatus: Ühtegi logifaili ei leitud.")
+    out_file = 'TULEMUSED/09_tulemus_threat_intel.csv'
+    with open(out_file, 'w', newline='', encoding='utf-8') as f_csv:
+        writer = csv.writer(f_csv)
+        writer.writerow(['IP', 'Reputation', 'Action_Required'])
+        
+        for ip in unique_ips:
+            reputation = check_ip_reputation(ip)
+            print(f"  [?] Kontrollin {ip}: {reputation}")
+            action = "BLOCK" if "MALICIOUS" in reputation else "NONE"
+            writer.writerow([ip, reputation, action])
+            
+    print(f"[+] Maine kontroll lõpetatud. Tulemused: {out_file}")
 
 if __name__ == "__main__":
-    check_all_logs()
+    run_threat_intel()

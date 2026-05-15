@@ -14,59 +14,74 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  00_terviklus_kontroll.py                      |   #
+#   |   FAILI NIMI:  09_tehniline_raport_pdf.py                    |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Logifailide SHA-256 räside arvutamine.        |   #
+#   |   KIRJELDUS:   Tehnilise PDF-raporti genereerimine.          |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
 
-00_terviklus_kontroll.py - Arvutab algallika logide räsid (Data Integrity).
-Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
+08_tehniline_raport_pdf.py - Genereerib tehnilise PDF raporti juhtkonnale.
+Selgitab VALVURi võimekust (XOR, Fuzzy matching jne).
 """
 
 import os
-import hashlib
 
 # ASCII Logo (VALVUR standard)
 r
 
-def calculate_sha256(file_path):
-    sha256_hash = hashlib.sha256()
-    with open(file_path, "rb") as f:
-        for byte_block in iter(lambda: f.read(4096), b""):
-            sha256_hash.update(byte_block)
-    return sha256_hash.hexdigest()
-
-def check_all_logs(log_dir='LOGID', out_report='TULEMUSED/00_terviklus_raport.txt'):
+def generate_technical_info():
     print(LOGO)
-    if not os.path.exists(log_dir):
-        print(f"[!] VIGA: Kausta {log_dir} ei leitud.")
-        return
-
-    results = []
-    print(f"[*] Arvutan räsid logidele asukohas: {log_dir}")
+    content = """
+    VALVUR - TEHNILINE VÕIMEKUS JA AUDITI LOGIIKA
+    ============================================
     
-    for root, dirs, files in os.walk(log_dir):
-        for file in files:
-            if file.lower().endswith(('.evtx', '.log', '.syslog')):
-                full_path = os.path.join(root, file)
-                file_hash = calculate_sha256(full_path)
-                results.append(f"{file}: {file_hash}")
-                print(f"  [OK] {file}")
+    1. XOR JA DEKOODER
+    VALVUR suudab automaatselt tuvastada ja dekodeerida PowerShell-i käske, 
+    mis on peidetud Base64 või lihtsa XOR algoritmi taha. See võimaldab 
+    näha ründaja tegelikke kavatsusi.
 
-    if results:
-        with open(out_report, 'w', encoding='utf-8') as f:
-            f.write("VALVUR - LOGIDE TERVIKLUSE RAPORT (SHA-256)\n")
-            f.write("="*60 + "\n")
-            for res in results:
-                f.write(res + "\n")
-        print(f"\n[+] Tervikluse raport loodud: {out_report}")
-    else:
-        print("[!] Hoiatus: Ühtegi logifaili ei leitud.")
+    2. FUZZY MATCHING (MÄÄRAMATU VASTAVUS)
+    Logide analüüsil kasutatakse 'Fuzzy matching' loogikat, mis tähendab, 
+    et me ei otsi ainult täpseid märksõnu (nt 'mimikatz'), vaid ka 
+    variatsioone ja sarnaseid kirjapilte, mida ründajad kasutavad 
+    tuvastuse vältimiseks.
+
+    3. API INTEGRATSIOON
+    VALVUR on ette valmistatud integratsiooniks väliste andmebaasidega 
+    (nt VirusTotal või AbuseIPDB), et kontrollida leitud IP-sid ja 
+    faili räsi-sid (hashes) reaalajas.
+
+    4. E-ITS JA VASTAVUSKONTROLL
+    Süsteemne audit võrdleb masina seadeid Eesti riikliku 
+    infoturbe standardiga (E-ITS), pakkudes koheseid parandusmeetmeid.
+    """
+    
+    # Proovime luua PDF-i kui fpdf on olemas
+    try:
+        from fpdf import FPDF
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(200, 10, txt="VALVUR - Tehniline Spetsifikatsioon", ln=1, align='C')
+        pdf.set_font("Arial", size=11)
+        pdf.ln(10)
+        for line in content.split('\n'):
+            pdf.multi_cell(0, 10, txt=line.strip(), align='L')
+        
+        out_file = "TULEMUSED/VALVUR_TEHNILINE_INFO.pdf"
+        pdf.output(out_file)
+        print(f"[+] Tehniline PDF raport loodud: {out_file}")
+    except ImportError:
+        # Kui FPDF puudub, teeme ilusa tekstifaili
+        out_file = "TULEMUSED/VALVUR_TEHNILINE_INFO.txt"
+        with open(out_file, "w", encoding="utf-8") as f:
+            f.write(content)
+        print(f"[!] FPDF teeki ei leitud. Loodi tekstipõhine raport: {out_file}")
+        print("    Vihje: 'pip install fpdf' PDF-i genereerimiseks.")
 
 if __name__ == "__main__":
-    check_all_logs()
+    generate_technical_info()

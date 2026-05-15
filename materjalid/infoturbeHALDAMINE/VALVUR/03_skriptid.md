@@ -1,4 +1,3 @@
-```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -13,15 +12,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  03_skriptid.md                                       |   #
+#   |   FAILI NIMI:  03_skriptid.md                                |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   VALVUR-i analüüsimoodulite detailne kirjeldus.       |   #
+#   |   KIRJELDUS:   VALVUR-i analüüsimoodulite detailne kirjeldus. |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-```
+
 
 # VALVUR Skriptide Ülevaade
 
@@ -54,7 +53,7 @@ Kontrollib süsteemi vastavust E-ITS standardile ja pakub parandusmeetmeid.
 ### 10_vorgu_skaneerimine.py
 Kaardistab võrgus olevad hostid ja teenused (nmap), et aidata koostada infovarade võrgujoonist.
 
-### 05_genereeriRAPORT.py
+### 08_genereeriRAPORT.py
 Koostab kronoloogilise ja struktureeritud Wordi (.docx) raporti, koondades kõik analüüsi tulemused.
 
 ### 08_tehniline_raport_pdf.py
@@ -66,10 +65,10 @@ Loetleb kõik unikaalsed kasutajad nii logidest kui ka süsteemist (/etc/passwd)
 ### 12_malu_analuus.py
 Liides Volatility 3 jaoks. Analüüsib mälutõmmiseid (.raw, .mem), tuvastades mälus peituvat pahavara (malfind, pslist).
 
-### 13_koond_ajajoon.py
+### 14_koond_ajajoon.py
 Genereerib ühtse kronoloogilise ajajoone (Unified Timeline) kõikidest logiallikatest, visualiseerides ründaja teekonda.
 
-### 14_linux_syvaanaluus.py
+### 15_linux_syvaanaluus.py
 Linuxi spetsiifiline süvakontroll: logide tervikluse kontroll (Log Tampering) ja SSH sisselogimiste normaliseeritud analüüs.
 
 ### valvurMASTER.py

@@ -14,59 +14,75 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  00_terviklus_kontroll.py                      |   #
+#   |   FAILI NIMI:  11_vorgu_skaneerimine.py                      |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Logifailide SHA-256 räside arvutamine.        |   #
+#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.        |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
 
-00_terviklus_kontroll.py - Arvutab algallika logide räsid (Data Integrity).
-Tagab, et tõendusmaterjali pole analüüsi käigus muudetud.
+10_vorgu_skaneerimine.py - Teostab võrgu skaneerimist (nmap) infovarade kaardistamiseks.
 """
 
 import os
-import hashlib
+import sys
+sys.path.append("SKRIPTID")
+import utils
+import subprocess
+import platform
+import csv
 
 # ASCII Logo (VALVUR standard)
 r
 
-def calculate_sha256(file_path):
-    sha256_hash = hashlib.sha256()
-    with open(file_path, "rb") as f:
-        for byte_block in iter(lambda: f.read(4096), b""):
-            sha256_hash.update(byte_block)
-    return sha256_hash.hexdigest()
+def check_nmap():
+    """Kontrollib, kas nmap on süsteemis olemas."""
+    try:
+        subprocess.check_output(["nmap", "--version"])
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
-def check_all_logs(log_dir='LOGID', out_report='TULEMUSED/00_terviklus_raport.txt'):
+def get_local_subnet():
+    return utils.get_local_subnet()
+def run_nmap_scan(target=None):
     print(LOGO)
-    if not os.path.exists(log_dir):
-        print(f"[!] VIGA: Kausta {log_dir} ei leitud.")
+    if not check_nmap():
+        print("[!] VIGA: 'nmap' ei ole paigaldatud. Kasuta: sudo apt install nmap")
         return
 
-    results = []
-    print(f"[*] Arvutan räsid logidele asukohas: {log_dir}")
-    
-    for root, dirs, files in os.walk(log_dir):
-        for file in files:
-            if file.lower().endswith(('.evtx', '.log', '.syslog')):
-                full_path = os.path.join(root, file)
-                file_hash = calculate_sha256(full_path)
-                results.append(f"{file}: {file_hash}")
-                print(f"  [OK] {file}")
+    if not target:
+        target = get_local_subnet()
 
-    if results:
-        with open(out_report, 'w', encoding='utf-8') as f:
-            f.write("VALVUR - LOGIDE TERVIKLUSE RAPORT (SHA-256)\n")
-            f.write("="*60 + "\n")
-            for res in results:
-                f.write(res + "\n")
-        print(f"\n[+] Tervikluse raport loodud: {out_report}")
-    else:
-        print("[!] Hoiatus: Ühtegi logifaili ei leitud.")
+    print(f"[*] Alustan võrgu skaneerimist: {target}")
+    # -sn (Ping scan) on kiire ja tuvastab hostid ilma portideta
+    # Kui soovid põhjalikumalt, kasuta -F (Fast mode) või -p 80,443,445,3389
+    try:
+        # Kasutame XML väljundit, et seda oleks lihtsam parssida või tekstiväljundit kiireks ülevaateks
+        cmd = ["nmap", "-sn", target]
+        result = subprocess.check_output(cmd).decode()
+        
+        out_file = "TULEMUSED/10_tulemus_vorgu_skaneerimine.txt"
+        with open(out_file, "w", encoding="utf-8") as f:
+            f.write(result)
+        
+        print(f"[+] Skaneerimine lõpetatud. Tulemused: {out_file}")
+        
+        # Proovime leida unikaalsed IP-d ja nimed lühidalt
+        found_hosts = []
+        for line in result.splitlines():
+            if "Nmap scan report for" in line:
+                host_info = line.replace("Nmap scan report for ", "").strip()
+                found_hosts.append(host_info)
+                print(f"  [+] Leiti host: {host_info}")
+                
+        return found_hosts
+    except Exception as e:
+        print(f"[!] Skaneerimine ebaõnnestus: {e}")
+        return []
 
 if __name__ == "__main__":
-    check_all_logs()
+    run_nmap_scan()
