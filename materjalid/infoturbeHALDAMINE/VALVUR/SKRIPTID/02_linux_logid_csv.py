@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  02_linux_logid_csv.py                         |   #
+#   |   FAILI NIMI:  02_linux_logid_csv.py                                |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Linuxi logide konverteerimine ja normaliseerimine. |   #
+#   |   KIRJELDUS:   Linuxi logide konverteerimine ja normaliseerimine.   |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -32,8 +32,6 @@ import csv
 import re
 from datetime import datetime
 
-# ASCII Logo (VALVUR standard)
-r
 
 def parse_linux_logs():
     print(LOGO)
