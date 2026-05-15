@@ -34,3 +34,18 @@ Koostab kronoloogilise ja struktureeritud Wordi (.docx) raporti, koondades kõik
 
 ### 08_tehniline_raport_pdf.py
 Genereerib juhtkonnale suunatud tehnilise ülevaate VALVURI süvaanalüüsi võimekusest.
+
+### 11_kasutajate_nimekiri.py
+Loetleb kõik unikaalsed kasutajad nii logidest kui ka süsteemist (/etc/passwd), tuvastades peidetud root-õigustega kontod (UID 0).
+
+### 12_malu_analuus.py
+Liides Volatility 3 jaoks. Analüüsib mälutõmmiseid (.raw, .mem), tuvastades mälus peituvat pahavara (malfind, pslist).
+
+### 13_koond_ajajoon.py
+Genereerib ühtse kronoloogilise ajajoone (Unified Timeline) kõikidest logiallikatest, visualiseerides ründaja teekonda.
+
+### 14_linux_syvaanaluus.py
+Linuxi spetsiifiline süvakontroll: logide tervikluse kontroll (Log Tampering) ja SSH sisselogimiste normaliseeritud analüüs.
+
+### valvurMASTER.py
+Süsteemi peamootor, mis juhib kogu analüüsiahelat. Sisaldab admin-õiguste kontrolli, metoodilist "klooni" märget ja robustset veatöötlust.

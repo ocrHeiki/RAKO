@@ -8,6 +8,8 @@ import os # Impordime mooduli operatsioonisüsteemi failitoiminguteks
 import csv # Impordime mooduli CSV failide kirjutamiseks
 import argparse # Impordime mooduli käsurea argumentide töötlemiseks
 import xml.etree.ElementTree as ET # Impordime XML-i töötlemise mooduli
+import shutil # Moodul failide kopeerimiseks
+import tempfile # Moodul ajutiste failide loomiseks
 from Evtx.Evtx import Evtx # Impordime spetsiaalse teegi .evtx failide lugemiseks
 
 # ASCII Logo ja metainfo definitsioon
@@ -28,9 +30,7 @@ LOGO = r"""
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  01_konverteering_evtx_csv.py                         |   #
 #   |   LOODUD:      2025-11-17                                           |   #
-#   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   GITHUB:      github.com/ocrHeiki                                  |   #
-#   |   KIRJELDUS:   Konverteerib .evtx logid CSV formaati.               |   #
+#   |   KIRJELDUS:   Konverteerib .evtx logid CSV formaati (Live & Logid).|   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -39,38 +39,39 @@ LOGO = r"""
 
 def parse_evtx(evtx_path, out_csv):
     """Funktsioon ühe .evtx faili konverteerimiseks CSV-ks."""
-    # Määrame CSV faili veerud
     headers = ['TimeCreated', 'Id', 'LevelDisplayName', 'Message', 'MachineName', 'RecordId']
     
+    # KUI FAIL ON LUKUS (nt reaalajas süsteemis), TEE AJUTINE KOOPIA
+    temp_dir = tempfile.gettempdir()
+    temp_evtx = os.path.join(temp_dir, os.path.basename(evtx_path))
+    
     try:
-        # Avame väljundfaili kirjutamiseks (UTF-8 koodingus)
+        shutil.copy2(evtx_path, temp_evtx)
+        path_to_analyze = temp_evtx
+    except:
+        path_to_analyze = evtx_path
+
+    try:
         with open(out_csv, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=headers)
-            writer.writeheader() # Kirjutame päiseriba
+            writer.writeheader()
             
-            # Avame .evtx faili kasutades Evtx teeki
-            with Evtx(evtx_path) as log:
-                # Käime läbi kõik logikirjed
+            with Evtx(path_to_analyze) as log:
                 for record in log.records():
                     try:
-                        # Võtame kirje XML-kujul
                         xml_str = record.xml()
-                        # Eemaldame XML nimeruumi, et otsing oleks lihtsam
                         xml_str = xml_str.replace(' xmlns="http://schemas.microsoft.com/win/2004/08/events/event"', '')
-                        root = ET.fromstring(xml_str) # Parsime XML-i
+                        root = ET.fromstring(xml_str)
                         
-                        # Leiame süsteemse sündmuse info (System ja EventData sektsioonid)
                         system = root.find('System')
                         event_data = root.find('EventData')
                         
-                        # Eraldame vajalikud väljad XML-ist
                         event_id = system.find('EventID').text if system.find('EventID') is not None else "N/A"
                         time_created = system.find('TimeCreated').attrib.get('SystemTime') if system.find('TimeCreated') is not None else "N/A"
                         machine_name = system.find('Computer').text if system.find('Computer') is not None else "N/A"
                         record_id = system.find('EventRecordID').text if system.find('EventRecordID') is not None else "N/A"
                         level = system.find('Level').text if system.find('Level') is not None else "N/A"
                         
-                        # Kogume kokku täiendava sündmuse info (EventData elemendid)
                         msg_parts = []
                         if event_data is not None:
                             for data in event_data.findall('Data'):
@@ -78,9 +79,8 @@ def parse_evtx(evtx_path, out_csv):
                                 val = data.text if data.text else ""
                                 msg_parts.append(f"{name}: {val}")
                         
-                        message = " | ".join(msg_parts) # Ühendame info üheks tekstiks
+                        message = " | ".join(msg_parts)
                         
-                        # Kirjutame rea CSV faili
                         writer.writerow({
                             'TimeCreated': time_created,
                             'Id': event_id,
@@ -89,32 +89,48 @@ def parse_evtx(evtx_path, out_csv):
                             'MachineName': machine_name,
                             'RecordId': record_id
                         })
-                    except Exception:
-                        # Kui ühe kirje lugemine ebaõnnestub, liigume edasi järgmise juurde
-                        continue
+                    except: continue
         print(f"SALVESTATUD: {out_csv}")
     except Exception as e:
-        print(f"VIGA: Ei saanud faili {evtx_path} konverteerida: {e}")
+        print(f"VIGA: {evtx_path} -> {e}")
+    finally:
+        # Kustutame ajutise faili, kui see loodi
+        if path_to_analyze == temp_evtx and os.path.exists(temp_evtx):
+            try: os.remove(temp_evtx)
+            except: pass
 
 def main():
-    """Skripti põhifunktsioon."""
-    print(LOGO) # Kuvame logo
-    # Seadistame käsurea argumentide töötleja
+    print(LOGO)
     parser = argparse.ArgumentParser(description="Windowsi .evtx -> CSV konverter")
     parser.add_argument("--path", default="LOGID", help="Kaust, kus asuvad .evtx failid")
+    parser.add_argument("--live", action="store_true", help="Võta logid otse süsteemsest kataloogist")
     args = parser.parse_args()
     
-    out_dir = "TULEMUSED"
-    # Loome tulemuste kausta, kui seda veel pole
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    source_path = args.path
+    if args.live:
+        # LIVE režiimis kopeerime failid esmalt oma kontrolli alla
+        system_logs = r"C:\Windows\System32\winevt\Logs"
+        print(f"[*] REŽIIM: LIVE (Kopeerin logid: {system_logs} -> {args.path})")
+        if not os.path.exists(args.path): os.makedirs(args.path)
+        
+        for f_name in ["Security.evtx", "System.evtx", "Application.evtx"]:
+            src = os.path.join(system_logs, f_name)
+            dst = os.path.join(args.path, f_name)
+            if os.path.exists(src):
+                try:
+                    shutil.copy2(src, dst)
+                    print(f"  [+] Kopeeritud: {f_name}")
+                except Exception as e:
+                    print(f"  [!] Ei saanud faili {f_name} kopeerida: {e}")
+        source_path = args.path
 
-    # Käime läbi etteantud kausta ja otsime .evtx faile
-    for root, dirs, files in os.walk(args.path):
+    out_dir = "TULEMUSED"
+    if not os.path.exists(out_dir): os.makedirs(out_dir)
+
+    for root, dirs, files in os.walk(source_path):
         for file in files:
             if file.lower().endswith('.evtx'):
                 evtx_full_path = os.path.join(root, file)
-                # Puhastame failinime väljundi jaoks
                 clean_name = file.replace('.evtx', '').replace('%4', '_')
                 out_name = os.path.join(out_dir, f"01_tulemus_eksport_{clean_name}.csv")
                 parse_evtx(evtx_full_path, out_name)

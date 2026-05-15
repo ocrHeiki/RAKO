@@ -27,6 +27,43 @@ LOGO = r"""
 ###############################################################################
 """
 
+def xor_decrypt(data, key):
+    """
+    XOR (Exclusive OR) on bitipõhine operatsioon. 
+    Selle eripära on, et kui me teeme andmetele sama võtmega teist korda XOR, 
+    saame algsed andmed tagasi. See on ründajate lemmik lihtne peitmisviis.
+    """
+    return bytearray([b ^ key for b in data])
+
+def find_xor_payloads(text):
+    """
+    See funktsioon otsib tekstist võimalikke heksadetsimaal-jadasid,
+    mis võivad peita endas XOR-itud pahavara skripte.
+    """
+    # Otsime mustrit nagu 0x41, 0x42, 0x43... (vähemalt 8 tükki järjest)
+    hex_pattern = r'(?:0x[0-9a-fA-F]{2}[, ]*){8,}'
+    matches = re.findall(hex_pattern, text)
+    results = []
+    
+    for m in matches:
+        try:
+            # Muudame leitud teksti päris baidijadaks
+            bytes_data = bytearray([int(x.strip(), 16) for x in m.split(",") if x.strip()])
+            
+            # Kuna me ei tea võtit, proovime läbi kõik 256 võimalikku 1-baidist võtit.
+            # Seda nimetatakse 'brute-force' meetodiks.
+            for key in range(1, 256):
+                dec = xor_decrypt(bytes_data, key)
+                try:
+                    # Kontrollime, kas tulemus meenutab arusaadavat teksti
+                    dec_str = dec.decode('ascii', errors='ignore').lower()
+                    # Otsime dekrüpteeritud tekstist kahtlaseid märksõnu
+                    if any(k in dec_str for k in ['http', 'iex', 'invoke', 'cmd', 'powershell']):
+                        results.append(f"XOR (Võti: {hex(key)}): {dec_str}")
+                except: continue
+        except: continue
+    return results
+
 def decode_ps_payload(text):
     """Otsib ja dekodeerib PowerShell Base64 sisu (UTF-16LE)."""
     b64_pattern = r'[A-Za-z0-9+/]{40,}'
@@ -63,16 +100,22 @@ def run_deep_forensics():
                     
                     msg = row.get('Message', '')
                     decoded_scripts = decode_ps_payload(msg)
+                    xor_findings = find_xor_payloads(msg)
                     ips = re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', msg + "".join(decoded_scripts))
                     
-                    if decoded_scripts or ips:
+                    if decoded_scripts or ips or xor_findings:
                         processed_records.add(rec_id)
                         findings += 1
                         f_out.write(f"LEID #{findings} | Aeg: {row.get('TimeCreated')} | EventID: {row.get('Id')}\n")
                         if ips: f_out.write(f"  [!] IP-D: {', '.join(set(ips))}\n")
                         if decoded_scripts:
+                            f_out.write(f"  [!] MITRE ATT&CK: T1059.001 (Command and Scripting Interpreter: PowerShell)\n")
                             for i, script in enumerate(decoded_scripts):
-                                f_out.write(f"  [>>>] DEKODEERITUD SKRIPT #{i+1}:\n{script}\n")
+                                f_out.write(f"  [>>>] B64 DEKODEERITUD: {script}\n")
+                        if xor_findings:
+                            f_out.write(f"  [!] MITRE ATT&CK: T1027 (Obfuscated Files or Information)\n")
+                            for xf in xor_findings:
+                                f_out.write(f"  [>>>] XOR LEID: {xf}\n")
                         f_out.write("-" * 40 + "\n\n")
     print(f"VALMIS! Süvaanalüüs tuvastas {findings} sündmust. Raport: {out_report}")
 

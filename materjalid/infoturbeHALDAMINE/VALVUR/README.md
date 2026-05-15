@@ -1,33 +1,37 @@
-# VALVUR - Intsidendi süvaanalüüsi ja auditeerimise tööriist
+# VALVUR - Intsidendi süvaanalüüsi ja turvaauditi platvorm
 
-VALVUR on võimas platvormiülene (Windows & Linux) tööriistakomplekt digitaalseks ekspertiisiks, logide süvaanalüüsiks ja süsteemseks turvaauditiks (E-ITS).
+**VALVUR** on professionaalne ja automatiseeritud tööriistakomplekt Windowsi ja Linuxi operatsioonisüsteemide turvaauditiks ja küberintsidentide lahendamiseks. Projekt on loodud eksamitööna (2026), kuid järgib tööstusstandardeid nagu **NIST CSF 2.0** ja **MITRE ATT&CK**.
 
-## Põhivõimekused
+## 🚀 Kiirkäivitus (Remote Launch)
+VALVUR-i saab käivitada otse GitHubist ilma käsitsi installita:
+```bash
+python3 -c "$(curl -fsSL https://raw.githubusercontent.com/ocrHeiki/VALVUR/main/launch_VALVUR.py)"
+```
 
-- **Platvormiülene logianalüüs**: Toetab nii Windowsi `.evtx` kui ka Linuxi süsteemiloge (`auth.log`, `syslog`).
-- **Süvaanalüüs (Deep Forensics)**: PowerShell Base64 ja XOR dekodeerimine, IP-aadresside ja ründeindikaatorite (IOC) tuvastamine.
-- **Live System Scan**: Reaalajas kontroll kahtlastele failidele (`.exe`, `.ps1`, `.sh`, `.php`) ajutistes kaustades.
-- **Võrgu skaneerimine**: Automaatne hostide ja teenuste tuvastamine (nmap) võrgujoonise koostamiseks.
-- **E-ITS Turvaaudit & GPO seire**: Süsteemi seadete ja Group Policy muudatuste kontroll.
-- **Professionaalne raporteerimine**: Genereerib detailse `.docx` tööraporti ja tehnilise `.pdf` ülevaate.
+## 🛡️ Strateegiline raamistik: NIST CSF 2.0
+VALVUR on ehitatud NIST põhisammastele:
+- **IDENTIFY**: Süsteemi varade ja kasutajate kaardistus (Skriptid 07, 10, 11).
+- **PROTECT**: E-ITS audit ja turvapoliitika kontroll (Skript 07).
+- **DETECT**: MITRE ATT&CK põhine logi- ja failianalüüs (Skriptid 02, 03, 06).
+- **RESPOND**: Automatiseeritud normaliseeritud raporteerimine.
+- **RECOVER**: Kronoloogiline ajajoon (Timeline) süsteemi taastamiseks.
 
-## Kasutamine
+## 🧠 HeRe kontseptsioon: Väe ja Tarkuse Liit
+Esitlusmaterjalides kannab projekt nime **HeRe** (Heiki Rebane & Helena Reinhold):
+- **HE (Might)**: Tehniline kaitsevõimekus (krüptograafia, tulemüürid).
+- **RE (Mind)**: Strateegiline analüüs ja ründaja kavaluse mõistmine.
+- **Moto**: *"Vägi ilma tarkuseta on pime, tarkus ilma väeta on võimetu."*
 
-VALVUR on loodud töötama kõikjal - mälupulgal, välisel kettal või süsteemselt.
+## 🛠️ Töövoog (Workflow)
+Analüüs toimub järgmises järjekorras (MASTER Control):
+1.  **Terviklus (00)**: SHA-256 räside arvutamine (Forensiliselt korrektne).
+2.  **Import (01)**: Logide konverteerimine CSV-ks (sisaldab lukustatud failide kopeerimist).
+3.  **Filtreerimine (02)**: Müra eemaldamine ja kriitiliste sündmuste eraldamine.
+4.  **Analüüs (03-04)**: MITRE märksõnade otsing, Fuzzy Matching ja XOR dekodeerimine.
+5.  **Live Scan (06)**: Peidetud failid, Cron-tööd ja brauseri indikaatorid.
+6.  **Audit (07)**: E-ITS vastavuskontroll ja **Roadmap** genereerimine.
+7.  **Visualiseerimine (13)**: Ühtne kronoloogiline ajajoon (Unified Timeline).
+8.  **Raporteerimine (05, 08)**: Executive Summary ja tehniline raport.
 
-1. Aseta logifailid kausta `LOGID/`.
-2. Käivita peaskript:
-   ```bash
-   python3 SKRIPTID/valvurMASTER.py
-   ```
-3. Tulemused ja raportid leiad kaustast `TULEMUSED/`.
-
-## Nõuded
-
-- Python 3.x
-- Vajalikud teegid: `pip install evtx python-docx fpdf`
-- Süsteemne tööriist: `nmap` (võrgu skaneerimiseks)
-
-## Autor
-**Heiki Rebane**
-VALVUR Projekt 2026
+## ⚖️ Metoodiline märkus
+Analüüs on teostatud süsteemi kloonil. Algne tõendusmaterjal on säilitatud puutumatuna vastavalt **ISO 27037** standardile.

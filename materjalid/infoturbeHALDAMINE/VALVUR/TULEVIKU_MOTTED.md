@@ -12,9 +12,13 @@ Siia on koondatud mõtted VALVUR-i edasiseks arendamiseks pärast kooliprojekti 
 - **Tehisintellekt (ML)**: Masinõppe mudel, mis tuvastab anomaaliaid kasutajate sisselogimise aegades (nt "Impossible Travel").
 - **Võrguliikluse analüüs**: PCAP failide ja Zeek/Suricata logide tugi.
 
-## 3. Visualiseerimine
+## 3. Visualiseerimine ja Konteinerid
+- **Konteinerite audit**: Docker ja Kubernetes konfiguratsiooni kontroll (privileged konteinerid, ohtlikud mount-punktid).
+- **Unified Timeline**: Kõigi logiallikate (Win, Linux, Network) koondamine ühele kronoloogilisele teljele.
 - **Web Dashboard**: Reaalajas veebiliides (React/Next.js), mis kuvab ründeid kaardil.
 - **MITRE Heatmap**: Visualiseerimine, millised MITRE ATT&CK taktikad on hetkel kõige rohkem rünnaku all.
+- **Täpsem MITRE sidumine**: Automaatne viitamine (nt PowerShell deobfuskatsioon -> T1059.001) kõikides raportites.
 
-## 4. Turvalisus
-- **Logide signeerimine**: Logide krüptograafiline signeerimine, et vältida nende muutmist ründaja poolt pärast kogumist.
+## 4. Turvalisus ja Forensika
+- **Mäluforensika**: Liides Volatility 3 tööriistaga mälutõmmiste analüüsiks, et tuvastada *fileless* malware-i.
+- **Logide signeerimine**: Logide krüptograafiline signeerimine, et vältida nende muutmist.

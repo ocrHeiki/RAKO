@@ -5,6 +5,15 @@
 
 import os
 import csv
+from difflib import SequenceMatcher
+
+def fuzzy_match(a, b):
+    """
+    Arvutab kahe sõna sarnasuse skoori vahemikus 0.0 kuni 1.0.
+    Kasutame difflib teeki, mis leiab pikima ühise alamjada.
+    See aitab meil leida 'm1m1katz' kui otsime 'mimikatz'.
+    """
+    return SequenceMatcher(None, a, b).ratio()
 
 # ASCII Logo (VALVUR standard)
 LOGO = r"""
@@ -49,7 +58,11 @@ def search_suspicious_keywords(in_dir='TULEMUSED', out_file='TULEMUSED/03_tulemu
         "printnightmare": ("T1068", "CVE-2021-34527", "Exploitation for Privilege Escalation"),
         "proxyshell": ("T1190", "CVE-2021-34473", "Exploit Public-Facing Application"),
         "log4j": ("T1190", "CVE-2021-44228", "Log4Shell Exploit attempt"),
-        "powershell -enc": ("T1059.001", "N/A", "PowerShell Obfuscation")
+        "powershell -enc": ("T1059.001", "N/A", "PowerShell Obfuscation"),
+        "schtasks": ("T1053.005", "N/A", "Scheduled Task/Job: Scheduled Task"),
+        "reg add": ("T1547.001", "N/A", "Boot or Logon Autostart Execution: Registry Run Keys"),
+        "net localgroup": ("T1069", "N/A", "Permission Groups Discovery"),
+        "sudoers": ("T1548.003", "N/A", "Abuse Elevation Control Mechanism: Sudo and Sudo Caching")
     }
 
     all_results = []
@@ -64,9 +77,34 @@ def search_suspicious_keywords(in_dir='TULEMUSED', out_file='TULEMUSED/03_tulemu
                 reader = csv.DictReader(f)
                 for row in reader:
                     message = row.get('Message', '').lower()
+                    # Tükeldame logikirje 'Message' välja sõnadeks, et võrrelda neid ükshaaval
+                    words_in_message = message.split()
+                    
+                    found = False
                     for word, info in attack_mapping.items():
+                        # SAMM 1: Kontrollime esmalt otsest vastet (kiire meetod)
                         if word in message:
+                            score = 1.0
+                            found = True
+                        else:
+                            # SAMM 2: Kui otsest vastet pole, proovime 'Fuzzy matchingut'
+                            # Käime läbi kõik sõnad sõnumis, mis on pikemad kui 3 märki
+                            score = 0
+                            for m_word in words_in_message:
+                                if len(m_word) > 3: 
+                                    s = fuzzy_match(word, m_word)
+                                    # Lävend 0.7 on valitud empiiriliselt: see on piisavalt kõrge,
+                                    # et vältida liiga palju valepositiivseid, aga piisavalt madal,
+                                    # et tabada märgi-asendusi (nt 'a' asendatud '4'-ga).
+                                    if s > 0.7:
+                                        score = s
+                                        found = True
+                                        break
+                        
+                        if found:
+                            # Kui leidsime vaste, salvestame selle koos metainfoga
                             row['MatchedKeyword'] = word
+                            row['SimilarityScore'] = f"{score:.2f}"
                             row['MITRE_ID'] = info[0]
                             row['CVE_ID'] = info[1]
                             row['Attack_Type'] = info[2]
