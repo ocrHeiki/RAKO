@@ -15,10 +15,10 @@ import gzip
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  15_tehniline_raport_pdf.py                    |   #
+#   |   FAILI NIMI:  15_tehniline_raport_pdf.py                           |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Tehnilise PDF-raporti genereerimine.          |   #
+#   |   KIRJELDUS:   Tehnilise PDF-raporti genereerimine.                 |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
