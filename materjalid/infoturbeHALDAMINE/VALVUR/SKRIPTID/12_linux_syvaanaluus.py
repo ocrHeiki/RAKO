@@ -14,24 +14,21 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  12_linux_syvaanaluus.py                       |   #
+#   |   FAILI NIMI:  12_linux_syvaanaluus.py                              |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Linuxi logide terviklus ja SSH süvaanalüüs.   |   #
+#   |   KIRJELDUS:   Linuxi logide terviklus ja SSH süvaanalüüs.          |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
 """
-
+"""
 08_tehniline_raport_pdf.py - Genereerib tehnilise PDF raporti juhtkonnale.
 Selgitab VALVURi võimekust (XOR, Fuzzy matching jne).
 """
 
 import os
-
-# ASCII Logo (VALVUR standard)
-r
 
 def generate_technical_info():
     print(LOGO)
