@@ -25,8 +25,6 @@ LOGO = """
 """
 import os, csv, re, base64
 
-# ASCII Logo (VALVUR standard)
-r
 
 def xor_decrypt(data, key):
     """
