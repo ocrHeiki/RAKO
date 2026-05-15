@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  07_vorgu_skaneerimine.py                      |   #
+#   |   FAILI NIMI:  07_vorgu_skaneerimine.py                             |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.        |   #
+#   |   KIRJELDUS:   Võrguvarade ja teenuste kaardistamine.               |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -35,8 +35,6 @@ import subprocess
 import platform
 import csv
 
-# ASCII Logo (VALVUR standard)
-r
 
 def check_nmap():
     """Kontrollib, kas nmap on süsteemis olemas."""
