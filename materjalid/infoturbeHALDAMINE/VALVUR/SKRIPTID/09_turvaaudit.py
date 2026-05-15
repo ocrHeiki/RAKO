@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  09_turvaaudit.py                              |   #
+#   |   FAILI NIMI:  09_turvaaudit.py                                     |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   E-ITS vastavuskontroll ja Roadmap.            |   #
+#   |   KIRJELDUS:   E-ITS vastavuskontroll ja Roadmap.                   |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -32,8 +32,6 @@ import os
 import platform
 import subprocess
 
-# ASCII Logo (VALVUR standard)
-r
 
 def check_windows():
     results = []
