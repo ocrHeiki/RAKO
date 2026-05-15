@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,15 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  02_turvafiltreering.py                        |   #
+#   |   FAILI NIMI:  02_turvafiltreering.py                               |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Kriitiliste sündmuste eraldamine logidest.    |   #
+#   |   KIRJELDUS:   Kriitiliste sündmuste eraldamine logidest.           |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
+
 
 02_turvafiltreering.py - Filtreerib eksporditud CSV-dest välja kriitilised sündmused.
 Kasutamine: python3 SKRIPTID/02_turvafiltreering.py
