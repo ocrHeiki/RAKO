@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 01_konverteering_evtx_csv.py - Windowsi .evtx logide konverteerimine CSV-formaati.
 Kasutamine: python3 SKRIPTID/01_konverteering_evtx_csv.py --path LOGID
 """
