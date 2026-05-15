@@ -23,7 +23,7 @@
 #                                                                             #
 ###############################################################################
 """
-
+"""
 09_threat_intel.py - IP maine kontroll ja Threat Intelligence liides.
 """
 
