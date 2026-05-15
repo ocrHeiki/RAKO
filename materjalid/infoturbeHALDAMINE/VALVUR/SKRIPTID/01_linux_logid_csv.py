@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,15 +14,14 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  01_linux_logid_csv.py                         |   #
+#   |   FAILI NIMI:  01_linux_logid_csv.py                                |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Linuxi logide konverteerimine ja normaliseerimine. |   #
+#   |   KIRJELDUS:   Linuxi logide konverteerimine ja normaliseerimine.   |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-"""
 
 01_linux_logid_csv.py - Linuxi logide (/var/log/auth.log jne) konverteerimine CSV-ks.
 """
