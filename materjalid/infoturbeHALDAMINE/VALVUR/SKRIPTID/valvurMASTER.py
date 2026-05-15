@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+LOGO = """
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  valvurMASTER.py                               |   #
+#   |   FAILI NIMI:  valvurMASTER.py                                      |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   VALVUR-i peamootor ja kontrollmoodul.         |   #
+#   |   KIRJELDUS:   VALVUR-i peamootor ja kontrollmoodul.                |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
