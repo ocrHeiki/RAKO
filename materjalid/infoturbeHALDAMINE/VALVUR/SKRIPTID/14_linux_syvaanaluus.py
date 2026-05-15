@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+LOGO = """
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  14_linux_syvaanaluus.py                       |   #
+#   |   FAILI NIMI:  14_linux_syvaanaluus.py                              |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   Linuxi logide terviklus ja SSH süvaanalüüs.   |   #
+#   |   KIRJELDUS:   Linuxi logide terviklus ja SSH süvaanalüüs.          |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
