@@ -23,6 +23,7 @@ LOGO = """
 #                                                                             #
 ###############################################################################
 """
+"""
 11_kasutajate_nimekiri.py - Tuvastab logidest kõik unikaalsed kasutajakontod.
 Aitab täita infovarade tabelit (kontod).
 """
@@ -30,8 +31,6 @@ Aitab täita infovarade tabelit (kontod).
 import os
 import csv
 
-# ASCII Logo (VALVUR standard)
-r
 
 def get_linux_system_users():
     """Loeb Linuxi kasutajad otse süsteemifailist /etc/passwd."""
