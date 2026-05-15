@@ -1,3 +1,27 @@
+###############################################################################
+#                                                                             #
+#   █████   █████           ████                                              #
+#  ▒▒███   ▒▒███           ▒▒███                                              #
+#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
+#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
+#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
+#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
+#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
+#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
+#                                                                             #
+#   =======================================================================   #
+#   |                                                                     |   #
+#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
+#   |   FAILI NIMI:  README.md                                     |   #
+#   |   LOODUD:      2026-05-15                                           |   #
+#   |   AUTOR:       Heiki Rebane                                         |   #
+#   |   KIRJELDUS:   Projekti koondülevaade ja kiirkäivitusjuhend. |   #
+#   |                                                                     |   #
+#   =======================================================================   #
+#                                                                             #
+###############################################################################
+
+
 # VALVUR - Intsidendi süvaanalüüsi ja turvaauditi platvorm
 
 **VALVUR** on professionaalne ja automatiseeritud tööriistakomplekt Windowsi ja Linuxi operatsioonisüsteemide turvaauditiks ja küberintsidentide lahendamiseks. Projekt on loodud eksamitööna (2026), kuid järgib tööstusstandardeid nagu **NIST CSF 2.0** ja **MITRE ATT&CK**.

@@ -8,31 +8,7 @@ import os # Impordime mooduli failisüsteemi toiminguteks
 import csv # Impordime mooduli CSV failide töötlemiseks
 
 # ASCII Logo definitsioon koos metainfoga
-LOGO = r"""
-###############################################################################
-#                                                                             #
-#   █████   █████           ████                                              #
-#  ▒▒███   ▒▒███           ▒▒███                                              #
-#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
-#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
-#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
-#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
-#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
-#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
-#                                                                             #
-#   =======================================================================   #
-#   |                                                                     |   #
-#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  02_turvafiltreering.py                               |   #
-#   |   LOODUD:      2025-11-17                                           |   #
-#   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   GITHUB:      github.com/ocrHeiki                                  |   #
-#   |   KIRJELDUS:   Kriitiliste Event ID-de filtreerimine CSV-dest.      |   #
-#   |                                                                     |   #
-#   =======================================================================   #
-#                                                                             #
-###############################################################################
-"""
+r
 
 def filter_security_events(in_dir='TULEMUSED', out_file='TULEMUSED/02_tulemus_turvafiltreering.csv'):
     """Funktsioon kriitiliste sündmuste filtreerimiseks CSV-failidest."""

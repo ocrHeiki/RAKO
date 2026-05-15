@@ -1,3 +1,27 @@
+###############################################################################
+#                                                                             #
+#   █████   █████           ████                                              #
+#  ▒▒███   ▒▒███           ▒▒███                                              #
+#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
+#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
+#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
+#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
+#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
+#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
+#                                                                             #
+#   =======================================================================   #
+#   |                                                                     |   #
+#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
+#   |   FAILI NIMI:  VALVUR_EKSAM_STRATEEGIA.md                    |   #
+#   |   LOODUD:      2026-05-15                                           |   #
+#   |   AUTOR:       Heiki Rebane                                         |   #
+#   |   KIRJELDUS:   Masinapõhine intsidendi lahendamise strateegia. |   #
+#   |                                                                     |   #
+#   =======================================================================   #
+#                                                                             #
+###############################################################################
+
+
 # VALVUR - Intsidendi Analüüsi ja Reageerimise Strateegia (Eksam 2026)
 
 See juhend kirjeldab VALVUR-i (HeRe) moodulite rakendamist spetsiifilistel infrastruktuuri masinatel, et tuvastada kompromiteerimist ja rekonstrueerida ründaja tegevust.

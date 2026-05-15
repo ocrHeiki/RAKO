@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# ASCII Logo (VALVUR standard)
+LOGO = r
 import os
 import sys
 import platform
