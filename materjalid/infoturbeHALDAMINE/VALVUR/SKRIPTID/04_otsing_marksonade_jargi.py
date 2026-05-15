@@ -14,10 +14,10 @@
 #   =======================================================================   #
 #   |                                                                     |   #
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  04_otsing_marksonade_jargi.py                 |   #
+#   |   FAILI NIMI:  04_otsing_marksonade_jargi.py                        |   #
 #   |   LOODUD:      2026-05-15                                           |   #
 #   |   AUTOR:       Heiki Rebane                                         |   #
-#   |   KIRJELDUS:   MITRE ATT&CK märksõnade otsing ja analüüs.    |   #
+#   |   KIRJELDUS:   MITRE ATT&CK märksõnade otsing ja analüüs.           |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
@@ -39,8 +39,6 @@ def fuzzy_match(a, b):
     """
     return SequenceMatcher(None, a, b).ratio()
 
-# ASCII Logo (VALVUR standard)
-r
 
 def search_suspicious_keywords(in_dir='TULEMUSED', out_file='TULEMUSED/03_tulemus_kahtlased_marksonad.csv'):
     print(LOGO)
