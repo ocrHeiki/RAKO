@@ -1,3 +1,4 @@
+```
 ###############################################################################
 #                                                                             #
 #   █████   █████           ████                                              #
@@ -15,14 +16,14 @@
 #   |   FAILI NIMI:  examWORKFLOW.md                                      |   #
 #   |   LOODUD:      2026-05-18                                           |   #
 #   |   AUTOR:       Heiki Rebane (Team 10 - HeRe)                        |   #
-#   |   KIRJELDUS:   Eksami samm-sammuline töövoog. E-ITS audit,         |   #
+#   |   KIRJELDUS:   Eksami samm-sammuline töövoog. E-ITS audit,          |   #
 #   |                reaktiivne forensika, intsidentide haldus Kali       |   #
 #   |                masinast kaughalduse teel.                           |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
 ###############################################################################
-
+```
 # 🚀 EKSAMI TÖÖVOOG & SPIKKER — TEAM 10: HeRe
 
 See töövoog on optimeeritud keskkonna **itskteam10** proaktiivseks auditeerimiseks
