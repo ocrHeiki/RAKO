@@ -19,7 +19,7 @@
 #   |   AUTOR:       Heiki Rebane (Team 9 - HeRe)                         |   #
 #   |   KIRJELDUS:   Eksami samm-sammuline töövoog. E-ITS audit,          |   #
 #   |                reaktiivne forensika, intsidentide haldus ja         |   #
-#   |                aktiivne ründe tõrje/pahalaste eemaldamine.           |   #
+#   |                aktiivne ründe tõrje/pahalaste eemaldamine.          |   #
 #   |                                                                     |   #
 #   =======================================================================   #
 #                                                                             #
