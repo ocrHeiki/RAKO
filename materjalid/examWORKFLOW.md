@@ -1,4 +1,4 @@
-# 🚀 EKSAMI TÖÖVOOG & SPRIKKER — TEAM 10 (Kaughalduse võimekusega)
+# 🚀 EKSAMI TÖÖVOOG & SPIKKER — TEAM 10: HeRe (Kaughalduse võimekusega)
 
 See töövoog on optimeeritud nii, et esmalt jäädvustatakse puhta võrgu seisund ning seejärel rakendatakse automatiseeritud ja käsitsi forensikat, kahjustamata olemasolevaid ründetõendeid. Kõik uuritavate masinate tulemused saadetakse automaatselt üle SCP tagasi Kali töölauale.
 
