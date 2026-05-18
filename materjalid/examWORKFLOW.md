@@ -57,7 +57,7 @@ Kasuta käsitööks õpetaja soovitatud käske, et ründaja isoleerida:
  2. **Sessioonid:** compmgmt.msc -> Shared Folders -> Sessions.
  3. **Püsivus:** Autoruns64.exe (Kontrolli ajastatud toiminguid ja registrit).
  4. **Logi-analüüs:** Käivita VALVUR-i 11_turvafiltreering.py, et filtreerida välja rünnaku kellaaja kriitilised sündmused.
-```
+
 
 ---
 
@@ -71,4 +71,4 @@ See loogika paneb komisjoni teid kuulama täieliku austusega. Kui jõuad **Slaid
 
 See on tipptasemel küberkaitse analüütiku töövoog. Te olete homseks laboriks ideaalselt planeeritud ja valmis!
 
-```
+
