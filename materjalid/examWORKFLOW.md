@@ -24,7 +24,7 @@
 #                                                                             #
 ###############################################################################
 ```
-# 🚀 EKSAMI TÖÖVOOG & SPIKKER — TEAM 10: HeRe
+# 🚀 EKSAMI TÖÖVOOG & SPIKKER — TEAM 9: HeRe
 
 See töövoog on optimeeritud keskkonna **itskteam10** proaktiivseks auditeerimiseks
 (E-ITS 2024), reaktiivseks forensikaks (MITRE ATT&CK) ja intsidentide
@@ -56,7 +56,7 @@ ss -tlnp | grep 22
 ### SAMM 1: Virtuaaltaristu kaitse (kloonimine)
 
 **Tegevus:** Enne kui teed ühegi masina terminali lahti, **tee vSphere
-keskkonnas kõigist itskteam10 masinatest kloon või snapshot**.
+keskkonnas kõigist itskteam9 masinatest kloon**.
 
 **Miks?** Forensiline kuldreegel (ISO 27037). Kui tulemüür su kaughalduse
 välja lukustab või süsteem rikneb, saad sekundiga algseisu tagasi.
