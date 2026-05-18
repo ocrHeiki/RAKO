@@ -15,7 +15,7 @@
 #   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
 #   |   FAILI NIMI:  examWORKFLOW.md                                      |   #
 #   |   LOODUD:      2026-05-18                                           |   #
-#   |   AUTOR:       Heiki Rebane (Team 10 - HeRe)                        |   #
+#   |   AUTOR:       Heiki Rebane (Team 9 - HeRe)                        |   #
 #   |   KIRJELDUS:   Eksami samm-sammuline töövoog. E-ITS audit,          |   #
 #   |                reaktiivne forensika, intsidentide haldus Kali       |   #
 #   |                masinast kaughalduse teel.                           |   #
