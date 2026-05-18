@@ -19,13 +19,13 @@ sudo systemctl start ssh
 ```ip a | grep "inet "```
 
 # 🏁 SAMM-SAMMULINE TÖÖVOOG LABORIS
-SAMM 1: Virtuaaltaristu Kaitse (Kloonimine)
+**SAMM 1:** Virtuaaltaristu Kaitse (Kloonimine)
 
 Tegevus: **Enne** kui teed ühegi masina terminali lahti, **tee** vSphere keskkonnas **kõigist** itskteam10 **masinatest Kloon**.
 
 Miks? Forensiline kuldreegel. Kui tulemüür su kaughalduse välja lukustab või süsteem rikneb, saad sekundiga algseisu tagasi.
 
-SAMM 2: Võrgu Baasjoone Kaardistamine (Zenmap)
+**SAMM 2:** Võrgu Baasjoone Kaardistamine (Zenmap)
 
 Tegevus: Käivita Kali masinas **Zenmap** või terminalis **Nmap** ja pane võrk skaneerima:
 Bash
@@ -34,7 +34,7 @@ sudo nmap -sV -O 192.168.10.0/24
 ```
 Eesmärk: Fikseerida ründaja poolt avatud pordid enne meie sekkumist. Jäta võrguseire taustale jooksma, et hiljem filtreerida välja VALVUR-i enda tekitatud legitiimne liiklus ründaja omast.
 
-SAMM 3: Kaughaldusühenduste Loomine
+**SAMM 3:** Kaughaldusühenduste Loomine
 
 Kui Zenmap kinnitab, et kaughalduspordid on avatud, logi Kali masinast sihtmärkidesse sisse:
 
@@ -45,7 +45,7 @@ Bash
 ```
 xfreerdp /v:192.168.10.Y /u:Administrator /p:Parool123 /dynamic-resolution +clipboard
 ```
-SAMM 4: VALVUR Masterskripti lennult käivitamine (In-Memory)
+**SAMM 4:** VALVUR Masterskripti lennult käivitamine (In-Memory)
 
 Selleks, et mitte saastada uuritavate masinate kõvakettaid, käivitame VALVUR-i otse vahemällu (RAM) GitHubi repositooriumist, andes kaasa oma Kali IP-aadressi:
 
@@ -61,12 +61,12 @@ $env:KALI_IP="192.168.1.100"; iex (iwr -UseBasicParsing "https://raw.githubuserc
 ```
 Tulemus: VALVUR teostab E-ITS auditi ja terviklikkuse kontrolli, pakib tulemused kokku ning eksfiltreerib ZIP-paki automaatselt tagasi sinu Kali töölauale.
 
-SAMM 5: Intsidentide Haldus (Ticketid)
+**SAMM 5:** Intsidentide Haldus (Ticketid)
 
 Vaata oma Kali töölauale laekunud VALVUR-i raportit.
 Registreeri kõik leitud E-ITS hälbed ja võrguandmed koheselt piletisüsteemis (TicketingServer-itskteam10). Priority: High/Critical.
 
-SAMM 6: Linuxi Serveri Käsitöö ja Süvaanalüüs (INTRAWEB1)
+**SAMM 6:** Linuxi Serveri Käsitöö ja Süvaanalüüs (INTRAWEB1)
 
 Kui VALVUR andis vihje aktiivsest ründajast, jahti teda SSH sessioonis järgmiselt:
 
@@ -89,7 +89,7 @@ sudo ufw allow from [Sinu_Kali_IP] to any port 22 proto tcp
 sudo ufw enable
 sudo ufw status numbered
 ```
-SAMM 7: Windowsi Masina Süvaanalüüs (DC1 / FileSRV1)
+**SAMM 7:** Windowsi Masina Süvaanalüüs (DC1 / FileSRV1)
 
 RDP sessiooni kaudu administraatori käsureal:
 
@@ -101,7 +101,7 @@ Püsivus: **Käivita Autoruns64.exe** -> Hide Microsoft Entries -> Kontrolli Sch
 
 Logi-analüüs: Jooksuta VALVUR-i moodulit 11_turvafiltreering.py, et filtreerida välja kriitilised sündmused rünnaku kellaaja kohta.
 
-📝 RAPORTEERIMISE JA MITRE ŠABLOON (Esitluse jaoks)
+# 📝 RAPORTEERIMISE JA MITRE ŠABLOON (Esitluse jaoks)
 
 Iga leitud anomaalia vormista slaididele nii:
 
