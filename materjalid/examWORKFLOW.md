@@ -1,105 +1,112 @@
-# 🚀 EKSAMI TÖÖVOOG & SPIKKER — TEAM 10: HeRe (Kaughalduse võimekusega)
+🚀 EKSAMI TÖÖVOOG & SPRIKKER — TEAM 10
 
-See töövoog on optimeeritud nii, et esmalt jäädvustatakse puhta võrgu seisund ning seejärel rakendatakse automatiseeritud ja käsitsi forensikat, kahjustamata olemasolevaid ründetõendeid. Kõik uuritavate masinate tulemused saadetakse automaatselt üle SCP tagasi Kali töölauale.
+See töövoog on optimeeritud keskkonna itskteam10 proaktiivseks auditeerimiseks (E-ITS), reaktiivseks forensikaks (MITRE ATT&CK) ja intsidentide tsentraalseks lahendamiseks otse analüütiku Kali masinast.
+📅 0. ETTEVALMISTUSKORD (Tee laboris esimese asjana kloonimise ajal)
 
----
+Kuna eelseadistus on kriitiline, sisesta oma Kali terminali need käsud kohe, kui sihtmärk-masinad vSphere'is kloonivad. See võtab aega alla minuti:
+Bash
 
-## 📅 ETTEVALMISTUSKORD (Tee kohe laboris hommiku alguses / kloonimise ajal)
+# 1. Uuenda pakettide nimekirja ja paigalda tööriistad + FreeRDP kaughalduseks
+sudo apt update && sudo apt install -y mc nmap zenmap-kbx net-tools iproute2 freerdp2-x11
 
-Kuna kooliserveri ligipääs oli piiratud, käivita need käsud oma Kali terminalis **kohe laboris esimese asjana** (sel ajal kui masinad vSphere'is kloonivad). See võtab aega vaid hetke:
-
-```bash
-# 1. Uuenda pakette ja paigalda põhitööriistad + FreeRDP (Windowsi kaughalduseks)
-sudo apt update
-sudo apt install -y mc nmap zenmap-kbx net-tools iproute2 freerdp2-x11
-
-# 2. Käivita Kali enda SSH server (Vajalik, et VALVUR master saaks raportid Kalisse saata)
+# 2. Käivita Kali masina enda SSH server (Vajalik VALVUR-i failide automaatseks vastuvõtmiseks)
 sudo systemctl enable ssh
 sudo systemctl start ssh
 
-# 3. Vaata ja kirjuta üles oma Kali täpne labori-IP (Seda on vaja VALVUR-i seadistamiseks)
+# 3. Vaata ja kirjuta üles oma Kali täpne labori-IP (Seda söödad keskkonnamuutujana ette)
 ip a | grep "inet "
 
 🏁 SAMM-SAMMULINE TÖÖVOOG LABORIS
 SAMM 1: Virtuaaltaristu Kaitse (Kloonimine)
 
-    Tegevus: Enne kui puutud ühtegi masinat, tee vSphere keskkonnas kõigist itskteam10 masinatest Kloon või Snapshot.
+    Tegevus: Enne kui teed ühegi masina terminali lahti, tee vSphere keskkonnas kõigist itskteam10 masinatest Kloon või Snapshot.
 
-    Miks? Kui kaughaldus või tulemüür su välja lukustab, saad sekundiga puhta seisu tagasi.
+    Miks? Forensiline kuldreegel. Kui tulemüür su kaughalduse välja lukustab või süsteem rikneb, saad sekundiga algseisu tagasi.
 
 SAMM 2: Võrgu Baasjoone Kaardistamine (Zenmap)
 
-    Tegevus: Käivita kohe oma Kali masinas Zenmap või käsurida ja pane võrk skaneerima:
+    Tegevus: Käivita Kali masinas Zenmap või terminalis Nmap ja pane võrk skaneerima:
     Bash
 
     sudo nmap -sV -O 192.168.10.0/24
 
-    Eesmärk: Tuvastada ründaja avatud pordid enne meie sekkumist. Jäta see taustale jooksma, et hiljem eraldada VALVUR-i liiklus ründaja omast.
+    Eesmärk: Fikseerida ründaja poolt avatud pordid enne meie sekkumist. Jäta võrguseire taustale jooksma, et hiljem filtreerida välja VALVUR-i enda tekitatud legitiimne liiklus ründaja omast.
 
-SAMM 3: Ühendumine Uuritavatesse Masinatesse (Kaughaldus)
+SAMM 3: Kaughaldusühenduste Loomine
 
-Kui Zenmap näitab, et pordid on lahti, logi Kali masinast otse sisse (eeldusel, et sul on õpetaja jagatud või leitud mandaadid):
+Kui Zenmap kinnitab, et kaughalduspordid on avatud, logi Kali masinast sihtmärkidesse sisse:
 
-    A. Linuxi serverisse logimine (SSH):
+    Linuxi serverisse (SSH): ssh kasutaja@192.168.10.X
+
+    Windowsi serverisse (RDP üle FreeRDP):
     Bash
 
-ssh kasutaja@192.168.10.X
-
-B. Windowsi masinasse logimine (RDP kasutades FreeRDP-d):
-Bash
-
-    # /v: määrab sihtmärgi IP, /u: kasutaja, /p: parool, /dynamic-resolution lubab akna suurust muuta
     xfreerdp /v:192.168.10.Y /u:Administrator /p:Parool123 /dynamic-resolution +clipboard
 
-SAMM 4: VALVUR Masterskripti Rakendamine (E-ITS Audit)
+SAMM 4: VALVUR Masterskripti lennult käivitamine (In-Memory)
 
-Nüüd, mil oled kaughalduse kaudu masinas sees, käivita VALVUR_master.py.
+Selleks, et mitte saastada uuritavate masinate kõvakettaid, käivitame VALVUR-i otse vahemällu (RAM) GitHubi repositooriumist, andes kaasa oma Kali IP-aadressi:
 
-    Märkus: Veendu, et masterskripti alguses on märgitud sinna eelseadistuse sammu ajal üles kirjutatud KALI_IP.
+    🐧 Linuxi serveris (INTRAWEB1 / TicketingServer):
+    Bash
 
-    Masterskript teeb auditi ja saadab kõik tulemused automaatselt zip-pakina tagasi sinu Kali töölauale.
+sudo KALI_IP=192.168.1.100 python3 -c "$(curl -fsSL https://raw.githubusercontent.com/ocrHeiki/VALVUR/main/launch_VALVUR.py)"
+
+💻 Windowsi serveris (DC1 / FileSRV1 läbi PowerShelli):
+PowerShell
+
+    $env:KALI_IP="192.168.1.100"; iex (iwr -UseBasicParsing "https://raw.githubusercontent.com/ocrHeiki/VALVUR/main/launch_VALVUR.ps1")
+
+    Tulemus: VALVUR teostab E-ITS auditi ja terviklikkuse kontrolli, pakib tulemused kokku ning eksfiltreerib ZIP-paki automaatselt tagasi sinu Kali töölauale.
 
 SAMM 5: Intsidentide Haldus (Ticketid)
 
-    Registreeri VALVUR-i ja Zenmapi leitud hälbed koheselt piletisüsteemis (TicketingServer-itskteam10).
+    Vaata oma Kali töölauale laekunud VALVUR-i raportit.
 
-SAMM 6: Linuxi Serveri Süvaanalüüs (INTRAWEB1)
+    Registreeri kõik leitud E-ITS hälbed ja võrguandmed koheselt piletisüsteemis (TicketingServer-itskteam10). Priority: High/Critical.
 
-Kui oled SSH sessioonis, jahti ründajat nendega:
+SAMM 6: Linuxi Serveri Käsitöö ja Süvaanalüüs (INTRAWEB1)
 
-    Kasutajad: w ja who -a (Kes on sees ja mis käsku jooksutab?).
+Kui VALVUR andis vihje aktiivsest ründajast, jahti teda SSH sessioonis järgmiselt:
 
-    Võrk reaalajas: sudo netstat -nputw (Leia ründaja ühenduse PID).
+    Aktiivsed olemid: w ja who -a -> Vaata veergu WHAT (Mida nad reaalajas teevad?).
 
-    Pahavara asukoht: sudo ls -l /proc/[PID]/exe.
+    Võrk reaalajas (Õpetaja soovitus): sudo netstat -nputw -> Tuvasta ESTABLISHED Reverse Shell (port 4444/1337) ja võta ründaja protsessi PID.
 
-    Püsivus: sudo crontab -e.
+    Pahavara asukoht kõvakettal: sudo ls -l /proc/[PID]/exe -> Näitab täpse kausta (nt /tmp/.hais/).
 
-    Logide lappamine: sudo mc (Võrdle veebiloge /var/log/nginx/ ja rakenduse siseseid logisid /var/www/html/).
+    Püsivuspunktid: sudo crontab -e ja ls -la /etc/cron.d/ -> Otsi @reboot või * * * * * tagauksi.
+
+    Logide ja veebijuure lappamine: sudo mc -> Pane vasakule paneelile veebilogid (/var/log/nginx/access.log) ja paremale rakenduse sisesed logid/failid (/var/www/html/), et tuvastada veebirakenduse õiguste alla peidetud Web Shellid ja ründejäljed.
 
     Tulemüüri esmaabi (SSH elupäästja!):
     Bash
 
+    # KRIITILINE: Luba alati SSH enne UFW aktiveerimist!
     sudo ufw allow from [Sinu_Kali_IP] to any port 22 proto tcp
     sudo ufw enable
+    sudo ufw status numbered
 
-SAMM 7: Windowsi Masina Süvaanalüüs (DC1)
+SAMM 7: Windowsi Masina Süvaanalüüs (DC1 / FileSRV1)
 
-RDP sessiooni kaudu ava administraatori käsurida või tööriistad:
+RDP sessiooni kaudu administraatori käsureal:
 
-    Võrk: netstat -fano -> Tuvasta C2 ühenduste PID-d.
+    Võrguühendused: netstat -fano -> Otsi võõraid ühendusi ja võta PID. Tuvasta fail: tasklist /FI "PID eq [number]".
 
-    Sessioonid: compmgmt.msc -> Shared Folders -> Sessions.
+    Aktiivsed lekked: compmgmt.msc -> Shared Folders -> Sessions (Kes tõmbab faile?).
 
-    Püsivus: By Autoruns64.exe (Kontrolli ajastatud toiminguid).
+    Püsivus: Käivita Autoruns64.exe -> Hide Microsoft Entries -> Kontrolli Scheduled Tasks ja Registry Run võtmeid.
 
-    Logi-analüüs: Käivita VALVUR-i 11_turvafiltreering.py.
+    Logi-analüüs: Jooksuta VALVUR-i moodulit 11_turvafiltreering.py, et filtreerida välja kriitilised sündmused rünnaku kellaaja kohta.
 
+📝 RAPORTEERIMISE JA MITRE ŠABLOON (Esitluse jaoks)
 
----
+Iga leitud anomaalia vormista slaididele nii:
 
-### 🗣️ Kuidas sa seda esitlusel komisjonile serveerid:
+    Tuvastatud tegevus: (nt ründaja sessioon Linuxis crontab-is)
 
-> *"Meie meeskonna metodoloogia laboris oli rangelt forensiline ja tsentraliseeritud. **Esimene samm oli keskkonna kloonimine vSphere'is**, tagamaks andmete puutumatuse. Samal ajal seadistasime oma Kali masinas valmis kaughaldusliidesed ja SSH serveri vastuvõtuks.
->  
-> **Teise sammuna käivitasime Zenmapi**, et fikseerida võrgu puhas baasjoon. Kui perimeeter oli kaardistatud, sisenesime masinatesse kaughalduse teel – **Linuxisse üle SSH ja Windowsi serveritesse üle RDP, kasutades FreeRDP-d**. See võimaldas meil käivitada oma **VALVUR Master Launcheri** otse terminalist, mis pärast analüüsi lõpetamist pakkis kõik vastused kokku ja saatis need üle SCP võrgu kaudu turvaliselt tagasi meie Kali töölauale, hoides uuritavad masinad kõrvalise prügiga saastamata."*
+    Kasutatud tööriist: sudo crontab -e / netstat -nputw
+
+    MITRE ATT&CK tehnika: T1053.003 (Scheduled Task/Job: Cron)
+
+    E-ITS 2024 mittevastavus: SYS.1.3.M1 (Linuxi süsteemiturve)
