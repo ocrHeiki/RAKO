@@ -1,4 +1,6 @@
-🕵️‍♂️ Linuxi (WKS1) Forensiline Uurimistee: Metoodika ja Käskude Loogika
+# 🕵️‍♂️ Linuxi (WKS1) Forensiline Uurimistee: 
+
+Metoodika ja Käskude Loogika
 Digitaalses forensikas ei tohi käske sisestada suvaliselt. Uurimisel lähtutakse andmete kõdunemise järjekorra reeglist (Order of Volatility). See tähendab, et liigutakse kõige kiiremini kaduvatest tõenditest (võrguliiklus ja reaalajas jooksvad protsessid mälus) kuni püsivamate tõenditeni (kõvakettale salvestatud logid ja failide ajalugu).
 Allolev käskude järjekord peegeldab täpselt seda metoodikat, liikudes tuvastamisest kuni raudpolt-kindla tõendusahela lukustamiseni.
 🟢 SAMM 1: Situatsiooniteadlikkus ja võrgu kaardistamine
