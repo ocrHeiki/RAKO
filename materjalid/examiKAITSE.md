@@ -16,7 +16,7 @@ Minu esmased taktilised sammud eksamikeskkonda sisenemisel olid järgmised:
 
 1. **Võrguühenduse loomine:** Ühendasin oma Kali Linuxi masina (`10.16.140.104`) eksamivõrku.
 2. **Liikluse püüdmine (Wireshark):** Käivitasin koheselt taustal **Wiresharki** võrguliikluse püüdmiseks. Forensilisest vaatest töötas see passiivselt taustal turvavõrguna, et tagada meile võimekus vajadusel kogu liiklust tagantjärele PCAP-failist uurida.
-3. **Võrgu skaneerimine (Nmap):** Kasutasin professionaalset lähenemist ja käivitasin otse terminalist puhta **`nmap`** käsu. Nmapi abil kaardistasin sekunditega võrgus aktiivsed seadmed, tuvastades domeenikontrolleri DC1, failiserveri ja Linuxi tööjaama **WKS1** aadressil `10.16.140.101`.
+3. **Võrgu skaneerimine (Nmap):** Kasutasin professionaalset lähenemist ja käivitasin otse terminalist puhta **`nmap`** käsu. Nmapi abil kaardistasin sekunditega võrgus aktiivsed seadmed, tuvastades domeenikontrolleri DC1, failiserveri ja tööjaamad.
 4. **Piletisüsteemi takistus (osTicket veebiaadressi viga):** Asudes ülesannete kallale, põrkasin kohe kokku esimese takistusega. Kõigile jagatud ülesande kirjelduses oli märgitud vale veebiaadress. Juhendis oli link kujul `tickets.kehtna.lan/scp`, mis viitas haldusliidesele, kuid tegelik toimiv aadress oli hoopis `tickets.kehtna.lan/osticket/`. See viga ja õige aadressi väljaselgitamine võttis minu masinaga alguses ära väärtuslikku aega. Kui aga aadress sai korrigeeritud, avanes meile piletisüsteem ja asusin lahendama kriitilisi juhtumeid.
 
 ---
