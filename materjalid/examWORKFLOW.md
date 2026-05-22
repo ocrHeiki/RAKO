@@ -1,228 +1,119 @@
+# Täielik Juhend: Windows 10 Logianalüüs (Hayabusa) ja Tulemuste Uurimine (VisiData) Läbi Kali Linuxi
 
-```
-###############################################################################
-#                                                                             #
-#   █████   █████           ████                                              #
-#  ▒▒███   ▒▒███           ▒▒███                                              #
-#   ▒███    ▒███   ██████   ▒███  █████ █████ █████ ████ ████████             #
-#   ▒███    ▒███  ▒▒▒▒▒███  ▒███ ▒▒███ ▒▒███ ▒▒███ ▒███ ▒▒███▒▒███            #
-#   ▒▒███   ███    ███████  ▒███  ▒███  ▒███  ▒███ ▒███  ▒███ ▒▒▒             #
-#    ▒▒▒█████▒    ███▒▒███  ▒███  ▒▒███ ███   ▒███ ▒███  ▒███                 #
-#      ▒▒███     ▒▒████████ █████  ▒▒█████    ▒▒████████ █████                #
-#       ▒▒▒       ▒▒▒▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒      ▒▒▒▒▒▒▒▒ ▒▒▒▒▒                 #
-#                                                                             #
-#   =======================================================================   #
-#   |                                                                     |   #
-#   |   PROJEKT:     VALVUR - Intsidendi süvaanalüüs                      |   #
-#   |   FAILI NIMI:  examWORKFLOW.md                                      |   #
-#   |   LOODUD:      2026-05-18 (Uuendatud reaktiivse tõrjega)            |   #
-#   |   AUTOR:       Heiki Rebane (Team 9 - HeRe)                         |   #
-#   |   KIRJELDUS:   Eksami samm-sammuline töövoog. E-ITS audit,          |   #
-#   |                reaktiivne forensika, intsidentide haldus ja         |   #
-#   |                aktiivne ründe tõrje/pahalaste eemaldamine.          |   #
-#   |                                                                     |   #
-#   =======================================================================   #
-#                                                                             #
-###############################################################################
+See dokument on terviklik samm-sammuline juhend digitaalse ekspertiisi ja intsidentide lahendamise (DFIR) läbiviimiseks laborikeskkonnas.
+1. SAMM: Windows 10 Ettevalmistus, SSH Lubamine ja IP Tuvastamine
 
-```
-# 🚀 EKSAMI TÖÖVOOG & SPIKKER — TEAM 9: HeRe
-See töövoog on optimeeritud keskkonna **itskteam9** proaktiivseks auditeerimiseks (E-ITS 2024), reaktiivseks forensikaks (MITRE ATT&CK) ja intsidentide tsentraalseks lahendamiseks/tõrjeks otse analüütiku Kali masinast.
-## 📅 0. ETTEVALMISTUSKORD (Tee laboris esimese asjana)
-Kui sihtmärk-masinad vSphere'is kloonivad, sisesta need käsud Kali terminali. See võtab aega alla minuti – aga kui SSH server ei jookse, ei saa VALVUR tulemusi tagasi saata.
-```bash
-# 1. Uuenda paketid ja paigalda tööriistad
-sudo apt update && sudo apt install -y mc nmap zenmap-kbx net-tools iproute2 freerdp2-x11
+Seda teed kooli Windowsi masinas PowerShellis (Run as Administrator).
 
-# 2. Käivita SSH server (vajalik VALVUR-i failide vastuvõtmiseks)
-sudo systemctl enable ssh && sudo systemctl start ssh
+Selleks, et saaksid Windowsi masinat hallata ja faile liigutada otse Kali Linuxi terminalist, tuleb Windowsis aktiveerida OpenSSH server ja kontrollida võrguseadeid.
+PowerShell
 
-# 3. Kontrolli, et SSH kuulab
-ss -tlnp | grep 22
+# 1. Paigalda OpenSSH Serveri komponent
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
 
-```
-## 🏁 SAMM-SAMMULINE TÖÖVOOG LABORIS
-### SAMM 1: Virtuaaltaristu kaitse (kloonimine)
-**Tegevus:** Enne kui teed ühegi masina terminali lahti, **tee vSphere keskkonnas kõigist itskteam9 masinatest kloon**.
-**Miks?** Forensiline kuldreegel (ISO 27037). Kui tulemüür su kaughalduse välja lukustab või süsteem rikneb, saad sekundiga algseisu tagasi.
-### SAMM 2: Võrgu baasjoone kaardistamine (nmap)
-**Tegevus:** Käivita Kali masinas võrgu skaneerimine:
-```bash
-# Kiire elusate tuvastus
-sudo nmap -sn 192.168.10.0/24 -oG - | grep Up
+# 2. Seadista OpenSSH teenus käivituma automaatselt ja käivita see kohe
+Set-Service -Name sshd -StartupType 'Automatic'
+Start-Service sshd
 
-# Põhjalik port + OS tuvastus (jäta taustale)
-sudo nmap -sV -O 192.168.10.0/24 &
+# 3. Kontrolli, kas SSH teenus reaalselt töötab (peab kuvama staatuseks "Running")
+Get-Service sshd
 
-```
-**Eesmärk:** Fikseerida ründaja poolt avatud pordid enne meie sekkumist. Jäta skaneerimine taustale jooksma – hiljem saad võrrelda VALVUR-i enda tekitatud liiklust ründaja omast.
-### SAMM 3: Kaughaldusühenduste loomine
-| Masin | Protokoll | Käsk |
-|---|---|---|
-| **Linux (ruuter, server, Kali)** | SSH | ssh kasutaja@192.168.10.X |
-| **Windows (DC, file server)** | RDP | xfreerdp /v:192.168.10.Y /u:Administrator /p:Parool123 /dynamic-resolution +clipboard |
-```bash
-# SSH Linuxi
-ssh heiki@192.168.10.10
+# 4. Loo tulemüüri reegel, mis lubab sissetulevaid SSH ühendusi (port 22)
+New-NetFirewallRule -Name 'OpenSSH-In' -DisplayName 'OpenSSH Server (Inbound)' -Profile Any -Direction Inbound -Action Allow -Protocol TCP -LocalPort 22
 
-# RDP Windowsi
-xfreerdp /v:192.168.10.20 /u:Administrator /p:Parool123 /dynamic-resolution +clipboard
+# 5. TUVASTA WINDOWSI IP-AADRESS
+# Otsi väljundist oma võrgukaardi nime alt rida "IPv4 Address" (nt. 192.168.1.232)
+ipconfig
 
-```
-### SAMM 4: VALVUR-i käivitamine (ühe rea githubi käsklus)
-Selleks, et mitte saastada uuritavate masinate kõvakettaid püsivate jälgedega, käivitatakse VALVUR otse mälust GitHubi repositooriumist. Kali IP tuvastatakse automaatselt $SSH_CLIENT põhjal.
-#### 🐧 Linuxi sihtmärk (INTRAWEB1 / ruuter / TicketingServer)
-```bash
-# Lihtsalt kleebi – KALI_IP tuleb $SSH_CLIENT seest
-python3 -c "$(curl -fsSL https://raw.githubusercontent.com/ocrHeiki/VALVUR/main/launch_VALVUR.py)"
+2. SAMM: Tööriistade Allalaadimine ja Paigaldamine Kali Linuxis
 
-```
-#### 💻 Windowsi sihtmärk (DC1 / FileSRV1) – PowerShelli kaudu
-```powershell
-$env:KALI_IP="192.168.10.50"; iex (iwr -UseBasicParsing "https://raw.githubusercontent.com/ocrHeiki/VALVUR/main/launch_VALVUR.ps1")
+Seda teed Kali Linuxi kohalikus terminalis (mitte SSH aknas).
 
-```
-### SAMM 5: Intsidentide haldus (ticketid)
- 1. Vaata Kali töölauale laekunud VALVUR-i ZIP-paki sisu:
-   ```bash
-   unzip -l /home/kali/Desktop/VALVUR_TULEMUSED/VALVUR_*.zip
-   
-   ```
- 2. Ava leidude failid ja registreeri kõik hälbed piletisüsteemis (**TicketingServer-itskteam9**). Priority: **High** / **Critical**.
-### SAMM 6: Linuxi süvaanalüüs ja REAKTIIVNE TÕRJE (INTRAWEB1 / ruuter)
-Kui VALVUR andis vihje aktiivsest ründajast, jahi ta esmalt taga ja seejärel elimineeri ligipääsud.
-```bash
-# 6.1 – Tuvasta aktiivsed olemid
-w && who -a
+Laadime vajalikud failid esmalt alla Kali masinasse, et vältida probleeme Windowsi virtuaalmasina võimalike võrgu- või DNS-tõrgetega.
+Bash
 
-# 6.2 – Võrk reaalajas (Otsi taga porte 4444, 1337, 8888 jne)
-sudo netstat -nputw | grep ESTABLISHED
+# 1. Liigu kasutaja Downloads (Allalaadimised) kausta
+cd ~/Downloads
 
-# 6.3 – Kahtlase protsessi PID põhjal faili asukoha tuvastamine
-sudo ls -l /proc/[PID]/exe
+# 2. Laadi alla Hayabusa stabiilne Windowsi 64-bitine versioon (v3.9.0) otse GitHubist
+wget https://github.com/Yamato-Security/hayabusa/releases/download/v3.9.0/hayabusa-3.9.0-win-x64.zip
 
-```
-#### 🛠️ UUS: 6.6 – Ründaja sessioonide ja protsesside TAPMINE (Kill)
-```bash
-# A. Viska ründaja reaalajas terminalist (nt pts/0) välja
-sudo pkill -kill -t pts/0
+# 3. Uuenda Kali paketihaldurit ja paigalda Pythoni paketihaldur pip
+sudo apt update && sudo apt install -y python3-pip
 
-# B. Tapa pahavara / Reverse Shell protsess sunnitult (SIGKILL)
-sudo kill -9 [PID]
+# 4. Paigalda ülikiire terminalipõhine CSV-andmete vaataja VisiData
+pip install visidata --break-system-packages
 
-```
-#### 🛠️ UUS: 6.7 – Püsivuspunktide ja tagauste EEMALDAMINE
-```bash
-# A. Puhasta ajastatud toimingud (Otsi ründaja skripte ja kustuta rida)
-sudo crontab -e
-# Vaata ja kustuta failid ka nendest kaustadest:
-sudo rm -f /etc/cron.d/[kahtlane_fail]
-sudo rm -f /var/spool/cron/crontabs/[kasutajanimi]
+3. SAMM: Failide saatmine Kalist Windowsisse (SCP)
 
-# B. SSH tagaakna eemaldamine (Kustuta ründaja avalik võti)
-sudo nano ~/.ssh/authorized_keys
-# Kontrolli ka teiste kasutajate ja root kausta võtmeid!
+Seda teed Kali Linuxi kohalikus terminalis.
 
-# C. Kontrolli pahatahtlikke systemd teenuseid
-sudo systemctl stop [teenuse_nimi]
-sudo systemctl disable [teenuse_nimi]
-sudo rm -f /etc/systemd/system/[teenuse_nimi].service
-sudo systemctl daemon-reload
+Liigutame allalaaditud zip-arhiivi üle võrgu otse Windowsi masina C-kettale, kasutades turvalist SCP krüpteeringut.
+Bash
 
-```
-#### Web Shelli otsing ja eemaldamine (veebiserver)
-```bash
-# Otsi viimati muudetud või kahtlase sisuga PHP faile
-sudo find /var/www/html/ -name "*.php" -newer /var/www/html/index.php
-sudo grep -rn "eval\|base64_decode\|shell_exec\|system(" /var/www/html/
+# Saada Hayabusa zip-fail Windowsi masina C:\ juurkataloogi
+# MÄRKUS: Asenda 'tempuser' ja '192.168.1.232' oma Windowsi tegeliku kasutajanime ja IP-ga!
+scp hayabusa-3.9.0-win-x64.zip tempuser@192.168.1.232:C:/
 
-# Kustuta leitud Web Shell
-sudo rm -f /var/www/html/[pahalase_fail].php
+Küsimisel sisesta Windowsi kasutaja parool.
+4. SAMM: Paigaldus ja Logianalüüs Läbi SSH Käsurea
 
-```
-#### Tulemüüri esmaabi (SSH elupäästja!)
-```bash
-# KRIITILINE: Luba alati SSH enne UFW aktiveerimist!
-sudo ufw allow from 192.168.10.0/24 to any port 22 proto tcp
-sudo ufw enable
+Nüüd logid Kali terminalist SSH-ga Windowsisse sisse ja teed analüüsi distantsilt.
+Bash
 
-```
-### SAMM 7: Windowsi süvaanalüüs ja REAKTIIVNE TÕRJE (DC1 / FileSRV1)
-**Kus:** RDP sessioon → **Command Prompt (Admin)** või **PowerShell (Admin)**.
-#### 7.1 – Võrguühendused (kes ja kuhu?)
-```cmd
-REM Tuvasta aktiivsed ühendused ja võta paha protsessi PID
-netstat -fano | findstr ESTABLISHED
+# 1. Loo SSH ühendus Windowsi masinaga (Asenda kasutaja ja IP!)
+ssh tempuser@192.168.1.232
 
-```
-#### 🛠️ UUS: 7.6 – Windowsi pahavara protsessi TAPMINE (Taskkill)
-```cmd
-REM A. Tapa pahavara / PowerShell ründevektor sunnitult (/F) PID järgi
-taskkill /F /PID [Käsklusest_saadud_PID]
+# 2. Windowsi käsureale jõudes käivita kohe PowerShell keskkond
+powershell
 
-REM B. Kui ründaja jooksutab pahavara nimega (nt "nc.exe" või "backdoor.exe")
-taskkill /F /IM "kahtlane_fail.exe"
+Järgmised käsud jooksevad juba Windowsi operatsioonisüsteemi sees (läbi SSH):
+PowerShell
 
-```
-#### 🛠️ UUS: 7.7 – Püsivuspunktide ja tagauste EEMALDAMINE
-Kasuta **Autoruns64.exe** (Options ➔ Hide Microsoft Entries).
-```
-💻 Autoruns aknas eemaldamine:
-   Tee kahtlasel kirjel (nt Scheduled Tasks või Logon all) paremklikk ➔ Vali "Delete".
+# 3. Loo uus sihtkaust C:\hayabusa
+New-Item -ItemType Directory -Force -Path "C:\hayabusa"
 
-```
-##### Kui Autorunsi pole ja pead tegema käsitsi käsurealt:
-```cmd
-REM A. Kustuta pahatahtlik ajastatud toiming (Task Scheduler)
-schtasks /delete /tn "RündajaToominguNimi" /f
+# 4. Liiguta varem SCP-ga saadetud zip-fail uude kausta
+Move-Item "C:\hayabusa-3.9.0-win-x64.zip" "C:\hayabusa\"
+cd C:\hayabusa
 
-REM B. Kustuta kahtlased käivitusvõtmed Registryst
-reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "PahalaseKirjeNimi" /f
-reg delete "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "PahalaseKirjeNimi" /f
+# 5. Paki arhiiv lahti ja kustuta vana zip-fail
+Expand-Archive -Path "hayabusa-3.9.0-win-x64.zip" -DestinationPath "C:\hayabusa" -Force
+Remove-Item "hayabusa-3.9.0-win-x64.zip"
 
-REM C. Puhasta Startup kaustad (Kustuta .lnk või .vbs failid)
-del "%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\Startup\kahtlane_fail.lnk"
+# 6. Mugavuse huvides nimeta pikk käivitatav fail ümber lühemaks
+Rename-Item "hayabusa-3.9.0-win-x64.exe" "hayabusa.exe"
 
-```
-#### 7.4 – Administraatorite rühma puhastus
-```cmd
-REM Vaata liikmed üle
-net localgroup Administrators
+# 7. Laadi alla kõige uuemad Sigma tuvastusreeglid GitHubist
+.\hayabusa.exe update-rules
 
-REM Kustuta ründaja poolt loodud või omavoliliselt gruppi lisatud konto
-net localgroup Administrators [paha_kasutaja] /delete
+# 8. Käivita reaalajas kohalike sündmuslogide (Event Logs) analüüs
+.\hayabusa.exe csv-timeline --live-analysis --output tulemus.csv
 
-```
-### SAMM 8: Raporti koostamine (esitluseks)
-Iga leitud anomaalia vormista slaididele/raportisse järgmiselt:
-```markdown
-## Leid #1: [Nimi]
+# 9. Pärast edukat analüüsi välju PowerShellist ja sulge SSH ühendus
+exit
+exit
 
-| Väli | Väärtus |
-|------|---------|
-| **Tuvastatud tegevus** | Ründaja aktiivne Reverse Shell pordil 4444 |
-| **Kasutatud tööriist** | `netstat -fano` / Sysinternals Autoruns64 |
-| **Tõend / Tõrje** | PID 4128 (`powershell.exe`) tapetud käsuga `taskkill /F /PID 4128` |
-| **MITRE ATT&CK** | T1059.001 – Command and Scripting Interpreter: PowerShell |
-| **E-ITS 2024** | CON.1.M2 – Tulemüüride puudumine (deaktiveeritud olek) |
-| **NIST CSF** | RESPOND (RS.MI-01) – Intsidendi isoleerimine ja leevendamine |
-| **Soovitus** | Aktiveerida Windows Firewall rühmaloodud reeglitega. |
+5. SAMM: Raporti Tõmbamine Kalisse ja Analüüs VisiData-s
 
-```
-## ⚡ REAKTIIVNE ABILINK (Eksami ajal kopeerimiseks)
-```bash
-# ===== LINUXI TÕRJE KIIRKÄSUD =====
-sudo pkill -kill -t pts/0                       # Väljaviskamine terminalist
-sudo kill -9 [PID]                              # Protsessi sunnitud tapmine
-sudo rm -f /var/www/html/[shell].php           # Web Shelli eemaldamine
-sudo ufw enable                                 # Tulemüüri lukustus
+Oled tagasi Kali Linuxi kohalikus terminalis (~/Downloads kaustas).
+Bash
 
-# ===== WINDOWSI TÕRJE KIIRKÄSUD =====
-taskkill /F /PID [PID]                          # Protsessi sunnitud tapmine CMD-st
-Stop-Process -ID [PID] -Force                   # Protsessi sunnitud tapmine PS-ist
-schtasks /delete /tn "ToomingaNimi" /f          # Ajastatud ründe eemaldamine
-net localgroup Administrators [kasutaja] /delete # Paha adminni eemaldamine
+# 1. Kopeeri valmis CSV fail Windowsist endale kohalikku Kali masinasse
+# NB! Pane kindlasti tähele TÜHIKUT ja PUNKTI (.) käsu päris lõpus!
+scp tempuser@192.168.1.232:C:/hayabusa/tulemus.csv .
 
-```
-> **VALVUR reaktiivne deklaratsioon:** *"Süsteem puhastatud aktiivsetest ründevektoritest. Tagaüksed eemaldatud mälust (SIGKILL/Taskkill) ja püsivuspunktid likvideeritud (crontab/schtasks). Keskkond viidud vastavusse E-ITS baasturvalisuse nõuetega."*
-> 
+# 2. Ava raport sekundiga VisiData interaktiivse tabelina
+vd tulemus.csv
+
+💡 VisiData Interaktiivsed Kiirkäsud (Spikker)
+Klahv / Sümbol	Tegevus ja Selgitus
+Nooleklahv / TAB	Liikumine tabeli ridade ja veergude vahel.
+[ (Vasak sulg)	Sorteerib veeru kahanevalt. Liigu veeru Level peale ja vajuta seda, et tuua Critical ja High ohud kohe etteotsa.
+] (Parem sulg)	Sorteerib valitud veeru kasvavalt.
+/ (Kaldkriips)	Otsing. Sisesta ründe märk (nt. mimikatz, psexec, cmd.exe) ja vajuta Enter.
+n	Hüppab järgmise samasuguse otsingutulemuse juurde.
+| (Püstkriips)	Märgistamine. Trüki otsisõna (nt Critical), et märgistada kõik vastavad read kollaseks.
+" (Jutumärk)	Filtreerimine. Tõstab kõik eelnevalt märgistatud read täiesti uuele puhtale vahelehele.
+g ja siis q	Sulgeb praeguse aktiivse filtri-vahelehe.
+q	Sulgeb VisiData ja viib tagasi tavalisele Linuxi käsureale.
