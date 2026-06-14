@@ -14,7 +14,7 @@ Käesolev fail sisaldab täielikku ülevaadet olulistest Nmap skaneerimise käsk
 | `sudo nmap -sV <IP_või_Võrk>` | **Version Detection** | Tuvastab avatud portidel jooksvate rakenduste täpsed versioonid (nt *OpenSSH 8.9p1*). Ülioluline haavatavuste (CVE) otsimisel. |
 | `sudo nmap -O <IP_või_Võrk>` | **OS Detection** | Püüab tuvastada sihtmärgi operatsisoonisüsteemi (nt *Linux 5.x*, *Windows 10*) TCP/IP stäki sõrmejälgede põhjal. |
 | `sudo nmap -A <IP>` | **Agressiivne skaneering** | Paneb kokku OS-i tuvastuse (`-O`), versioonituvastuse (`-sV`), skriptide skaneerimise (`-sC`) ja teekonna tuvastuse (*Traceroute*). Väga mürarikas võrgus, kuid annab ühe masina kohta maksimuminfo. |
-| `sudo nmap -p- <IP>` | **Kõikide portide kontroll** | Skaneerib läbi kõik võimalikud **65 535 porti** (vaikimisi kontrollib Nmap vaid 1000 levinumat). Kasuta peidetud tagaustega (*backdoor*) pahalaste masinate otsimiseks. |
+| `sudo nmap -p- <IP>` | **Kõikide portide kontroll** | Skaneerib läbi kaikki võimalikud **65 535 porti** (vaikimisi kontrollib Nmap vaid 1000 levinumat). Kasuta peidetud tagaustega (*backdoor*) pahalaste masinate otsimiseks. |
 | `sudo nmap -p 22,80,443 <IP>` | **Konkreetsete portide kontroll** | Säästab aega, kontrollides ainult spetsiifiliselt määratud teenuseid. |
 | `sudo nmap --script vuln <IP>` | **Haavatavuste kontroll (NSE)** | Kasutab Nmap Scripting Engine (NSE) andmebaasi, et kontrollida, kas sihtmärgi avatud teenustel on teadaolevaid kriitilisi turvaauke või exploite. |
 | `sudo nmap --script brute <IP>` | **Automaatne paroolirünnak** | Püüab levinud teenustele (nt SSH, FTP) teha automaatset sõnastikurünnakut vaikekasutajate ja paroolidega. |
@@ -23,7 +23,7 @@ Käesolev fail sisaldab täielikku ülevaadet olulistest Nmap skaneerimise käsk
 
 ## 2. Eksamil Kriitilised Pordid ja Teenused (Mida auditist otsida?)
 
-Kui teostad võrguauditit või otsid pahalase masinat, viitavad järgmised avatud pordid konkreetsetele teenustele või ohtudele:
+Kui teostad võrguauditit või otsid pahalase masinat, viitavad järgmised avatud pordid konkreetsetele teenuseid või ohtudele:
 
 ### Standardse Infrastruktuuri Pordid
 * **Port 21 (FTP):** Failiedastusprotokoll. Sageli krüpteerimata ja vana tarkvara korral kergesti haavatav.
@@ -44,14 +44,14 @@ Kui teostad võrguauditit või otsid pahalase masinat, viitavad järgmised avatu
 * **Port 9200 (Wazuh Indexer / Elasticsearch):** Andmebaasi liides. Peab alati olema välismaailma eest suletud!
 
 ### Pahalase / Kahtlased pordid (Ründeindikaatorid)
-* **Port 4444 (Metasploit Default Meterpreter):** Kui leiad võrgust masina, millel on lahti port 4444, on see peaaegu kindel märk sellest, et masin on häkitud ja seal jookseb aktiivne ründaja tagauks (*reverse shell*).
+* **Port 4444 (Metasploit Default Meterpreter):** Kui leiad võrgust masina, millel on lahti port 4444, on see peaaegu kindel märk sellest, et masin on häkitud ja SQL/veebi kaudu on sinna paigaldatud aktiivne ründaja tagauks (*reverse shell*).
 * **Port 5555, 9999, 6667 (IRC/Backdoors):** Kasutatakse sageli botneti juhtimiseks (*Command & Control*) või vanemate troojalaste poolt.
 
 ---
 
 ## 3. Auditiraporti Näidistabelid (Kopeerimiseks)
 
-Kasuta neid lihtsaid tabeleid oma auditidokumentatsioonis võrgu hetkeseisu ja topoloogia fikseerimiseks.
+Kasuta neid lihtsaid tabeleid oma auditidokumentatsioonis võrgu hetkeseisu ja topoloogia fikseerimiseks. Nimekirja on lisatud ka ründav/pahalase masin ning analüütiku/uurija tööjaam.
 
 ### 3.1 Võrgu plaan
 
@@ -63,12 +63,15 @@ Kasuta neid lihtsaid tabeleid oma auditidokumentatsioonis võrgu hetkeseisu ja t
 
 | Virtuaalmasina nimi | Masina hostinimi | Masina IP | Teenused / Funktsioon võrgus |
 | :--- | :--- | :--- | :--- |
+| **Kali-Uurija** | `kali-analyst` | `10.0.x.90` | Wireshark, Nmap, OpenVAS (Turvaanalüütiku ja uurija masin) |
+| **Wazuh-Server** | `wazuh-siem` | `10.0.x.194` | Docker, Wazuh Manager (1514/TCP), Dashboard (443/TCP) |
 | WinServr | AD1 | 10.0.x.2 | SSH, Active Directory, DHCP, DNS |
 | WinCoreServer | AD2 | 10.0.x.3 | SSH, Failiserver, AD varukoopia |
 | WinKlient | WinKlient | 10.0.x.4 | SSH, Kasutaja tööjaam |
 | DebianServer | Debian | 10.0.x.50 | SSH, Apache Veebiserver, MariaDB Andmebaas |
-| AlmaServer | Alma | 10.0.x.51 | SSH, Logiserveer (Syslog) |
+| AlmaServer | Alma | 10.0.x.51 | SSH, Logiserver (Syslog) |
 | UbuntuServer | Ubuntu | 10.0.x.52 | SSH, Ansible Automaatika, Wazuh Agent |
+| **Pahalase-Masin** | `unknown-attacker` | `10.0.x.66` | Metasploit Framework, Nmap, Reverse Shells, Port 4444 (Avatud tagauks) |
 
 ---
-*Nõuanne eksamiks: Täida tabelis olevad `x` väärtused vastavalt sellele, millise võrguvahemiku kooli või eksamikeskkonna ruuter sulle automaatselt määrab (näiteks sinu praeguses koduses testis oli selleks `192.168.1`).*
+*Nõuanne eksamiks: Täida tabelis olevad `x` väärtused vastavalt sellele, millise võrguvahemiku kooli või eksamikeskkonna ruuter sulle automaatselt määrab (näiteks sinu koduses testis oli selleks `192.168.1`).*
