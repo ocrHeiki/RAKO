@@ -24,18 +24,14 @@ Juhend on ehitatud loogilises järjestuses – alates füüsilisest võrguühend
 Enne mis tahes tööriista käivitamist tuleb tagada, et uurija tööjaam on õiges eksami/labori võrgus.
 
 1. Kontrolli oma võrgukaarte ja saadud IP-aadressi:
-
-Koodiväljund
-
-Täielik töövoo fail kordusEXAMi_LAB06.md edukalt genereeritud!
-
 ```bash
-   ip a
+
+ip a
 ```
 Vajadusel võrgu ühendamine: Kui sul pole IP-aadressi (nt eth0 liidesel), küsi ruuterilt uus aadress:
 ```Bash
 
-    sudo dhclient eth0
+sudo dhclient eth0
 ```
 Tuvasta oma võrgu CIDR vahemik (nt kui näed `inet 192.168.1.50/24`, on sinu võrguvahemik `192.168.1.0/24`).
 
@@ -50,7 +46,7 @@ Pane käima pakettide püüdmine (Capture).
 Kasuta ekraanifiltrit, et eemaldada müra ja keskenduda sihtmärkidele (asenda IP vastavalt vajadusele):
 ```Plaintext
 
-    ip.addr == 192.168.1.194 || ip.addr == 192.168.1.86
+ip.addr == 192.168.1.194 || ip.addr == 192.168.1.86
 ```
 SAMM 3: Võrgu Kaardistamine ja Pahalase Otsing (Nmap)
 
@@ -69,7 +65,7 @@ sudo nmap -sV -O 192.168.1.86
 Kõikide portide kontroll pahalase tagauste leidmiseks:
 ```Bash
 
-    sudo nmap -p- 192.168.1.86
+sudo nmap -p- 192.168.1.86
 ```
 Märkus: Kui leiad pordi `4444` või mõne muu tundmatu kõrge pordi, viitab see aktiivsele tagauksele (reverse shell).
 
