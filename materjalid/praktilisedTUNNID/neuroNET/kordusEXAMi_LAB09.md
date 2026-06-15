@@ -23,7 +23,7 @@ Otsi aktiivse võrguliidese (nt `eth0` või `ens33`) alt rida "`inet`" (nt. `192
 ```Bash
 ip a
 ```
-2. SAMM: Tööriistade Allalaadimine ja Seadistamine Kali Linuxis
+## 2. SAMM: Tööriistade Allalaadimine ja Seadistamine Kali Linuxis
 
 **Seda teed Kali Linuxi kohalikus terminalis.**
 
@@ -34,27 +34,25 @@ Liigu kasutaja Downloads (Allalaadimised) kausta
 ```Bash
 cd ~/Downloads
 ```
-Laadi alla Hayabusa stabiilne Linuxi 64-bitine versioon (v3.9.0) otse GitHubist
+Laadi alla Hayabusa stabiilne Linuxi 64-bitine versioon (v3.9.0 GNU-versioon) otse GitHubist:
 
 ```Bash
-wget [https://github.com/Yamato-Security/hayabusa/releases/download/v3.9.0/hayabusa-3.9.0-lin-x64.zip](https://github.com/Yamato-Security/hayabusa/releases/download/v3.9.0/hayabusa-3.9.0-lin-x64.zip)
+wget [https://github.com/Yamato-Security/hayabusa/releases/download/v3.9.0/hayabusa-3.9.0-lin-x64-gnu.zip](https://github.com/Yamato-Security/hayabusa/releases/download/v3.9.0/hayabusa-3.9.0-lin-x64-gnu.zip)
 ```
 Paki arhiiv lahti ja liigu uude kausta
 
 ```Bash
-unzip hayabusa-3.9.0-lin-x64.zip -d hayabusa_lin
+unzip hayabusa-3.9.0-lin-x64-gnu.zip -d hayabusa_lin
 cd hayabusa_lin
 ```
-Anna Hayabusa põhifailile ja uuendajale käivitusõigused
+Anna Hayabusa põhifailile käivitusõigused ning mugavuse huvides nimeta fail kohe ümber lühemaks:
 
 ```Bash
-chmod +x hayabusa-3.9.0-lin-x64 hayabusa-updater
+sudo chmod +x hayabusa-3.9.0-lin-x64-gnu
+mv hayabusa-3.9.0-lin-x64-gnu hayabusa
 ```
-Mugavuse huvides nimeta pikk käivitatav fail ümber lühemaks
+(Märkus: Selles versioonis on reeglite uuendaja funktsioon otse põhifaili sees, eraldi hayabusa-updater faili pole vaja otsida).
 
-```Bash
-mv hayabusa-3.9.0-lin-x64 hayabusa
-```
 Laadi alla kõige uuemad Sigma tuvastusreeglid (sh Linuxi ründereeglid) GitHubist
 
 ```Bash
@@ -65,7 +63,7 @@ Veendu, et VisiData on Kalis olemas (kui tegid juba Windowsi juhendit, on see ol
 ```Bash
 sudo apt update && sudo apt install -y python3-pip && pip install visidata --break-system-packages
 ```
-3. SAMM: Logifailide Tõmbamine Ubuntust Kalisse (SCP)
+## 3. SAMM: Logifailide Tõmbamine Ubuntust Kalisse (SCP)
 
 Seda teed Kali Linuxi kohalikus terminalis (kaustas `~/Downloads/hayabusa_lin`).
 
@@ -86,7 +84,7 @@ scp kasutaja@192.168.1.150:/var/log/syslog ./target_logs/
 ```
 Küsimisel sisesta Ubuntu kasutaja parool.
 
-4. SAMM: Linuxi Logianalüüs Hayabusaga
+## 4. SAMM: Linuxi Logianalüüs Hayabusaga
 
 Seda teed Kali Linuxi terminalis (kaustas `~/Downloads/hayabusa_lin`).
 
@@ -97,7 +95,7 @@ Käivita analüüs kogutud logide kaustale
 ```Bash
 ./hayabusa csv-timeline -d target_logs/ -o linux_tulemus.csv
 ```
-5. SAMM: Tulemuste Uurimine VisiData-s
+## 5. SAMM: Tulemuste Uurimine VisiData-s
 
 Oled Kali Linuxi terminalis ja avad värskelt genereeritud CSV-raporti.
 
