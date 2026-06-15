@@ -2,7 +2,7 @@
 ## SAMM 1: Eelluure ja võrgu skaneerimine (Reconnaissance)
 Ründaja püüab kaardistada võrku ja leida avatud porte.
 1. Wazuh filter (Otsi rünnaku algust):
- Kopeeri otsinguribale: ⁠rule.id: (31101 OR 31103 OR 31533) OR rule.description: "Port scanning"⁠
+ Kopeeri otsinguribale: ```⁠rule.id: (31101 OR 31103 OR 31533) OR rule.description: "Port scanning"`⁠``
  Mida jälgida: Otsi ründaja IP-aadressi (⁠data.srcip⁠) ja täpset kellaaega, millal pakettide laviin algas.
 2. Wireshark filter (Võta võrgutõend):
  Kirjuta filtriribale: ⁠ip.src == <Ründaja_IP> && tcp.flags.syn == 1 && tcp.flags.ack == 0⁠
