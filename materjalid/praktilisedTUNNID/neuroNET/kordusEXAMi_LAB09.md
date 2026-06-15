@@ -129,7 +129,7 @@ Ava raport interaktiivse tabelina:
 ```Bash
 vd linux_tulemus.csv
 ```
-💡 Taktikaline Spikker: Mida otsida Linuxi logidest VisiData-s?
+## 💡 Taktikaline Spikker: Mida otsida Linuxi logidest VisiData-s?
 
 Klahvikäsud töötavad täpselt samamoodi nagu Windowsi juhendis.
 
